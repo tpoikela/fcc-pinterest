@@ -226,6 +226,17 @@ module.exports = function(app, passport) {
     // User registration and authentication
     //--------------------------------------
 
+	app.get('/auth/twitter',
+		passport.authenticate('twitter'));
+
+	app.get('/auth/twitter/callback',
+		passport.authenticate('twitter', { failureRedirect: '/login' }),
+		(req, res) => {
+			// Successful authentication, redirect home.
+			res.redirect('/');
+		});
+
+
     // Logs user in via form (after successful authentication)
 	app.route('/auth/userlogin')
         .post(passport.authenticate('local',

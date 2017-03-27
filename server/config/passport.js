@@ -1,8 +1,13 @@
 'use strict';
 
 const User = require('../model/user-schema');
+
+const TwitterStrategy = require('passport-twitter').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 const hash = require('../common/hash-password');
+
+const TWITTER_CONSUMER_KEY = process.env.TWITTER_CONSUMER_KEY;
+const TWITTER_CONSUMER_SECRET = process.env.TWITTER_CONSUMER_SECRET;
 
 module.exports = function(passport) {
     passport.serializeUser(function(user, done) {
@@ -39,4 +44,18 @@ module.exports = function(passport) {
         }
     ));
 
+    // Strategy for Twitter authentication
+    passport.use(new TwitterStrategy({
+        consumerKey: TWITTER_CONSUMER_KEY,
+        consumerSecret: TWITTER_CONSUMER_SECRET,
+        callbackURL: 'http://127.0.0.1:8080/auth/twitter/callback'
+      },
+      function(token, tokenSecret, profile, cb) {
+        User.findOrCreate({ twitterId: profile.id }, (err, user) => {
+          return cb(err, user);
+        });
+      })
+    );
+
 };
+
