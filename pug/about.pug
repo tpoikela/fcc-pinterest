@@ -1,0 +1,28 @@
+//- File which is for /about requests.
+
+include mixins.pug
+
+doctype html
+html
+  +pageHead("About")
+
+  body
+    +layoutBase()
+      +appTitle()
+      +topMenu("about")
+
+      h2 About
+
+      div.main
+        p
+          | Pinterest-clone app for 
+          a(href="http://www.freecodecamp.com") FreeCodeCamp 
+          | fullstack projects.
+        p
+          | You can view walls by other users or create your own wall after
+          | signing up.
+        p
+          | You can access the full source code of the project from 
+          a(href="http://www.github/tpoikela/fcc-pinterest") GitHub.
+
+      +appFooter()

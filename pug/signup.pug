@@ -1,0 +1,46 @@
+//- File which is rendered for signing up a user
+
+include mixins.pug
+
+doctype html
+html
+  +pageHead("Signup")
+
+  body
+    +layoutBase()
+      +appTitle()
+      +topMenu("signup")
+
+      h2 Signup
+      p
+        | After the signup and login, you can add images to your profile wall and
+        | link to images posted by other users.
+
+      p
+        | Please enter a username and a password:
+
+      form(method="POST" action="/forms/signup")
+
+        div.form-group
+          label.label.label-default(for="usernameField") Username
+          input#usernameField.form-control(
+            name="username" type="text"
+            placeholder="Username" pattern="^[^<>/]+$"
+            title="No <,/ or > in username")
+
+        div.form-group
+          label.label.label-default(for="passwordField") Password
+          input#passwordField.form-control(
+            name="password" type="password"
+            placeholder="Password" required="required"
+            title="Cannot be empty")
+
+        button#signup-btn.books-btn(type="submit") Signup!
+
+      br
+      p 
+        | If you already have an account, click 
+        a(href="/login") here 
+        | to login.
+
+      +appFooter()

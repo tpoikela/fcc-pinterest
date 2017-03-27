@@ -1,0 +1,95 @@
+//- This file contains mixins used in all .pug files. This helps making layouts
+//- more unified across all different pages, and helps in following DRY.
+
+- var bsCdn = "https://maxcdn.bootstrapcdn.com";
+- var bs = bsCdn + "/bootstrap/3.3.2/css/bootstrap.min.css";
+- var bsJs = bsCdn + "/bootstrap/3.3.2/js/bootstrap.min.js"
+- var bsTheme = bsCdn + "/bootstrap/3.3.2/css/bootstrap-theme.min.css";
+- var jqueryJs = "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js";
+- var domain = "http://127.0.0.1";
+- var appTitle = 'Pinterest-clone';
+
+mixin metaProps()
+  meta(property="og:url" content="" + domain)
+  meta(property="og:type" content="website")
+  meta(property="og:title" content={appTitle})
+  meta(property="og:description" content="Pinterest-clone")
+  meta(name='viewport' content='initial-scale=1')
+  //- meta(property="og:image" content="http://www.your-domain.com/path/image.jpg" )
+
+mixin styleSheets()
+    link(href="/build/main.css" rel="stylesheet" type="text/css")
+
+mixin externalStyleSheets()
+    link(href="" + bs rel="stylesheet" type="text/css")
+    link(href="" + bsTheme rel="stylesheet" type="text/css")
+    link(href="/public/css/font-awesome.css" rel="stylesheet" type="text/css")
+
+mixin scripts()
+  script(src="" + jqueryJs)
+  script(src="" + bsJs)
+  //-script(src="https://fb.me/react-15.2.1.min.js")
+  //-script(src="https://fb.me/react-dom-15.2.1.min.js")
+
+//- Generates the page head (css + js) with a customisable title
+mixin pageHead(pageTitle)
+  head
+    - var fullTitle = appTitle + ' ' + pageTitle;
+    meta(http-equiv="content-type" content="text/html; charset=utf-8")
+    +metaProps()
+    title= fullTitle
+    +externalStyleSheets()
+    +scripts()
+    +styleSheets()
+
+//- Defines the page basic layout
+mixin layoutBase()
+  div.container
+    div.row
+      div.col-xs-12
+        block
+
+//- Main navigation bar at the top of the page.
+mixin topMenu(title)
+  header
+    ul.top-menu
+      li
+        a.menu(href="/") Home
+      - if (isAuth) {
+        li
+          a.menu(href="/profile") Profile
+        li
+          a.menu(href="/logout") Logout
+      - }
+      - else {
+        li
+          a.menu(href="/login") Login
+        li
+          a.menu(href="/signup") Signup
+      - }
+      li
+        a.menu(href="/about") About
+    hr
+
+mixin appTitle()
+  h1.app-title-text Pinterest-clone
+
+mixin button(text)
+  button.btn-night {text}
+
+//- Footer for the pages with various link symbols
+mixin appFooter()
+  div.author-footer
+    hr
+    ul.footer-links
+      li.footer-link-icon
+        a(href="https://www.github.com/tpoikela")
+          i(class="fa fa-github fa-2x")
+      li.footer-link-icon
+        a(href="https://www.twitter.com/tuomaspoi")
+          i(class="fa fa-twitter fa-2x")
+      li.footer-link-icon
+        a(href="https://www.freecodecamp.com/tpoikela")
+          i(class="fa fa-free-code-camp fa-2x")
+    p.author-p Tuomas Poikela, 2017
+

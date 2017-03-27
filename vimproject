@@ -1,0 +1,123 @@
+fcc-pintereset=~/git/fcc-pinterest CD=. filter="*" flags=S {
+ LICENSE
+ README.md
+ TODO.md
+ dbTest.js
+ gulpfile.js
+ package.json
+ server.js
+ tags
+ testem.json
+ vimproject
+ . # pragma keep
+ build=build {
+  bundle.js
+  main.css
+ }
+ .git=.git {
+  COMMIT_EDITMSG
+  FETCH_HEAD
+  HEAD
+  ORIG_HEAD
+  config
+  description
+  index
+  packed-refs
+  hooks=hooks {
+   applypatch-msg.sample
+   commit-msg.sample
+   post-update.sample
+   pre-applypatch.sample
+   pre-commit.sample
+   pre-push.sample
+   pre-rebase.sample
+   prepare-commit-msg.sample
+   update.sample
+  }
+  logs=logs {
+   HEAD
+  }
+  objects=objects {
+  }
+  refs=refs {
+  }
+  info=info {
+   exclude
+  }
+  branches=branches {
+  }
+ }
+ test=test {
+  ajaxFunctionsTest.js
+  bookSchemaTest.js
+  test-utils.js
+  tradeReqSchemaTest.js
+  userSchemaTest.js
+ }
+ pug=pug {
+  about.pug
+  index.pug
+  login.pug
+  mixins.pug
+  profile.pug
+  signup.pug
+  signup_done.pug
+ }
+ public=public {
+  css=css {
+   font-awesome.css
+  }
+ }
+ scss=scss {
+  main.scss
+ }
+ client=client {
+  ctrl=ctrl {
+   book-ctrl.js
+   trade-ctrl.js
+   user-ctrl.js
+  }
+  jsx=jsx {
+   add-book.jsx
+   app.jsx
+   book-item.jsx
+   books-top.jsx
+   button.jsx
+   contact-info.jsx
+   contact-input.jsx
+   modal-header.jsx
+   modal-view-req.jsx
+   prof-book-item.jsx
+   prof-book-list.jsx
+   prof-req-list.jsx
+   profile.jsx
+   tab-select.jsx
+  }
+  common=common {
+   ajax-functions.js
+  }
+ }
+ server=server {
+  config=config {
+   passport.js
+  }
+  routes=routes {
+   routes.js
+  }
+  ctrl=ctrl {
+   book-ctrl.server.js
+   trade-ctrl.server.js
+   user-ctrl.server.js
+  }
+  model=model {
+   book-schema.js
+   tradereq-schema.js
+   user-schema.js
+  }
+  common=common {
+   book-search.js
+   hash-password.js
+   validation.js
+  }
+ }
+}
