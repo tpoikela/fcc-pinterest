@@ -49,13 +49,16 @@ module.exports = function(passport) {
         consumerKey: TWITTER_CONSUMER_KEY,
         consumerSecret: TWITTER_CONSUMER_SECRET,
         callbackURL: 'http://127.0.0.1:8080/auth/twitter/callback'
-      },
-      function(token, tokenSecret, profile, cb) {
-        User.findOrCreate({ twitterId: profile.id }, (err, user) => {
-          return cb(err, user);
-        });
-      })
-    );
+    },
+    function(token, tokenSecret, profile, done) {
+		// From https://scotch.io/tutorials/easy-node-authentication-twitter
+		process.nextTick(function() {
+			User.findOrCreate(token, profile, (err, user) => {
+                return done(err, user);
+            });
+		});
+    } // function
+	));
 
 };
 
