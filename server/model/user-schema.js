@@ -10,7 +10,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 
 var UserSchema = new Schema({
 
-    // Used to access the information in database
+    // Used to access the information in the database, unique for each
     username: {
         required: true,
         type: String,
@@ -20,9 +20,16 @@ var UserSchema = new Schema({
         }
     },
 
+	// Used for twitter authentication
+	twitter: {
+		id: {required: true, type: String},
+		token: {required: true, type: String},
+		username: {required: true, type: String},
+		displayName: {required: true, type: String}
+	},
+
     // Used for local user and password auth
     local: {
-        required: true,
         type: Object,
         username: {
             required: true,
@@ -49,16 +56,53 @@ var UserSchema = new Schema({
     userPostCode: {type: String},
     userState: {type: String},
 
-    bookList: [{type: ObjectId, ref: 'Book'}],
-    tradeReqs: {type: Array}
+    linkedTo: [{type: ObjectId, ref: 'Image'}],
+    liked: [{type: ObjectId, ref: 'Image'}],
+    added: [{type: ObjectId, ref: 'Image'}]
 
 },
-{collection: 'book_users'}
+{collection: 'pint_users'}
 );
 
 //---------------------------------------------------------------------------
 // STATIC METHODS
 //---------------------------------------------------------------------------
+
+UserSchema.statics.findOrCreate = function(token, profile, cb) {
+    var User = this.model('User');
+	User.findOne({'twitter.id': profile.id}, (err, user) => {
+		if (err) {cb(err);}
+		else if (user) {
+            console.log('Found existing user ' + user.username);
+			cb(null, user); // user found, return that user
+		}
+		else {
+            console.log('Creating a new user ' + profile.username);
+			// if there is no user, create them
+			var newUser = new User();
+
+			// set all of the user data that we need
+			newUser.twitter.id = profile.id;
+			newUser.twitter.token = token;
+			newUser.twitter.username = profile.username;
+			newUser.twitter.displayName = profile.displayName;
+			newUser.username = profile.username;
+
+			// save our user into the database
+			newUser.save(err => {
+                console.log('User was saved OK');
+				if (err) {
+                    console.log('Error is ' + err);
+                    cb(err);
+                }
+				else {
+                    console.log('Callback with new user');
+                    cb(null, newUser);
+                }
+			});
+		}
+	});
+};
 
 /* Returns the full document for given username. Doesn't populate. */
 UserSchema.statics.getUser = function(username, cb) {
