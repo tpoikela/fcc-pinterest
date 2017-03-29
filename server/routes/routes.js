@@ -233,7 +233,7 @@ module.exports = function(app, passport) {
 		passport.authenticate('twitter', { failureRedirect: '/login' }),
 		(req, res) => {
 			// Successful authentication, redirect home.
-			res.redirect('/');
+			res.redirect('/profile');
 		});
 
 
