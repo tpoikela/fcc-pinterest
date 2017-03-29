@@ -72,26 +72,14 @@ fcc-pintereset=~/git/fcc-pinterest CD=. filter="*" flags=S {
   main.scss
  }
  client=client {
+  common=common {
+   ajax-functions.js
+  }
   ctrl=ctrl {
-   book-ctrl.js
-   trade-ctrl.js
-   user-ctrl.js
   }
   jsx=jsx {
-   add-book.jsx
    app.jsx
-   book-item.jsx
-   books-top.jsx
-   button.jsx
-   contact-info.jsx
-   contact-input.jsx
-   modal-header.jsx
-   modal-view-req.jsx
-   prof-book-item.jsx
-   prof-book-list.jsx
-   prof-req-list.jsx
-   profile.jsx
-   tab-select.jsx
+   profile-top.jsx
   }
   common=common {
    ajax-functions.js
