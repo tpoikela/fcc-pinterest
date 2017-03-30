@@ -223,6 +223,18 @@ module.exports = function(app, passport) {
         });
 
     //--------------------------------------
+    // Images
+    //--------------------------------------
+
+    app.route('/images')
+        .post(isLoggedInAjax, (req, res) => {
+            console.log('POST /images');
+            console.log(JSON.stringify(req.body));
+            res.status(200).json({msg: 'OK'});
+
+        });
+
+    //--------------------------------------
     // User registration and authentication
     //--------------------------------------
 
