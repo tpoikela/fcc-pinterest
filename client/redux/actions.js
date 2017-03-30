@@ -7,6 +7,10 @@ var appUrl = window.location.origin;
 // Actions
 //---------------
 
+//----------------------------------------------
+// THUNK ACTIONS
+//----------------------------------------------
+
 // Thunk action to retrieve user info
 var getUserInfo = () => {
     return function(dispatch) {
@@ -25,6 +29,28 @@ var getUserInfo = () => {
         });
     };
 };
+
+// Thunk action to send POST to server with image data
+var addImage = (obj) => {
+    return function(dispatch) {
+        dispatch(fetchImage());
+        var url = appUrl + '/images';
+        ajax.post(url, obj, (err, respText) => {
+            if (err) {
+                dispatch(actionError(err));
+            }
+            else {
+                var json = JSON.parse(respText);
+                dispatch(receiveImage(json));
+            }
+        });
+
+    };
+};
+
+//----------------------------------------------
+// SIMPLE ACTIONS
+//----------------------------------------------
 
 let actionError = (err) => ({
     type: 'ERROR',
@@ -46,4 +72,15 @@ let receiveUser = (json) => {
     };
 };
 
-export {getUserInfo, actionClicked, fetchUser, receiveUser};
+let fetchImage = () => ({
+    type: 'FETCH_IMAGE'
+});
+
+let receiveImage = (json) => {
+    return {
+        type: 'RECEIVE_IMAGE',
+        json
+    };
+};
+
+export {addImage, getUserInfo, actionClicked, fetchUser, receiveUser};
