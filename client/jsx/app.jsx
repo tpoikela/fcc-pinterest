@@ -2,8 +2,7 @@
 'use strict';
 
 import {profileReducer} from '../redux/reducers.js';
-import {getUserInfo, actionClicked,
-    fetchUser, receiveUser} from '../redux/actions';
+import {getUserInfo, actionClicked, addImage} from '../redux/actions';
 
 import ThunkMiddleware from 'redux-thunk';
 import {createStore, applyMiddleware, combineReducers} from 'redux';
@@ -35,7 +34,8 @@ let store = createStore(
 
 let mapDispatchToProps = dispatch => ({
     onClickButton: () => dispatch(actionClicked()),
-    getUserInfo: () => dispatch(getUserInfo())
+    getUserInfo: () => dispatch(getUserInfo()),
+    addImage: (obj) => dispatch(addImage(obj))
 });
 
 let mapStateToProps = (state) => {
