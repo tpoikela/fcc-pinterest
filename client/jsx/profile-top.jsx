@@ -2,6 +2,8 @@
 
 const React = require('react');
 
+const ProfileAddImage = require('./profile-add-image');
+
 class ProfileTop extends React.Component {
 
     constructor(props) {
@@ -18,6 +20,7 @@ class ProfileTop extends React.Component {
 
     render() {
         console.log('ProfileTop render()');
+        var addImage = this.props.addImage;
         var userData = this.props.userData;
         var username = '';
         var userID = '';
@@ -32,6 +35,7 @@ class ProfileTop extends React.Component {
                 <p>ProfileTop was rendered: |{username}|</p>
                 <p>userID: |{userID}|</p>
                 <button onClick={this.props.onClickButton}>Push</button>
+                <ProfileAddImage addImage={addImage} />
             </div>
         );
     }
@@ -39,6 +43,7 @@ class ProfileTop extends React.Component {
 }
 
 ProfileTop.propTypes = {
+    addImage: React.PropTypes.func,
     getUserInfo: React.PropTypes.func,
     onClickButton: React.PropTypes.func,
     userData: React.PropTypes.object
