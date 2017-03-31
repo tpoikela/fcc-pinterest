@@ -22,21 +22,19 @@ var UserSchema = new Schema({
 
 	// Used for twitter authentication
 	twitter: {
-		id: {required: true, type: String},
-		token: {required: true, type: String},
-		username: {required: true, type: String},
-		displayName: {required: true, type: String}
+		id: {type: String},
+		token: {type: String},
+		username: {type: String},
+		displayName: {type: String}
 	},
 
     // Used for local user and password auth
     local: {
         type: Object,
         username: {
-            required: true,
             type: String
         },
         password: {
-            required: true,
             type: String
         },
         validate: {
@@ -50,11 +48,13 @@ var UserSchema = new Schema({
     },
 
     // Complementary (optional) user info
+    /*
     userAddress: {type: String},
     userEmail: {type: String},
     userFullname: {type: String},
     userPostCode: {type: String},
     userState: {type: String},
+    */
 
     linkedTo: [{type: ObjectId, ref: 'Image'}],
     liked: [{type: ObjectId, ref: 'Image'}],
@@ -63,6 +63,54 @@ var UserSchema = new Schema({
 },
 {collection: 'pint_users'}
 );
+
+
+/* Convert args obj into a database query object.*/
+function getQuery(obj) {
+    if (obj.id) {
+        return {_id: obj.id};
+    }
+    else if (obj.username) {
+        return {username: obj.username};
+    }
+    else if (obj.query) {
+        return obj.query;
+    }
+    return null;
+}
+
+function getPushObj(obj) {
+    if (obj.add) {
+        return {$push: {added: obj.imageId}};
+    }
+    else if (obj.like) {
+        return {$push: {liked: obj.imageId}};
+    }
+    else if (obj.link) {
+        return {$push: {linkedTo: obj.imageId}};
+    }
+    else {
+        // By default, add the imageId to 'owned' images
+        return {$push: {added: obj.imageId}};
+    }
+}
+
+function getPullObj(obj) {
+    if (obj.add) {
+        return {$pull: {added: obj.imageId}};
+    }
+    else if (obj.like) {
+        return {$pull: {liked: obj.imageId}};
+    }
+    else if (obj.link) {
+        return {$pull: {linkedTo: obj.imageId}};
+    }
+    else {
+        // By default, add the imageId to 'owned' images
+        return {$pull: {added: obj.imageId}};
+    }
+
+}
 
 //---------------------------------------------------------------------------
 // STATIC METHODS
@@ -135,110 +183,76 @@ UserSchema.statics.getUserID = function(username, cb) {
     });
 };
 
-/* Adds one trade request for this user. */
-UserSchema.statics.addTradeReq = function(username, tradeReq, cb) {
+/* Adds one image for this user. */
+UserSchema.statics.addImage = function(obj, cb) {
     var User = this.model('User');
-    tradeReq.createdOn = new Date().toDateString();
-    tradeReq.state = 'Pending';
-    var pushObj = {$push: {tradeReqs: tradeReq}};
-    User.update({username: username}, pushObj, (err, data) => {
-        if (err) {cb(err);}
-        else {
-            cb(null, data);
-        }
-    });
-};
-
-/* Removes one trade request from a user.*/
-UserSchema.statics.removeTradeReq = function(username, tradeReq, cb) {
-    var User = this.model('User');
-
-    var pullObj = {
-        $pull: {tradeReqs: {
-            'book.title': tradeReq.book.title
-            // createdOn: tradeReq.createdOn
-        }}
-    };
-
-    User.update({username: username}, pullObj, (err, data) => {
-        if (err) {cb(err);}
-        else {
-            if (data.nModified === 0) {
-                console.warn('User.removeTradeReq no modifications done.');
+    var imageId = obj.imageId;
+    if (imageId) {
+        var query = getQuery(obj);
+        var pushObj = getPushObj(obj);
+        User.update(query, pushObj, (err, res) => {
+            if (err) {cb(err);}
+            else {
+                cb(null, res);
             }
-            console.log('removeTradeReq data: ' + JSON.stringify(data));
-            cb(null, data);
-        }
-    });
+        });
+    }
+    else {
+        var error = new Error('No imageId in obj');
+        cb(error);
+    }
 };
 
-/* Sets the state of given tradeReq as accepted. tradeReq is identified by
- * createdOn date.*/
-UserSchema.statics.acceptTradeReq = function(username, tradeReq, cb) {
+/* Adds one image for this user. */
+UserSchema.statics.removeImage = function(obj, cb) {
     var User = this.model('User');
-
-    var queryObj = {
-        username: username,
-        'tradeReqs.createdOn': tradeReq.createdOn
-    };
-    console.log('acceptTradeReq looking for date ' + tradeReq.createdOn +
-        ' and user ' + username);
-
-    var setObj = {
-        $set: {
-            'tradeReqs.$.state': 'Accepted',
-            'tradeReqs.$.acceptedWith': tradeReq.acceptedWith,
-            'tradeReqs.$.acceptedOn': new Date().toDateString()
-        }
-    };
-
-    User.update(queryObj, setObj, (err, data) => {
-        if (err) {cb(err);}
-        else {
-            if (data.nModified === 0) {
-                console.warn('User.acceptTradeReq no modifications done.');
+    var imageId = obj.imageId;
+    if (imageId) {
+        var query = getQuery(obj);
+        var pullObj = getPullObj(obj);
+        User.update(query, pullObj, (err, res) => {
+            if (err) {cb(err);}
+            else {
+                cb(null, res);
             }
-            cb(null, data);
-        }
-    });
+        });
+    }
+    else {
+        var error = new Error('No imageId in obj');
+        cb(error);
+    }
 };
 
-/* Sets the state of given tradeReq as rejected. tradeReq is identified by
- * createdOn date.*/
-UserSchema.statics.rejectTradeReq = function(username, tradeReq, cb) {
+UserSchema.statics.addLinkedImage = function(obj, cb) {
     var User = this.model('User');
-
-    var queryObj = {
-        username: username,
-        'tradeReqs.createdOn': tradeReq.createdOn
-    };
-
-    var setObj = {
-        $set: {
-            'tradeReqs.$.state': 'Rejected',
-            'tradeReqs.$.rejectedOn': new Date().toDateString()
-        }
-    };
-
-    User.update(queryObj, setObj, (err, data) => {
-        if (err) {cb(err);}
-        else {
-            if (data.nModified === 0) {
-                console.warn('User.rejectTradeReq no modifications done.');
-            }
-            cb(null, data);
-        }
-    });
-
+    var newObj = Object.assign({}, obj);
+    newObj.link = true;
+    User.addImage(newObj, cb);
 };
 
-/* Returns all books for the given user. Does a populate. */
-UserSchema.statics.getBooksForUser = function(username, cb) {
+UserSchema.statics.addLikedImage = function(obj, cb) {
     var User = this.model('User');
-    var queryObj = {username: username};
+    var newObj = Object.assign({}, obj);
+    newObj.like = true;
+    User.addImage(newObj, cb);
+};
+
+UserSchema.statics.removeLinkedImage = function(obj, cb) {
+    var User = this.model('User');
+    var newObj = Object.assign({}, obj);
+    newObj.link = true;
+    User.removeImage(newObj, cb);
+};
+
+/* Returns all images for the given user. Does a populate. */
+UserSchema.statics.getImagesForUser = function(obj, cb) {
+    var User = this.model('User');
+    var queryObj = getQuery(obj);
     var filter = {username: 1, bookList: 1, _id: 0};
     User.findOne(queryObj, filter)
-        .populate('bookList')
+        .populate('added')
+        .populate('liked')
+        .populate('linkedTo')
         .exec( (err, user) => {
             if (err) {cb(err);}
             else {cb(null, user);}
@@ -257,30 +271,6 @@ UserSchema.methods.update = function(obj, cb) {
         if (err) {cb(err, null);}
         cb(null, data);
     });
-};
-
-/* Adds one book for the user.*/
-UserSchema.methods.addBook = function(bookId, cb) {
-    var list = this.bookList;
-    list.push(bookId);
-    var updateObj = {bookList: list};
-    this.update(updateObj, cb);
-};
-
-/* Removes a book from user. */
-UserSchema.methods.removeBook = function(bookId, cb) {
-    var list = this.bookList;
-    var index = list.indexOf(bookId);
-    if (index >= 0) {
-        list.splice(index, 1);
-        var updateObj = {bookList: list};
-        this.update(updateObj, cb);
-    }
-    else {
-        console.error('No book ID' + bookId.toString() + ' found for user '
-            + this.username);
-        console.error('User bookList: ' + JSON.stringify(list));
-    }
 };
 
 module.exports = mongoose.model('User', UserSchema);
