@@ -31,31 +31,45 @@ var ImageSchema = new Schema({
 {collection: 'pint_images'}
 );
 
-ImageSchema.statics.createNew = function(obj, cb) {
-    const Image = this.model('Image');
-    // TODO validate the obj
-    var img = new Image(obj);
-    img.save( (err) => {
-        if (err) {cb(err);}
-        else {
-            cb(null, img);
+function verifyObj(obj, requiredKeys) {
+    var ok = true;
+    requiredKeys.forEach( (item) => {
+        if (typeof obj[item] === 'undefined') {
+            console.error('Image obj error. Missing key: ' + item);
+            ok = false;
         }
     });
+    return ok;
+}
+
+ImageSchema.statics.createNew = function(obj, cb) {
+    const Image = this.model('Image');
+    if (verifyObj(obj, ['title', 'url', 'addedBy'])) {
+        var img = new Image(obj);
+        img.save( (err) => {
+            if (err) {cb(err);}
+            else {
+                cb(null, img);
+            }
+        });
+    }
 };
 
 ImageSchema.statics.addLike = function(obj, cb) {
     const Image = this.model('Image');
-    var id = obj.id;
-    var userId = obj.likedBy;
-    var query = {_id: id};
-    var pushObj = {
-        $push: {likedBy: userId}
-    };
+    if (verifyObj(obj, ['id', 'likedBy'])) {
+        var id = obj.id;
+        var userId = obj.likedBy;
+        var query = {_id: id};
+        var pushObj = {
+            $push: {likedBy: userId}
+        };
 
-    Image.update(query, pushObj, (err) => {
-        if (err) {cb(err);}
-        else {cb(null);}
-    });
+        Image.update(query, pushObj, (err) => {
+            if (err) {cb(err);}
+            else {cb(null);}
+        });
+    }
 };
 
 /* Removes one like from the given image.*/
@@ -63,12 +77,12 @@ ImageSchema.statics.removeLike = function(obj, cb) {
     const Image = this.model('Image');
     var query = {_id: obj.id};
     var pullObj = {
-        $pull: {'likedBy.$': obj.userId}
+        $pull: {likedBy: obj.userId}
     };
 
-    Image.update(query, pullObj, (err) => {
+    Image.update(query, pullObj, (err, res) => {
         if (err) {cb(err);}
-        else {cb(null);}
+        else {cb(null, res);}
     });
 };
 
@@ -82,15 +96,26 @@ ImageSchema.statics.addLink = function(obj, cb) {
         $push: {linkedBy: userId}
     };
 
-    Image.update(query, pushObj, (err) => {
+    Image.update(query, pushObj, (err, res) => {
         if (err) {cb(err);}
-        else {cb(null);}
+        else {cb(null, res);}
     });
 
 };
 
 ImageSchema.statics.removeLink = function(obj, cb) {
     const Image = this.model('Image');
+    var id = obj.id;
+    var userId = obj.linkedBy;
+    var query = {_id: id};
+
+    var pullObj = {
+        $pull: {linkedBy: userId}
+    };
+    Image.update(query, pullObj, (err, res) => {
+        if (err) {cb(err);}
+        else {cb(null, res);}
+    });
 };
 
 module.exports = mongoose.model('Image', ImageSchema);

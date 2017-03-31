@@ -95,4 +95,50 @@ describe('Image-model', function() {
         });
     });
 
+
+    it('can have likes removed from it', function(done) {
+        var obj = {id: testImg._id, likedBy: getObjectId()};
+        Image.addLike(obj, (err) => {
+
+            expect(err).to.be.null;
+            obj.userId = obj.likedBy;
+
+            Image.removeLike(obj, (err, res) => {
+                expect(err).to.be.null;
+                expect(res.ok).to.be.equal(1);
+                console.log(JSON.stringify(res));
+
+                Image.findOne({_id: testImg._id}, (err, img) => {
+                    expect(err).to.be.null;
+                    expect(img.likedBy).to.have.length(0);
+                    done();
+                });
+
+            });
+        });
+    });
+
+    it('can have links removed from it', function(done) {
+        var obj = {id: testImg._id, linkedBy: getObjectId()};
+        Image.addLink(obj, (err) => {
+            expect(err).to.be.null;
+
+            obj.userId = obj.linkedBy;
+
+            Image.removeLink(obj, (err, res) => {
+                expect(err).to.be.null;
+                expect(res.ok).to.be.equal(1);
+
+                console.log(JSON.stringify(res));
+
+                Image.findOne({_id: testImg._id}, (err, img) => {
+                    expect(err).to.be.null;
+                    expect(img.linkedBy).to.have.length(0);
+                    done();
+                });
+
+            });
+        });
+    });
+
 });
