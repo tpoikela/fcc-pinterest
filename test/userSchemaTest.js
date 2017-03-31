@@ -20,7 +20,6 @@ describe('UserSchema', function() {
             username: 'aaa',
             password: 'ccc'
         };
-        user.tradeReqs = [];
         user.save( err => {
             if (err) {throw new Error(err);}
             done();
@@ -39,13 +38,10 @@ describe('UserSchema', function() {
         var newUser = new User();
         newUser.validateSync();
         expect(newUser.errors.username).to.exist;
-        expect(newUser.errors.local).to.exist;
-        expect(newUser.errors.bookList).to.not.exist;
-        expect(newUser.errors.tradeReqsPending).to.not.exist;
     });
 
     it('can have information updated', function(done) {
-        var obj = {email: 'aaa@bbb.com', state: 'Florida'};
+        var obj = {twitter: {username: 'aaa'}};
         var username = {username: 'aaa'};
         User.findOne(username, (err, data) => {
             if (err) {throw new Error(err);}
@@ -54,8 +50,8 @@ describe('UserSchema', function() {
                     if (err) {throw new Error(err);}
                     User.findOne(username, (err, userData) => {
                         if (err) {throw new Error(err);}
-                        expect(userData.state).to.be.equal('Florida');
-                        expect(userData.email).to.be.equal('aaa@bbb.com');
+                        expect(userData.twitter).to.exist;
+                        expect(userData.twitter.username).to.be.equal('aaa');
                         done();
                     });
                 });
@@ -63,58 +59,47 @@ describe('UserSchema', function() {
         });
     });
 
-    it('can add one book for the user', function(done) {
+    it('can add images for the user', function(done) {
         var username = {username: 'aaa'};
-        User.findOne(username, (err, data) => {
+        User.findOne(username, (err, userdata) => {
             if (err) {throw new Error(err);}
             else {
-                var book = getObjectId();
-                data.addBook(book, err => {
+                var newImageId = getObjectId();
+                var obj = {imageId: newImageId, id: userdata._id};
+
+                User.addImage(obj, (err, res) => {
                     if (err) {throw new Error(err);}
-                    User.findOne(username, (err, data) => {
+                    expect(res.ok).to.be.equal(1);
+
+                    User.findOne({_id: userdata._id}, (err, userdata) => {
                         if (err) {throw new Error(err);}
-                        expect(data.bookList.length).to.equal(1);
-                        Utils.expectEqualObjectId(data.bookList[0], book);
+                        expect(userdata.added.length).to.equal(1);
+                        Utils.expectEqualObjectId(userdata.added[0],
+                            newImageId);
                         done();
                     });
+
                 });
 
             }
         });
     });
 
-    it('can have books removed also', function(done) {
-        var bookId = getObjectId();
-        var username = {username: 'aaa'};
-        User.update(username, {$set: {bookList: [bookId]}}, {}, (err) => {
-            if (err) {throw new Error(err);}
-            else if (user) {
-                User.findOne(username, (err, user) => {
-                    if (err) {throw new Error(err);}
+    it('can likes added and removed', function(done) {
+        var likedImageId = getObjectId();
 
-                    expect(user.bookList.length).to.be.equal(1);
-
-                    user.removeBook(bookId, err => {
-                        if (err) {throw new Error(err);}
-                        User.findOne(username, (err, user) => {
-                            if (err) {throw new Error(err);}
-                            expect(user.bookList.length).to.be.equal(0);
-                            done();
-                        });
-
-                    });
-                });
-
-
-            }
-            else {
-                throw new Error('No user with name ' + username.username);
-            }
+        var obj = {like: true, imageId: likedImageId, username: 'aaa'};
+        User.addLikedImage(obj, (err, res) => {
+            console.log(JSON.stringify(err));
+            expect(err).to.be.null;
+            expect(res.ok).to.be.equal(1);
+            done();
 
         });
 
     });
 
+    /*
     it('can have tradeReqs added and removed', function(done) {
         var tradeReq = {
             from: 'xxx',
@@ -145,6 +130,7 @@ describe('UserSchema', function() {
             }
         });
     });
+    */
 
 
 });
