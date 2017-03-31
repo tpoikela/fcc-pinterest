@@ -48,6 +48,13 @@ var addImage = (obj) => {
     };
 };
 
+// Thunk action to GET all images from the server
+var getAllImages = () => {
+    return function(dispatch) {
+        dispatch(actionFetching('allImages'));
+    };
+};
+
 //----------------------------------------------
 // SIMPLE ACTIONS
 //----------------------------------------------
@@ -60,6 +67,13 @@ let actionError = (err) => ({
 let actionClicked = () => ({
     type: 'BUTTON_CLICKED'
 });
+
+let actionFetching = (fetchWhat) => {
+    return {
+        type: 'FETCHING',
+        what: fetchWhat
+    };
+};
 
 let fetchUser = () => ({
     type: 'FETCH_USER'
@@ -83,4 +97,5 @@ let receiveImage = (json) => {
     };
 };
 
-export {addImage, getUserInfo, actionClicked, fetchUser, receiveUser};
+export {addImage, getAllImages, getUserInfo, actionClicked,
+        fetchUser, receiveUser};
