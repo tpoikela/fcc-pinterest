@@ -9,6 +9,16 @@ const getObjectId = Utils.getObjectId;
 
 Utils.connectTestDb();
 
+beforeEach( (done) => {
+    Utils.connectTestDb();
+    done();
+});
+
+afterEach( (done) => {
+    Utils.disconnectTestDb();
+    done();
+});
+
 describe('UserSchema', function() {
 
     var user = null;
@@ -85,7 +95,7 @@ describe('UserSchema', function() {
         });
     });
 
-    it('can likes added and removed', function(done) {
+    it('can have likes added and removed', function(done) {
         var likedImageId = getObjectId();
 
         var obj = {like: true, imageId: likedImageId, username: 'aaa'};
@@ -93,44 +103,49 @@ describe('UserSchema', function() {
             console.log(JSON.stringify(err));
             expect(err).to.be.null;
             expect(res.ok).to.be.equal(1);
-            done();
 
-        });
+            User.findOne({username: 'aaa'}, (err, user) => {
+                expect(err).to.be.null;
+                expect(user.liked).to.have.length(1);
 
-    });
+                User.removeLikedImage(obj, (err, res) => {
+                    expect(err).to.be.null;
+                    expect(res.ok).to.be.equal(1);
 
-    /*
-    it('can have tradeReqs added and removed', function(done) {
-        var tradeReq = {
-            from: 'xxx',
-            book: {title: 'GoodBook'}
-        };
-        User.addTradeReq('aaa', tradeReq, err => {
-            if (err) {throw new Error(err);}
-            else {
-                User.findOne({username: 'aaa'}, (err, data) => {
-                    if (err) {throw new Error(err);}
-                    else {
-                        expect(data).to.have.property('tradeReqs');
-                        var req = data.tradeReqs[0];
-                        expect(req.from).to.equal('xxx');
-
-                        User.removeTradeReq('aaa', tradeReq, err => {
-                            if (err) {throw new Error(err);}
-                            else {
-                                User.findOne({username: 'aaa'}, (err, data) => {
-                                    if (err) {throw new Error(err);}
-                                    expect(data.tradeReqs).to.be.length(0);
-                                    done();
-                                });
-                            }
-                        });
-                    }
+                    User.findOne({username: 'aaa'}, (err, user) => {
+                        expect(err).to.be.null;
+                        expect(user.liked).to.have.length(0);
+                        done();
+                    });
                 });
-            }
-        });
-    });
-    */
 
+            });
+
+        });
+
+    });
+
+    it('can have links to images added and removed', function(done) {
+        var linkedImageId = getObjectId();
+
+        var obj = {link: true, imageId: linkedImageId, username: 'aaa'};
+        User.addLinkedImage(obj, (err, res) => {
+            console.log(JSON.stringify(err));
+            expect(err).to.be.null;
+            expect(res.ok).to.be.equal(1);
+
+            User.removeLinkedImage(obj, (err, res) => {
+                expect(err).to.be.null;
+                expect(res.ok).to.be.equal(1);
+                User.findOne({username: 'aaa'}, (err, user) => {
+                    expect(err).to.be.null;
+                    expect(user.linkedTo).to.have.length(0);
+                    done();
+                });
+            });
+
+        });
+
+    });
 
 });

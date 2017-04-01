@@ -6,7 +6,16 @@ const Image = require('../server/model/image-schema.js');
 
 const getObjectId = Utils.getObjectId;
 
-Utils.connectTestDb();
+// Utils.connectTestDb();
+beforeEach( (done) => {
+    Utils.connectTestDb();
+    done();
+});
+
+afterEach( (done) => {
+    Utils.disconnectTestDb();
+    done();
+});
 
 var testUrl = 'http://nonsense.com/test.png';
 
