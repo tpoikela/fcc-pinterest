@@ -7,6 +7,8 @@ const Image = require('../server/model/image-schema');
 
 mongoose.Promise = global.Promise;
 
+const testDbURI = 'mongodb://localhost:27017/pinterest_test';
+
 var TestUtils = {
 
     getObjectId: function() {
@@ -19,9 +21,14 @@ var TestUtils = {
     },
 
     connectTestDb: function() {
-        var testDbURI = 'mongodb://localhost:27017/pinterest_test';
-        mongoose.Promise = global.Promise;
-        mongoose.connect(testDbURI);
+        if (mongoose.connection.readyState === 0) {
+            mongoose.Promise = global.Promise;
+            mongoose.connect(testDbURI);
+        }
+    },
+
+    disconnectTestDb: function() {
+        mongoose.disconnect();
     },
 
     clearTestDb: function(coll, cb) {
