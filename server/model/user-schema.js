@@ -244,6 +244,13 @@ UserSchema.statics.removeLinkedImage = function(obj, cb) {
     User.removeImage(newObj, cb);
 };
 
+UserSchema.statics.removeLikedImage = function(obj, cb) {
+    var User = this.model('User');
+    var newObj = Object.assign({}, obj);
+    newObj.like = true;
+    User.removeImage(newObj, cb);
+};
+
 /* Returns all images for the given user. Does a populate. */
 UserSchema.statics.getImagesForUser = function(obj, cb) {
     var User = this.model('User');
