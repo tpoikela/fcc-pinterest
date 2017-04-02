@@ -2,7 +2,8 @@
 'use strict';
 
 import {profileReducer} from '../redux/reducers.js';
-import {getUserInfo, actionClicked, addImage} from '../redux/actions';
+import {getUserInfo, getAllImages, actionClicked,
+    addImage} from '../redux/actions';
 
 import ThunkMiddleware from 'redux-thunk';
 import {createStore, applyMiddleware, combineReducers} from 'redux';
@@ -13,11 +14,12 @@ const ReactDOM = require('react-dom');
 const ReactRedux = require('react-redux');
 
 const ProfileTop = require('./profile-top');
+const ImagesTop = require('./images-top');
 
 const Provider = ReactRedux.Provider;
 
+let imgTopElem = document.querySelector('#images-top');
 let profTopElem = document.querySelector('#profile-app');
-var booksTop = null;
 
 let store = createStore(
     combineReducers({
@@ -35,7 +37,8 @@ let store = createStore(
 let mapDispatchToProps = dispatch => ({
     onClickButton: () => dispatch(actionClicked()),
     getUserInfo: () => dispatch(getUserInfo()),
-    addImage: (obj) => dispatch(addImage(obj))
+    addImage: (obj) => dispatch(addImage(obj)),
+    getAllImages: () => dispatch(getAllImages())
 });
 
 let mapStateToProps = (state) => {
@@ -59,8 +62,17 @@ if (profTopElem) {
             ,
             profTopElem);
 }
-else if (booksTop) {
-    // ReactDOM.render(<BooksTop />, booksTop);
-    console.log('not supported yet.');
+else if (imgTopElem) {
+
+    let ImagesTopConnected = ReactRedux.connect(
+        mapStateToProps, mapDispatchToProps
+    )(ImagesTop);
+
+        ReactDOM.render(
+            <Provider store={store}>
+                <ImagesTopConnected />
+            </Provider>
+            ,
+            imgTopElem);
 }
 
