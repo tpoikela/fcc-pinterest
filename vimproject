@@ -66,9 +66,6 @@ fcc-pintereset=~/git/fcc-pinterest CD=. filter="*" flags=S {
   main.scss
  }
  client=client {
-  common=common {
-   ajax-functions.js
-  }
   jsx=jsx {
    app.jsx
    profile-add-image.jsx
@@ -86,6 +83,7 @@ fcc-pintereset=~/git/fcc-pinterest CD=. filter="*" flags=S {
    routes.js
   }
   ctrl=ctrl {
+   image-ctrl.server.js
    user-ctrl.server.js
   }
   model=model {
