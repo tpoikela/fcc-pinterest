@@ -55,6 +55,8 @@ mixin topMenu(title)
     ul.top-menu
       li
         a.menu(href="/") Home
+      li
+        a.menu(href="/all-images") Images
       - if (isAuth) {
         li
           a.menu(href="/profile") Profile
