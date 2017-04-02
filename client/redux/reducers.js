@@ -1,27 +1,63 @@
 'use strict';
 
-var receiveUser = function(currState, action) {
-    console.log('receiveUser with curr ' + JSON.stringify(currState));
-    var newState = Object.assign(currState, {userData: action.json});
-    console.log('receiveUser with new ' + JSON.stringify(newState));
-    return newState;
+var receiveUser = (nextState, action) => {
+    nextState.userData = action.json;
+    return nextState;
+};
+
+var receiveImage = (nextState, action) => {
+    nextState.resp = action.json;
+    return nextState;
+};
+
+var handleAjaxStart = (nextState, action) => {
+    nextState.isFetching = true;
+    nextState.fetchingWhat = action.what;
+    return nextState;
+};
+
+var handleAjaxDone = (nextState, action) => {
+    nextState.isFetching = false;
+    nextState.fetchingWhat = '';
+    switch (action.what) {
+        case 'allImages': return {nextState, images: action.json};
+        default: return nextState;
+    }
+
+};
+
+var handleError = (nextState, action) => {
+    nextState.err = action.err;
+    nextState.isFetching = false;
+    nextState.fetchingWhat = '';
+    return nextState;
 };
 
 export function profileReducer(state, action) {
-    console.log('reducer state ' + JSON.stringify(state));
-
     if (typeof state === 'undefined') {
-        return {clicked: false, username: ''};
+        return {
+            clicked: false,
+            err: null,
+            msg: '',
+            username: '',
+            userData: null,
+            isFetching: false,
+            fetchingWhat: ''
+        };
     }
 
-    let currState = Object.assign({}, state);
+    // State copy done here
+    let nextState = Object.assign({}, state);
 
     switch (action.type) {
+        case 'AJAX_START': return handleAjaxStart(nextState, action);
         case 'BUTTON_CLICKED': return Object.assign(
-                currState, {clicked: true});
-        //case 'RECEIVE_USER': return receiveUser(currState, action);
-        case 'RECEIVE_USER': return Object.assign(currState,
-            {userData: action.json});
-        default: return currState;
+                nextState, {clicked: true});
+        case 'ERROR': return handleError(nextState, action);
+        case 'FETCH_USER':
+        case 'RECEIVE_USER': return receiveUser(nextState, action);
+        case 'RECEIVE_IMAGE': return receiveImage(nextState, action);
+        case 'AJAX_DONE': return handleAjaxDone(nextState, action);
+        default: return nextState;
     }
 }
