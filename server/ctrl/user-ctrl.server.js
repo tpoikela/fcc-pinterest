@@ -93,7 +93,9 @@ module.exports = function(path) {
      * it to callback.*/
     this.getUserByName = function(username, cb) {
         User.findOne({username: username})
-            // .populate('bookList')
+            .populate('added')
+            .populate('liked')
+            .populate('linkedTo')
             .exec( (err, user) => {
                 if (err) {
                     return cb(err);
