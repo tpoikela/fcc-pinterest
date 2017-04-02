@@ -17,7 +17,7 @@ var getUserInfo = () => {
 
         dispatch(fetchUser());
 
-        var url = appUrl + '/users/amiauth';
+        var url = appUrl + '/users';
         ajax.get(url, (err, respText) => {
             if (err) {
                 dispatch(actionError(err));
@@ -51,7 +51,17 @@ var addImage = (obj) => {
 // Thunk action to GET all images from the server
 var getAllImages = () => {
     return function(dispatch) {
-        dispatch(actionFetching('allImages'));
+        dispatch(actionAjaxStart('allImages'));
+        var url = appUrl + '/images';
+        ajax.get(url, (err, respText) => {
+            if (err) {
+                dispatch(actionError(err));
+            }
+            else {
+                var json = JSON.parse(respText);
+                dispatch(actionAjaxDone('allImages', json));
+            }
+        });
     };
 };
 
@@ -68,12 +78,21 @@ let actionClicked = () => ({
     type: 'BUTTON_CLICKED'
 });
 
-let actionFetching = (fetchWhat) => {
+let actionAjaxStart = (fetchWhat) => {
     return {
-        type: 'FETCHING',
+        type: 'AJAX_START',
         what: fetchWhat
     };
 };
+
+let actionAjaxDone = (recWhat, json) => {
+    return {
+        type: 'AJAX_DONE',
+        what: recWhat,
+        json
+    };
+};
+
 
 let fetchUser = () => ({
     type: 'FETCH_USER'
