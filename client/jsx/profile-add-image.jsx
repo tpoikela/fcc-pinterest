@@ -44,7 +44,7 @@ class ProfileAddImage extends React.Component {
                 <label>URL:
                     <input name='url' onChange={this.onChangeUrl} />
                 </label>
-                <button onClick={this.addImage} />
+                <button onClick={this.addImage}>Add</button>
             </div>
 
         );
