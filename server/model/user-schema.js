@@ -255,7 +255,7 @@ UserSchema.statics.removeLikedImage = function(obj, cb) {
 UserSchema.statics.getImagesForUser = function(obj, cb) {
     var User = this.model('User');
     var queryObj = getQuery(obj);
-    var filter = {username: 1, bookList: 1, _id: 0};
+    var filter = {username: 1, added: 1, linkedTo: 1, liked: 1, _id: 0};
     User.findOne(queryObj, filter)
         .populate('added')
         .populate('liked')
