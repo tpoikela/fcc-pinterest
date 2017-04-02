@@ -3,6 +3,7 @@
 var path = process.cwd();
 var ctrlPath = path + '/server/ctrl';
 
+const ImageController = require(ctrlPath + '/image-ctrl.server.js');
 const UserController = require(ctrlPath + '/user-ctrl.server.js');
 const debug = require('debug')('book:routes');
 
@@ -100,6 +101,7 @@ module.exports = function(app, passport) {
 
     // CONTROLLERS
     var userController = new UserController(path);
+    var imageController = new ImageController(path);
 
     //----------------------------------------------------------------------
     // ROUTES
@@ -115,9 +117,9 @@ module.exports = function(app, passport) {
             renderPug(req, res, 'about.pug');
 		});
 
-	app.route('/allbooks')
+	app.route('/all-images')
 		.get((req, res) => {
-            renderPug(req, res, 'books.pug');
+            renderPug(req, res, 'images.pug');
 		});
 
 	app.route('/signup')
@@ -222,6 +224,21 @@ module.exports = function(app, passport) {
             });
         });
 
+    app.route('/users')
+        .get(isLoggedInAjax, (req, res) => {
+            var username = req.user.username;
+            userController.getUserByName(username, (err, data) => {
+                if (err) {
+                    logError('/users/' + username, err, req);
+                    res.status(500).json(errorInternal);
+                }
+                else {
+                    delete data.local.password;
+                    res.json(data);
+                }
+            });
+        });
+
     //--------------------------------------
     // Images
     //--------------------------------------
@@ -230,7 +247,17 @@ module.exports = function(app, passport) {
         .post(isLoggedInAjax, (req, res) => {
             console.log('POST /images');
             console.log(JSON.stringify(req.body));
-            res.status(200).json({msg: 'OK'});
+            var username = req.user.username;
+            imageController.addImage(username, req.body, (err, result) => {
+                if (err) {
+                    logError('/images', err, req);
+                    res.status(500).json(errorInternal);
+                }
+                else {
+                    console.log(JSON.stringify(result));
+                    res.status(200).json({msg: 'OK'});
+                }
+            });
 
         });
 
