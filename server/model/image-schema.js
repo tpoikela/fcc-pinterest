@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
+/* DB schema for storing images posted by users. Each image has an owner, an URL
+ * and a title at least. Each images also knows which users have linked to it.*/
 var ImageSchema = new Schema({
 
     url: {
@@ -52,6 +54,10 @@ ImageSchema.statics.createNew = function(obj, cb) {
                 cb(null, img);
             }
         });
+    }
+    else {
+        var error = new Error('Missing param');
+        cb(error);
     }
 };
 
