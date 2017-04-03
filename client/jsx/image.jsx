@@ -19,6 +19,8 @@ class ImageComp extends React.Component {
                 <p>Title: {image.title}</p>
                 <p>Likes: {numLikes}</p>
                 <p>Linked by: {numLinks}</p>
+                <button onClick={this.props.linkImage}>Link</button>
+                <button onClick={this.props.likeImage}>Like</button>
             </div>
         );
 
@@ -27,7 +29,9 @@ class ImageComp extends React.Component {
 }
 
 ImageComp.propTypes = {
-    image: React.PropTypes.object
+    image: React.PropTypes.object,
+    linkImage: React.PropTypes.func,
+    likeImage: React.PropTypes.func
 };
 
 module.exports = ImageComp;
