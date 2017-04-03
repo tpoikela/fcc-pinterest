@@ -258,6 +258,23 @@ module.exports = function(app, passport) {
             });
         })
 
+        /* Used for updating existing images. */
+        .put(isLoggedInAjax, (req, res) => {
+            debugJSON('PUT /images req.body: ', req.body);
+            var username = req.user.username;
+            imageController.updateImage(username, req.body, (err, result) => {
+                if (err) {
+                    logError('/images', err, req);
+                    res.status(500).json(errorInternal);
+                }
+                else {
+                    debugJSON('PUT /images result (200): ', result);
+                    res.status(200).json({msg: 'OK'});
+                }
+
+            });
+        })
+
         .post(isLoggedInAjax, (req, res) => {
             debug('POST /images');
             debugJSON('POST /images req.body: ', req.body);

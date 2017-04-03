@@ -30,6 +30,22 @@ class ImageController {
 
     }
 
+    /* Updates existing images with link/like.*/
+    updateImage(username, body, cb) {
+        var obj = {
+            id: body.image._id,
+            linkedBy: username
+        };
+        if (body.link) {
+            Image.addLink(obj, (err, result) => {
+                if (err) {cb(err);}
+                else {
+                     cb(null, result);
+                }
+            });
+        }
+    }
+
     getAllImages(cb) {
         Image.find({}, (err, data) => {
             if (err) {cb(err);}

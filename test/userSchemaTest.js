@@ -7,7 +7,7 @@ const Utils = require('./test-utils');
 
 const getObjectId = Utils.getObjectId;
 
-Utils.connectTestDb();
+// Utils.connectTestDb();
 
 beforeEach( (done) => {
     Utils.connectTestDb();

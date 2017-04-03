@@ -3,7 +3,7 @@
 
 import {profileReducer} from '../redux/reducers.js';
 import {getUserInfo, getAllImages, actionClicked,
-    addImage} from '../redux/actions';
+    likeImage, linkImage, addImage} from '../redux/actions';
 
 import ThunkMiddleware from 'redux-thunk';
 import {createStore, applyMiddleware, combineReducers} from 'redux';
@@ -38,7 +38,9 @@ let mapDispatchToProps = dispatch => ({
     onClickButton: () => dispatch(actionClicked()),
     getUserInfo: () => dispatch(getUserInfo()),
     addImage: (obj) => dispatch(addImage(obj)),
-    getAllImages: () => dispatch(getAllImages())
+    getAllImages: () => dispatch(getAllImages()),
+    linkImage: (img) => dispatch(linkImage(img)),
+    likeImage: (img) => dispatch(likeImage(img))
 });
 
 let mapStateToProps = (state) => {

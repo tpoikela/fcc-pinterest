@@ -48,6 +48,42 @@ var addImage = (obj) => {
     };
 };
 
+var linkImage = (image) => {
+    return function(dispatch) {
+        dispatch(actionAjaxStart('linkImage'));
+        var url = appUrl + '/images';
+        var obj = {image: image, link: true};
+        ajax.put(url, obj, (err, respText) => {
+            if (err) {
+                dispatch(actionError(err));
+            }
+            else {
+                var json = JSON.parse(respText);
+                dispatch(actionAjaxDone('linkImage', json));
+            }
+        });
+
+    };
+};
+
+var likeImage = (image) => {
+    return function(dispatch) {
+        dispatch(actionAjaxStart('likeImage'));
+        var url = appUrl + '/images';
+        var obj = {image: image, like: true};
+        ajax.put(url, obj, (err, respText) => {
+            if (err) {
+                dispatch(actionError(err));
+            }
+            else {
+                var json = JSON.parse(respText);
+                dispatch(actionAjaxDone('likeImage', json));
+            }
+        });
+
+    };
+};
+
 // Thunk action to GET all images from the server
 var getAllImages = () => {
     return function(dispatch) {
@@ -117,4 +153,4 @@ let receiveImage = (json) => {
 };
 
 export {addImage, getAllImages, getUserInfo, actionClicked,
-        fetchUser, receiveUser};
+        likeImage, linkImage, fetchUser, receiveUser};
