@@ -38,11 +38,12 @@ export function profileReducer(state, action) {
         return {
             clicked: false,
             err: null,
-            msg: '',
-            username: '',
-            userData: null,
+            fetchingWhat: '',
+            images: [],
             isFetching: false,
-            fetchingWhat: ''
+            msg: '',
+            userData: null,
+            username: ''
         };
     }
 
