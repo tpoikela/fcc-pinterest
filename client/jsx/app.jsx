@@ -44,7 +44,8 @@ let mapDispatchToProps = dispatch => ({
 let mapStateToProps = (state) => {
     console.log('mapStateToProps with ' + JSON.stringify(state));
     return {
-        userData: state.profileReducer.userData
+        userData: state.profileReducer.userData,
+        images: state.profileReducer.images
     };
 };
 
