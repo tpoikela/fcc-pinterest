@@ -2,6 +2,7 @@
 'use strict';
 
 const React = require('react');
+const ImageComp = require('./image');
 
 
 class ImagesTop extends React.Component {
@@ -11,9 +12,22 @@ class ImagesTop extends React.Component {
     }
 
     render() {
-        return (
-            <div>ImagesTop
+        var images = this.props.images;
 
+        var imgElems = images.map( (img, index) => {
+            return (
+                <li key={index}>
+                    <ImageComp image={img}/>
+                </li>
+            );
+        });
+
+        return (
+            <div className='image-grid'>
+                <h2>ImagesTop</h2>
+                <ul>
+                {imgElems}
+                </ul>
             </div>
         );
 
@@ -22,7 +36,8 @@ class ImagesTop extends React.Component {
 }
 
 ImagesTop.propTypes = {
-    getAllImages: React.PropTypes.func
+    getAllImages: React.PropTypes.func,
+    images: React.PropTypes.array
 };
 
 module.exports = ImagesTop;
