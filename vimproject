@@ -1,4 +1,4 @@
-fcc-pintereset=~/git/fcc-pinterest CD=. filter="*" flags=S {
+fcc-pinterest=~/git/fcc-pinterest CD=. filter="*" flags=S {
  gulpfile.js
  LICENSE
  package.json
@@ -44,12 +44,13 @@ fcc-pintereset=~/git/fcc-pinterest CD=. filter="*" flags=S {
   }
  }
  test=test {
-  imageSchemaTests.js
+  imageSchemaTest.js
   test-utils.js
   userSchemaTest.js
  }
  pug=pug {
   about.pug
+  images.pug
   index.pug
   login.pug
   mixins.pug
@@ -66,13 +67,20 @@ fcc-pintereset=~/git/fcc-pinterest CD=. filter="*" flags=S {
   main.scss
  }
  client=client {
-  jsx=jsx {
-   app.jsx
-   profile-add-image.jsx
-   profile-top.jsx
-  }
   common=common {
    ajax-functions.js
+  }
+  jsx=jsx {
+   app.jsx
+   image.jsx
+   images-top.jsx
+   profile-add-image.jsx
+   profile-images.jsx
+   profile-top.jsx
+  }
+  redux=redux {
+   actions.js
+   reducers.js
   }
  }
  server=server {
