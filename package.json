@@ -59,6 +59,7 @@
     "eslint-plugin-react": "^6.9.0",
     "gulp-ctags": "^0.1.0",
     "gulp-nodemon": "^2.2.1",
+    "gulp-notify": "^3.0.0",
     "jsctags": "git://github.com/ramitos/jsctags.git",
     "mocha": "^3.2.0",
     "sass-lint": "^1.10.2",
