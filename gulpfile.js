@@ -5,8 +5,7 @@ var sass = require('gulp-sass');
 var babelify = require('babelify');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
-
-
+var notify = require('gulp-notify');
 
 var jsxDir = './client/jsx';
 
@@ -25,13 +24,26 @@ var paths = {
 
 };
 
+
+/* Used to notify on build/compile errors.*/
+function handleErrors() {
+    var args = Array.prototype.slice.call(arguments);
+      notify.onError({
+        title: 'Compile Error',
+        message: '<%= error.message %>'
+      }).apply(this, args);
+      this.emit('end'); // Keep gulp from hanging on this task
+}
+
 gulp.task('build-js', function() {
     return browserify({entries: jsxDir + '/app.jsx',
         extensions: ['.jsx'], debug: true})
         .transform(babelify)
         .bundle()
+        .on('error', handleErrors)
         .pipe(source('./bundle.js'))
-        .pipe(gulp.dest('build'));
+        .pipe(gulp.dest('build'))
+        .pipe(notify('Build OK'));
 });
 
 gulp.task('build-test', function() {
@@ -45,7 +57,7 @@ gulp.task('build-test', function() {
 });
 
 gulp.task('build-sass', function() {
-	return gulp.src('./scss/*.scss')
+    return gulp.src('./scss/*.scss')
     .pipe(sass().on('error', sass.logError))
     .pipe(gulp.dest('./build'));
 
@@ -118,4 +130,4 @@ gulp.task('watch', ['watch-cli', 'serve'], function() {
 
 gulp.task('default', ['watch']);
 
-}
+} // if not in production
