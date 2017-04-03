@@ -30,6 +30,13 @@ class ImageController {
 
     }
 
+    getAllImages(cb) {
+        Image.find({}, (err, data) => {
+            if (err) {cb(err);}
+            else {cb(null, data);}
+        });
+    }
+
 }
 
 module.exports = ImageController;
