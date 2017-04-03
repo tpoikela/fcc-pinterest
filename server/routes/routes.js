@@ -244,9 +244,23 @@ module.exports = function(app, passport) {
     //--------------------------------------
 
     app.route('/images')
+
+        .get( (req, res) => {
+            imageController.getAllImages( (err, data) => {
+                if (err) {
+                    logError('/images', err, req);
+                    res.status(500).json(errorInternal);
+                }
+                else {
+                    debugJSON('GET /images result (200): ', data);
+                    res.status(200).json(data);
+                }
+            });
+        })
+
         .post(isLoggedInAjax, (req, res) => {
-            console.log('POST /images');
-            console.log(JSON.stringify(req.body));
+            debug('POST /images');
+            debugJSON('POST /images req.body: ', req.body);
             var username = req.user.username;
             imageController.addImage(username, req.body, (err, result) => {
                 if (err) {
@@ -254,7 +268,7 @@ module.exports = function(app, passport) {
                     res.status(500).json(errorInternal);
                 }
                 else {
-                    console.log(JSON.stringify(result));
+                    debugJSON('POST /images result (200): ', result);
                     res.status(200).json({msg: 'OK'});
                 }
             });
