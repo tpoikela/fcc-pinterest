@@ -17,6 +17,19 @@ afterEach( (done) => {
     done();
 });
 
+const expectArrLength = (testImg, arrName, arrLength, cb) => {
+    Image.findOne({_id: testImg._id}, (err, img) => {
+        expect(err).to.be.null;
+        if (!img) {
+            throw new Error('No image with ID ' + testImg._id);
+        }
+        else {
+            expect(img[arrName]).to.have.length(arrLength);
+            cb();
+        }
+    });
+};
+
 var testUrl = 'http://nonsense.com/test.png';
 
 describe('Image-model', function() {
@@ -72,15 +85,9 @@ describe('Image-model', function() {
         var obj = {id: testImg._id, likedBy: getObjectId()};
         Image.addLike(obj, (err) => {
             expect(err).to.be.null;
-            Image.findOne({_id: testImg._id}, (err, img) => {
-                expect(err).to.be.null;
-                if (!img) {
-                    console.log('No image with ID ' + testImg._id);
-                }
-                else {
-                    expect(img.likedBy).to.have.length(1);
-                    done();
-                }
+
+            expectArrLength(testImg, 'likedBy', 1, () => {
+                done();
             });
 
         });
@@ -90,16 +97,11 @@ describe('Image-model', function() {
         var obj = {id: testImg._id, linkedBy: getObjectId()};
         Image.addLink(obj, (err) => {
             expect(err).to.be.null;
-            Image.findOne({_id: testImg._id}, (err, img) => {
-                expect(err).to.be.null;
-                if (!img) {
-                    console.log('No image with ID ' + testImg._id);
-                }
-                else {
-                    expect(img.linkedBy).to.have.length(1);
-                    done();
-                }
+
+            expectArrLength(testImg, 'linkedBy', 1, () => {
+                done();
             });
+
 
         });
     });
@@ -116,9 +118,7 @@ describe('Image-model', function() {
                 expect(err).to.be.null;
                 expect(res.ok).to.be.equal(1);
 
-                Image.findOne({_id: testImg._id}, (err, img) => {
-                    expect(err).to.be.null;
-                    expect(img.likedBy).to.have.length(0);
+                expectArrLength(testImg, 'likedBy', 0, () => {
                     done();
                 });
 
@@ -130,21 +130,49 @@ describe('Image-model', function() {
         var obj = {id: testImg._id, linkedBy: getObjectId()};
         Image.addLink(obj, (err) => {
             expect(err).to.be.null;
-
             obj.userId = obj.linkedBy;
 
             Image.removeLink(obj, (err, res) => {
                 expect(err).to.be.null;
                 expect(res.ok).to.be.equal(1);
 
-                Image.findOne({_id: testImg._id}, (err, img) => {
-                    expect(err).to.be.null;
-                    expect(img.linkedBy).to.have.length(0);
+                expectArrLength(testImg, 'linkedBy', 0, () => {
                     done();
                 });
 
             });
         });
+    });
+
+    it('should prevent adding of double likes', function(done) {
+        var obj = {id: testImg._id, likedBy: 'tpoikela_user'};
+        Image.addLike(obj, (err) => {
+            expect(err).to.be.null;
+            Image.addLike(obj, (err) => {
+                expect(err).to.be.null;
+
+                expectArrLength(testImg, 'likedBy', 1, () => {
+                    done();
+                });
+
+            });
+        });
+    });
+
+    it('should prevent adding of double-links', function(done) {
+        var obj = {id: testImg._id, linkedBy: 'testUser'};
+        Image.addLink(obj, (err) => {
+            expect(err).to.be.null;
+            Image.addLink(obj, (err) => {
+                expect(err).to.be.null;
+
+                expectArrLength(testImg, 'linkedBy', 1, () => {
+                    done();
+                });
+
+            });
+        });
+
     });
 
 });
