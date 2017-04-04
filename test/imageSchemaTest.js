@@ -47,7 +47,7 @@ describe('Image-model', function() {
         var img = new Image();
         img.url = testUrl;
         var errors = img.validateSync().errors;
-        console.log(JSON.stringify(errors));
+
         expect(errors.title).to.exist;
         expect(errors.url).to.not.exist;
         expect(errors.addedBy).to.exist;
@@ -115,7 +115,6 @@ describe('Image-model', function() {
             Image.removeLike(obj, (err, res) => {
                 expect(err).to.be.null;
                 expect(res.ok).to.be.equal(1);
-                console.log(JSON.stringify(res));
 
                 Image.findOne({_id: testImg._id}, (err, img) => {
                     expect(err).to.be.null;
@@ -137,8 +136,6 @@ describe('Image-model', function() {
             Image.removeLink(obj, (err, res) => {
                 expect(err).to.be.null;
                 expect(res.ok).to.be.equal(1);
-
-                console.log(JSON.stringify(res));
 
                 Image.findOne({_id: testImg._id}, (err, img) => {
                     expect(err).to.be.null;
