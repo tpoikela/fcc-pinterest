@@ -49,6 +49,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
+    "browserify-incremental": "^3.1.1",
     "chai": "^3.5.0",
     "ctags": "^3.0.0",
     "debug": "^2.6.1",

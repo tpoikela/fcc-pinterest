@@ -1,18 +1,18 @@
 
-var gulp = require('gulp');
-var sass = require('gulp-sass');
+const gulp = require('gulp');
+const sass = require('gulp-sass');
 
-var babelify = require('babelify');
-var browserify = require('browserify');
-var source = require('vinyl-source-stream');
-var notify = require('gulp-notify');
+const babelify = require('babelify');
+const browserify = require('browserify');
 
-var jsxDir = './client/jsx';
+const source = require('vinyl-source-stream');
+const notify = require('gulp-notify');
 
-var port = process.env.PORT || 8080;
+const port = process.env.PORT || 8080;
 
 // Define paths for all source files here
-var paths = {
+const paths = {
+    jsxDir: './client/jsx',
     client: ['./client/jsx/*.jsx', './client/**/*.js'],
     sass: ['./scss/*.*'],
 
@@ -24,20 +24,25 @@ var paths = {
 
 };
 
-
 /* Used to notify on build/compile errors.*/
 function handleErrors() {
     var args = Array.prototype.slice.call(arguments);
-      notify.onError({
+    notify.onError({
         title: 'Compile Error',
         message: '<%= error.message %>'
-      }).apply(this, args);
-      this.emit('end'); // Keep gulp from hanging on this task
+    }).apply(this, args);
+    this.emit('end'); // Keep gulp from hanging on this task
 }
 
+const browserifyOpts = {
+    entries: paths.jsxDir + '/app.jsx',
+    extensions: ['.jsx'],
+    debug: true
+};
+
+// Build the js
 gulp.task('build-js', function() {
-    return browserify({entries: jsxDir + '/app.jsx',
-        extensions: ['.jsx'], debug: true})
+    return browserify(browserifyOpts)
         .transform(babelify)
         .bundle()
         .on('error', handleErrors)
@@ -45,6 +50,7 @@ gulp.task('build-js', function() {
         .pipe(gulp.dest('build'))
         .pipe(notify('Build OK'));
 });
+
 
 gulp.task('build-test', function() {
     return browserify({entries:
@@ -76,8 +82,9 @@ gulp.task('build', buildTasks, function() {
 
 if (process.env.NODE_ENV !== 'production') {
 
-var nodemon = require('gulp-nodemon');
-var ctags = require('gulp-ctags');
+const browserifyInc = require('browserify-incremental');
+const nodemon = require('gulp-nodemon');
+const ctags = require('gulp-ctags');
 
 gulp.task('tags', function() {
   return gulp.src(paths.tags)
@@ -112,14 +119,30 @@ gulp.task('serve', function(cb) {
     });
 });
 
+// Incrementally building the js
+gulp.task('build-js-inc', function() {
+	var b = browserify(Object.assign({}, browserifyInc.args,
+		browserifyOpts
+	));
+
+	browserifyInc(b, {cacheFile: './browserify-cache.json'});
+
+	b.transform(babelify)
+		.bundle()
+        .on('error', handleErrors)
+        .pipe(source('./bundle.js'))
+        .pipe(gulp.dest('build'))
+        .pipe(notify('Build OK'));
+});
+
 var watchDependents = [
-  'build-js',
+  'build-js-inc',
   'tags',
   'build-sass'
 ];
 
 gulp.task('watch-cli', watchDependents, function() {
-    gulp.watch(paths.client, ['build-js']);
+    gulp.watch(paths.client, ['build-js-inc']);
     gulp.watch(paths.sass, ['build-sass']);
     gulp.watch(paths.tags, ['tags']);
 });
