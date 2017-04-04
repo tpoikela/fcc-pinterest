@@ -79,22 +79,24 @@ function getQuery(obj) {
     return null;
 }
 
+/* Returns the object which is used to add given imageId to the user. */
 function getPushObj(obj) {
     if (obj.add) {
-        return {$push: {added: obj.imageId}};
+        return {$addToSet: {added: obj.imageId}};
     }
     else if (obj.like) {
-        return {$push: {liked: obj.imageId}};
+        return {$addToSet: {liked: obj.imageId}};
     }
     else if (obj.link) {
-        return {$push: {linkedTo: obj.imageId}};
+        return {$addToSet: {linkedTo: obj.imageId}};
     }
     else {
         // By default, add the imageId to 'owned' images
-        return {$push: {added: obj.imageId}};
+        return {$addToSet: {added: obj.imageId}};
     }
 }
 
+/* Returns the object which is used to remove given imageId from a user. */
 function getPullObj(obj) {
     if (obj.add) {
         return {$pull: {added: obj.imageId}};
