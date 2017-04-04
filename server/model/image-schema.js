@@ -4,7 +4,7 @@
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
-const ObjectId = mongoose.Schema.Types.ObjectId;
+// const ObjectId = mongoose.Schema.Types.ObjectId;
 
 /* DB schema for storing images posted by users. Each image has an owner, an URL
  * and a title at least. Each images also knows which users have linked to it.*/
@@ -22,12 +22,12 @@ var ImageSchema = new Schema({
 
     addedBy: {
         required: true,
-        type: ObjectId,
+        type: String,
         ref: 'User'
     },
 
-    likedBy: [{type: ObjectId, ref: 'User'}],
-    linkedBy: [{type: ObjectId, ref: 'User'}]
+    likedBy: [{type: String, ref: 'User'}],
+    linkedBy: [{type: String, ref: 'User'}]
 
 },
 {collection: 'pint_images'}
@@ -68,7 +68,7 @@ ImageSchema.statics.addLike = function(obj, cb) {
         var userId = obj.likedBy;
         var query = {_id: id};
         var pushObj = {
-            $push: {likedBy: userId}
+            $addToSet: {likedBy: userId}
         };
 
         Image.update(query, pushObj, (err) => {
@@ -99,7 +99,7 @@ ImageSchema.statics.addLink = function(obj, cb) {
     var userId = obj.linkedBy;
     var query = {_id: id};
     var pushObj = {
-        $push: {linkedBy: userId}
+        $addToSet: {linkedBy: userId}
     };
 
     Image.update(query, pushObj, (err, res) => {
