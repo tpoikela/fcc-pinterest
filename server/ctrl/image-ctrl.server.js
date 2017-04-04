@@ -32,17 +32,41 @@ class ImageController {
 
     /* Updates existing images with link/like.*/
     updateImage(username, body, cb) {
-        var obj = {
-            id: body.image._id,
-            linkedBy: username
-        };
-        if (body.link) {
-            Image.addLink(obj, (err, result) => {
-                if (err) {cb(err);}
-                else {
-                     cb(null, result);
-                }
-            });
+        var imageId = body.image._id;
+        if (imageId) {
+            var obj = {
+                id: imageId,
+                linkedBy: username
+            };
+            if (body.link) {
+                Image.addLink(obj, (err, result) => {
+                    if (err) {cb(err);}
+                    else {
+                        var updateObj = {
+                            username: username,
+                            imageId: imageId
+                        };
+                        User.addLinkedImage(updateObj, (err, result) => {
+                            if (err) {cb(err);}
+                            else {
+                                cb(null, result);
+                            }
+                        })
+                    }
+                });
+            }
+            else if (body.like) {
+                let error = new Error('body.like not implemented yet');
+                cb(error);
+            }
+            else {
+                let error = new Error('body.link or body.like not given');
+                cb(error);
+            }
+        }
+        else {
+            let error = new Error('image._id not found');
+            cb(error);
         }
     }
 
