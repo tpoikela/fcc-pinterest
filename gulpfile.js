@@ -1,3 +1,4 @@
+/* gulpfile for project fcc-pinterest.*/
 
 const gulp = require('gulp');
 const sass = require('gulp-sass');
@@ -22,7 +23,7 @@ const paths = {
 
     tags: ['./client/**/*', './server/**/*', './pug/**/*', './scss/**/*'],
 
-    test: ['./client/common/*.js', './test/*.js'],
+    test: ['./client/common/*.js', './test/*.js']
 
 };
 
@@ -42,6 +43,10 @@ const browserifyOpts = {
     debug: true
 };
 
+//------------------
+// PRODUCTION-tasks
+//------------------
+
 // Build the js
 gulp.task('build-js', function() {
     return browserify(browserifyOpts)
@@ -51,18 +56,6 @@ gulp.task('build-js', function() {
         .pipe(source('./bundle.js'))
         .pipe(gulp.dest('build'))
         .pipe(notify('Build OK'));
-});
-
-// Build all tests
-gulp.task('build-test', function() {
-    return browserify({entries:
-        ['./client/common/ajax-functions.js', 'test/ajaxFunctionsTest.js'],
-        extensions: ['.js'], debug: true})
-        .transform(babelify)
-        .bundle()
-        .on('error', handleErrors)
-        .pipe(source('./bundleTests.js'))
-        .pipe(gulp.dest('build'));
 });
 
 gulp.task('build-sass', function() {
@@ -121,6 +114,19 @@ gulp.task('serve', function(cb) {
         }
     });
 });
+
+// Build all tests
+gulp.task('build-test', function() {
+    return browserify({entries:
+        ['./client/common/ajax-functions.js', 'test/ajaxFunctionsTest.js'],
+        extensions: ['.js'], debug: true})
+        .transform(babelify)
+        .bundle()
+        .on('error', handleErrors)
+        .pipe(source('./bundleTests.js'))
+        .pipe(gulp.dest('build'));
+});
+
 
 // Incrementally building the js
 gulp.task('build-js-inc', function() {
