@@ -20,7 +20,9 @@ const paths = {
     serverIgnore: ['./gulpfile.js', './scss', './pug', './public', './build',
         './app/jsx', './app/common/ajax-functions.js'],
 
-    tags: ['./client/**/*', './server/**/*', './pug/**/*', './scss/**/*']
+    tags: ['./client/**/*', './server/**/*', './pug/**/*', './scss/**/*'],
+
+    test: ['./client/common/*.js', './test/*.js'],
 
 };
 
@@ -51,13 +53,14 @@ gulp.task('build-js', function() {
         .pipe(notify('Build OK'));
 });
 
-
+// Build all tests
 gulp.task('build-test', function() {
     return browserify({entries:
         ['./client/common/ajax-functions.js', 'test/ajaxFunctionsTest.js'],
         extensions: ['.js'], debug: true})
         .transform(babelify)
         .bundle()
+        .on('error', handleErrors)
         .pipe(source('./bundleTests.js'))
         .pipe(gulp.dest('build'));
 });
@@ -145,6 +148,10 @@ gulp.task('watch-cli', watchDependents, function() {
     gulp.watch(paths.client, ['build-js-inc']);
     gulp.watch(paths.sass, ['build-sass']);
     gulp.watch(paths.tags, ['tags']);
+});
+
+gulp.task('watch-test', ['build-test'], function() {
+    gulp.watch(paths.test, ['build-test']);
 });
 
 gulp.task('watch', ['watch-cli', 'serve'], function() {

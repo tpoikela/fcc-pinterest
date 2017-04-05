@@ -65,6 +65,7 @@
     "mocha": "^3.2.0",
     "sass-lint": "^1.10.2",
     "sinon": "^1.17.7",
-    "sinon-chai": "^2.8.0"
+    "sinon-chai": "^2.8.0",
+    "testem": "^1.15.0"
   }
 }
