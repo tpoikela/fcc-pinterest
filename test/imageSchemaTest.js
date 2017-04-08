@@ -30,11 +30,11 @@ const expectArrLength = (testImg, arrName, arrLength, cb) => {
     });
 };
 
-var testUrl = 'http://nonsense.com/test.png';
+let testUrl = 'http://nonsense.com/test.png';
 
 describe('Image-model', function() {
 
-    var testImg = null;
+    let testImg = null;
 
     beforeEach( (done) => {
         testImg = new Image({
@@ -57,18 +57,17 @@ describe('Image-model', function() {
     });
 
     it('should have name, url and owner', function() {
-        var img = new Image();
+        let img = new Image();
         img.url = testUrl;
-        var errors = img.validateSync().errors;
+        let errors = img.validateSync().errors;
 
         expect(errors.title).to.exist;
         expect(errors.url).to.not.exist;
-        expect(errors.addedBy).to.exist;
     });
 
     it('should be saved properly to DB', function(done) {
-        var obj = {
-            addedBy: getObjectId(),
+        let obj = {
+            linkedBy: 'myusername',
             url: testUrl,
             title: 'A test image for the user'
         };
@@ -82,7 +81,7 @@ describe('Image-model', function() {
     });
 
     it('can have likes added to it', function(done) {
-        var obj = {id: testImg._id, likedBy: getObjectId()};
+        let obj = {id: testImg._id, likedBy: getObjectId()};
         Image.addLike(obj, (err) => {
             expect(err).to.be.null;
 
@@ -94,7 +93,7 @@ describe('Image-model', function() {
     });
 
     it('can have links added to it', function(done) {
-        var obj = {id: testImg._id, linkedBy: getObjectId()};
+        let obj = {id: testImg._id, linkedBy: getObjectId()};
         Image.addLink(obj, (err) => {
             expect(err).to.be.null;
 
@@ -108,7 +107,7 @@ describe('Image-model', function() {
 
 
     it('can have likes removed from it', function(done) {
-        var obj = {id: testImg._id, likedBy: getObjectId()};
+        let obj = {id: testImg._id, likedBy: getObjectId()};
         Image.addLike(obj, (err) => {
 
             expect(err).to.be.null;
@@ -127,7 +126,7 @@ describe('Image-model', function() {
     });
 
     it('can have links removed from it', function(done) {
-        var obj = {id: testImg._id, linkedBy: getObjectId()};
+        let obj = {id: testImg._id, linkedBy: getObjectId()};
         Image.addLink(obj, (err) => {
             expect(err).to.be.null;
             obj.userId = obj.linkedBy;
@@ -145,7 +144,7 @@ describe('Image-model', function() {
     });
 
     it('should prevent adding of double likes', function(done) {
-        var obj = {id: testImg._id, likedBy: 'tpoikela_user'};
+        let obj = {id: testImg._id, likedBy: 'tpoikela_user'};
         Image.addLike(obj, (err) => {
             expect(err).to.be.null;
             Image.addLike(obj, (err) => {
@@ -160,7 +159,7 @@ describe('Image-model', function() {
     });
 
     it('should prevent adding of double-links', function(done) {
-        var obj = {id: testImg._id, linkedBy: 'testUser'};
+        let obj = {id: testImg._id, linkedBy: 'testUser'};
         Image.addLink(obj, (err) => {
             expect(err).to.be.null;
             Image.addLink(obj, (err) => {
