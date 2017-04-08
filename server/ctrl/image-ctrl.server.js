@@ -13,13 +13,13 @@ class ImageController {
 
     /* Adds image to the database and for the user.*/
     addImage(username, body, cb) {
-        var imgObj = {title: body.title, url: body.url,
+        let imgObj = {title: body.title, url: body.url,
             addedBy: body.userId};
         Image.createNew(imgObj, (err, img) => {
             if (err) {cb(err);}
             else {
-                var imageId = img._id;
-                var obj = {username: username, imageId: imageId};
+                let imageId = img._id;
+                let obj = {username: username, imageId: imageId};
                 User.addImage(obj, (err, result) => {
                     if (err) {cb(err);}
                     else {cb(null, result);}
@@ -32,17 +32,17 @@ class ImageController {
 
     /* Updates existing images with link/like.*/
     updateImage(username, body, cb) {
-        var imageId = body.image._id;
+        let imageId = body.image._id;
         if (imageId) {
-            var obj = {
+            let obj = {
                 id: imageId,
                 linkedBy: username
             };
             if (body.link) {
-                Image.addLink(obj, (err, result) => {
+                Image.addLink(obj, (err) => {
                     if (err) {cb(err);}
                     else {
-                        var updateObj = {
+                        let updateObj = {
                             username: username,
                             imageId: imageId
                         };
@@ -51,7 +51,7 @@ class ImageController {
                             else {
                                 cb(null, result);
                             }
-                        })
+                        });
                     }
                 });
             }
@@ -66,6 +66,37 @@ class ImageController {
         }
         else {
             let error = new Error('image._id not found');
+            cb(error);
+        }
+    }
+
+    /* Removes linked image from a user.*/
+    removeImage(username, body, cb) {
+        let imageId = body.image._id;
+        if (imageId) {
+            let obj = {
+                id: imageId,
+                linkedBy: username
+            };
+            Image.removeLink(obj, (err, result) => {
+                if (err) {cb(err);}
+                else if (result.nModified === 1) {
+                    User.removeLinkedImage(userObj, (err, result) => {
+                        if (err) {cb(err);} // TODO handle link removal
+                        else {
+                            cb(null, result);
+                        }
+
+                    });
+                }
+                else {
+                    let error = new Error('Error in Image.removeLink');
+                    cb(error);
+                }
+            });
+        }
+        else {
+            let error = new Error('image not found within body');
             cb(error);
         }
     }
