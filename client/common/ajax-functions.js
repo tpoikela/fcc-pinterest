@@ -1,17 +1,24 @@
 'use strict';
 
-var $DEBUG = 1;
 
-var xhrReadyOk = (xhr) => {
-    return xhr.readyState === 4 && xhr.status === 200;
+// const UNSENT = 0;
+// const OPENED = 1;
+// const HEADERS_RECEIVED = 2;
+// const LOADING = 3;
+const DONE = 4;
+
+let $DEBUG = 1;
+
+let xhrReadyOk = (xhr) => {
+    return xhr.readyState === DONE && xhr.status === 200;
 };
 
-var xhrReadyError = (xhr) => {
-    return xhr.readyState === 4 && xhr.status === 500;
+let xhrReadyError = (xhr) => {
+    return xhr.readyState === DONE && xhr.status === 500;
 };
 
 /* Sends the data. It can be either in string or object format.*/
-var sendData = (type, xhr, data) => {
+let sendData = (type, xhr, data) => {
     if (typeof data === 'string') {
         xhr.send(data);
     }
@@ -23,7 +30,8 @@ var sendData = (type, xhr, data) => {
     }
 };
 
-var xhrReadyCallback = (xhr, cb) => {
+/* Callback for ajax-functions which check when the ajax-call is complete.*/
+let xhrReadyCallback = (xhr, cb) => {
     if (xhrReadyOk(xhr)) {
         if ($DEBUG) {console.log('Resp text:' + xhr.responseText);}
         cb(null, xhr.responseText);
@@ -34,11 +42,13 @@ var xhrReadyCallback = (xhr, cb) => {
 };
 
 
-var AjaxFuncs = {
+/* Contains basic ajax-functions for communicating with the server. */
+let AjaxFuncs = {
 
+    /* Send ajax-GET. */
     get: (url, cb) => {
         if ($DEBUG) {console.log('ajax-get to URL: ' + url);}
-        var xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest();
         xhr.onreadystatechange = xhrReadyCallback.bind(this, xhr, cb);
 
         xhr.open('get', url, true);
@@ -49,7 +59,7 @@ var AjaxFuncs = {
     /* Send ajax-POST with JSON data.*/
     post: (url, data, cb) => {
         if ($DEBUG) {console.log('ajax-post to URL: ' + url);}
-        var xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest();
         xhr.onreadystatechange = xhrReadyCallback.bind(this, xhr, cb);
 
         xhr.open('post', url, true);
@@ -61,7 +71,7 @@ var AjaxFuncs = {
     /* Send ajax-PUT with JSON data.*/
     put: (url, data, cb) => {
         if ($DEBUG) {console.log('ajax-put to URL: ' + url);}
-        var xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest();
         xhr.onreadystatechange = xhrReadyCallback.bind(this, xhr, cb);
 
         xhr.open('put', url, true);
@@ -73,7 +83,7 @@ var AjaxFuncs = {
     /* Send ajax-DELETE with JSON data. */
     delete: (url, data, cb) => {
         if ($DEBUG) {console.log('ajax-delete to URL: ' + url);}
-        var xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest();
         xhr.onreadystatechange = xhrReadyCallback.bind(this, xhr, cb);
 
         xhr.open('delete', url, true);
