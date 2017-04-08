@@ -20,12 +20,6 @@ let ImageSchema = new Schema({
         type: String
     },
 
-    addedBy: {
-        required: true,
-        type: String,
-        ref: 'User'
-    },
-
     likedBy: [{type: String, ref: 'User'}],
     linkedBy: [{type: String, ref: 'User'}]
 
@@ -46,7 +40,7 @@ function verifyObj(obj, requiredKeys) {
 
 ImageSchema.statics.createNew = function(obj, cb) {
     const Image = this.model('Image');
-    if (verifyObj(obj, ['title', 'url', 'addedBy'])) {
+    if (verifyObj(obj, ['title', 'url', 'linkedBy'])) {
         let img = new Image(obj);
         img.save( (err) => {
             if (err) {cb(err);}
