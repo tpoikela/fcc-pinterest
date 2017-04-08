@@ -14,7 +14,7 @@ class ImageController {
     /* Adds image to the database and for the user.*/
     addImage(username, body, cb) {
         let imgObj = {title: body.title, url: body.url,
-            addedBy: body.userId};
+            linkedBy: username};
         Image.createNew(imgObj, (err, img) => {
             if (err) {cb(err);}
             else {
@@ -92,6 +92,7 @@ class ImageController {
                 }
                 else {
                     let error = new Error('Error in Image.removeLink');
+                    console.log('removeLink result: ' + JSON.stringify(result));
                     cb(error);
                 }
             });
