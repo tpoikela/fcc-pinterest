@@ -4,7 +4,7 @@
 'use strict';
 
 const serverName = 'fcc-Pinterest-clone';
-const debug = require('debug')('book:server');
+const debug = require('debug')('pint:server');
 
 loadDotEnv();
 
@@ -22,7 +22,7 @@ const routes = require('./server/routes/routes.js');
 
 debug(serverName + ' All requires loaded OK.');
 
-var app = express();
+let app = express();
 app.set('view engine', 'pug');
 
 require('./server/config/passport')(passport);
@@ -40,7 +40,7 @@ initAndConfigMiddleware(app);
 
 routes(app, passport);
 
-var port = process.env.PORT || 8080;
+let port = process.env.PORT || 8080;
 app.listen(port, () => {
 	debug(serverName + ' Server listening on port ' + port + '...');
 });
