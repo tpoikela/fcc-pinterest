@@ -32,13 +32,11 @@ class ProfileTop extends React.Component {
         var userData = this.props.userData;
         var username = '';
         var userID = '';
-
         var images = [];
 
         if (userData) {
             username = userData.username;
             userID = userData.userID;
-
             images = userData.added.concat(userData.linkedTo, userData.liked);
         }
 
@@ -48,7 +46,12 @@ class ProfileTop extends React.Component {
                 <p>userID: |{userID}|</p>
                 <button onClick={this.props.onClickButton}>Push</button>
                 <ProfileAddImage addImage={this.addImage} />
-                <ProfileImages images={images} />
+
+                <ProfileImages
+                    images={images}
+                    onClickRemove={this.props.onClickRemoveImage}
+                />
+
             </div>
         );
     }
@@ -59,8 +62,8 @@ ProfileTop.propTypes = {
     addImage: React.PropTypes.func,
     getUserInfo: React.PropTypes.func,
     onClickButton: React.PropTypes.func,
+    onClickRemoveImage: React.PropTypes.func,
     userData: React.PropTypes.object
-
 };
 
 module.exports = ProfileTop;
