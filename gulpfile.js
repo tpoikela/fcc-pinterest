@@ -156,6 +156,11 @@ gulp.task('watch-cli', watchDependents, function() {
     gulp.watch(paths.tags, ['tags']);
 });
 
+gulp.task('watch-server', ['serve'], function() {
+    gulp.watch(paths.server, ['serve']);
+
+});
+
 gulp.task('watch-test', ['build-test'], function() {
     gulp.watch(paths.test, ['build-test']);
 });
