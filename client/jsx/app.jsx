@@ -3,7 +3,7 @@
 
 import {profileReducer} from '../redux/reducers.js';
 import {getUserInfo, getAllImages, actionClicked,
-    likeImage, linkImage, addImage} from '../redux/actions';
+    likeImage, linkImage, addImage, removeImage} from '../redux/actions';
 
 import ThunkMiddleware from 'redux-thunk';
 import {createStore, applyMiddleware, combineReducers} from 'redux';
@@ -36,6 +36,7 @@ let store = createStore(
 
 let mapDispatchToProps = dispatch => ({
     onClickButton: () => dispatch(actionClicked()),
+    onClickRemoveImage: (img) => dispatch(removeImage(img)),
     getUserInfo: () => dispatch(getUserInfo()),
     addImage: (obj) => dispatch(addImage(obj)),
     getAllImages: () => dispatch(getAllImages()),
