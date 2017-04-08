@@ -81,6 +81,7 @@ class ImageController {
             Image.removeLink(obj, (err, result) => {
                 if (err) {cb(err);}
                 else if (result.nModified === 1) {
+                    let userObj = {};
                     User.removeLinkedImage(userObj, (err, result) => {
                         if (err) {cb(err);} // TODO handle link removal
                         else {

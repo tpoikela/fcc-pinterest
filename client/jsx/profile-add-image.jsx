@@ -25,13 +25,13 @@ class ProfileAddImage extends React.Component {
     }
 
     onChangeTitle(e) {
-        var val = e.target.value;
+        let val = e.target.value;
         this.setState({title: val});
 
     }
 
     onChangeUrl(e) {
-        var val = e.target.value;
+        let val = e.target.value;
         this.setState({url: val});
     }
 

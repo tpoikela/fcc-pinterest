@@ -7,7 +7,7 @@ const ImageComp = require('./image');
 // const Masonry = require('masonry-layout');
 const Masonry = require('react-masonry-component');
 
-var masonryOptions = {
+let masonryOptions = {
     columnWidth: 50
 };
 
@@ -35,9 +35,9 @@ class ImagesTop extends React.Component {
     }
 
     render() {
-        var images = this.props.images;
+        let images = this.props.images;
 
-        // var gridElem = document.querySelector('#image-grid');
+        // let gridElem = document.querySelector('#image-grid');
         /* if (gridElem) {
             console.log('Creating the Masonry fluid grid');
             this.masonryGrid = new Masonry(gridElem, {
@@ -46,9 +46,9 @@ class ImagesTop extends React.Component {
             });
         }*/
 
-        var imgElems = images.map( (img, index) => {
-            var likeCb = this.likeImage.bind(this, img);
-            var linkCb = this.linkImage.bind(this, img);
+        let imgElems = images.map( (img, index) => {
+            let likeCb = this.likeImage.bind(this, img);
+            let linkCb = this.linkImage.bind(this, img);
             return (
                 <ImageComp image={img} key={index}
                     likeImage={likeCb}

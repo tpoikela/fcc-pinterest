@@ -8,7 +8,7 @@ const Schema = mongoose.Schema;
 
 /* DB schema for storing images posted by users. Each image has an owner, an URL
  * and a title at least. Each images also knows which users have linked to it.*/
-var ImageSchema = new Schema({
+let ImageSchema = new Schema({
 
     url: {
         required: true,
@@ -34,7 +34,7 @@ var ImageSchema = new Schema({
 );
 
 function verifyObj(obj, requiredKeys) {
-    var ok = true;
+    let ok = true;
     requiredKeys.forEach( (item) => {
         if (typeof obj[item] === 'undefined') {
             console.error('Image obj error. Missing key: ' + item);
@@ -47,7 +47,7 @@ function verifyObj(obj, requiredKeys) {
 ImageSchema.statics.createNew = function(obj, cb) {
     const Image = this.model('Image');
     if (verifyObj(obj, ['title', 'url', 'addedBy'])) {
-        var img = new Image(obj);
+        let img = new Image(obj);
         img.save( (err) => {
             if (err) {cb(err);}
             else {
@@ -56,7 +56,7 @@ ImageSchema.statics.createNew = function(obj, cb) {
         });
     }
     else {
-        var error = new Error('Missing param');
+        let error = new Error('Missing param');
         cb(error);
     }
 };
@@ -64,10 +64,10 @@ ImageSchema.statics.createNew = function(obj, cb) {
 ImageSchema.statics.addLike = function(obj, cb) {
     const Image = this.model('Image');
     if (verifyObj(obj, ['id', 'likedBy'])) {
-        var id = obj.id;
-        var userId = obj.likedBy;
-        var query = {_id: id};
-        var pushObj = {
+        let id = obj.id;
+        let userId = obj.likedBy;
+        let query = {_id: id};
+        let pushObj = {
             $addToSet: {likedBy: userId}
         };
 
@@ -81,8 +81,8 @@ ImageSchema.statics.addLike = function(obj, cb) {
 /* Removes one like from the given image.*/
 ImageSchema.statics.removeLike = function(obj, cb) {
     const Image = this.model('Image');
-    var query = {_id: obj.id};
-    var pullObj = {
+    let query = {_id: obj.id};
+    let pullObj = {
         $pull: {likedBy: obj.userId}
     };
 
@@ -95,10 +95,10 @@ ImageSchema.statics.removeLike = function(obj, cb) {
 
 ImageSchema.statics.addLink = function(obj, cb) {
     const Image = this.model('Image');
-    var id = obj.id;
-    var userId = obj.linkedBy;
-    var query = {_id: id};
-    var pushObj = {
+    let id = obj.id;
+    let userId = obj.linkedBy;
+    let query = {_id: id};
+    let pushObj = {
         $addToSet: {linkedBy: userId}
     };
 
@@ -111,11 +111,11 @@ ImageSchema.statics.addLink = function(obj, cb) {
 
 ImageSchema.statics.removeLink = function(obj, cb) {
     const Image = this.model('Image');
-    var id = obj.id;
-    var userId = obj.linkedBy;
-    var query = {_id: id};
+    let id = obj.id;
+    let userId = obj.linkedBy;
+    let query = {_id: id};
 
-    var pullObj = {
+    let pullObj = {
         $pull: {linkedBy: userId}
     };
     Image.update(query, pullObj, (err, res) => {

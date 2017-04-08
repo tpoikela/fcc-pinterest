@@ -3,12 +3,12 @@
 const mongoose = require('mongoose');
 const Validation = require('../common/validation.js');
 
-var validator = new Validation();
+let validator = new Validation();
 
 const Schema = mongoose.Schema;
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
-var UserSchema = new Schema({
+let UserSchema = new Schema({
 
     // Used to access the information in the database, unique for each
     username: {
@@ -119,7 +119,7 @@ function getPullObj(obj) {
 //---------------------------------------------------------------------------
 
 UserSchema.statics.findOrCreate = function(token, profile, cb) {
-    var User = this.model('User');
+    let User = this.model('User');
 	User.findOne({'twitter.id': profile.id}, (err, user) => {
 		if (err) {cb(err);}
 		else if (user) {
@@ -129,7 +129,7 @@ UserSchema.statics.findOrCreate = function(token, profile, cb) {
 		else {
             console.log('Creating a new user ' + profile.username);
 			// if there is no user, create them
-			var newUser = new User();
+			let newUser = new User();
 
 			// set all of the user data that we need
 			newUser.twitter.id = profile.id;
@@ -156,42 +156,42 @@ UserSchema.statics.findOrCreate = function(token, profile, cb) {
 
 /* Returns the full document for given username. Doesn't populate. */
 UserSchema.statics.getUser = function(username, cb) {
-    var User = this.model('User');
+    let User = this.model('User');
     if (username) {
         User.findOne({username: username}, (err, data) => {
             if (err) {cb(err);}
             else if (data) {cb(null, data);}
             else {
-                var error = new Error('No user |' + username + '| found.');
+                let error = new Error('No user |' + username + '| found.');
                 cb(error);
             }
         });
     }
     else {
-        var error = new Error('No username given.');
+        let error = new Error('No username given.');
         cb(error);
     }
 };
 
 /* Calls given callback with user ID corresponding to the given username.*/
 UserSchema.statics.getUserID = function(username, cb) {
-    var User = this.model('User');
+    let User = this.model('User');
     User.findOne({username: username}, (err, data) => {
         if (err) {return cb(err);}
         if (data) {return cb(null, data._id);}
 
-        var error = new Error('No user with given ID found.');
+        let error = new Error('No user with given ID found.');
         return cb(error);
     });
 };
 
 /* Adds one image for this user. */
 UserSchema.statics.addImage = function(obj, cb) {
-    var User = this.model('User');
-    var imageId = obj.imageId;
+    let User = this.model('User');
+    let imageId = obj.imageId;
     if (imageId) {
-        var query = getQuery(obj);
-        var pushObj = getPushObj(obj);
+        let query = getQuery(obj);
+        let pushObj = getPushObj(obj);
         User.update(query, pushObj, (err, res) => {
             if (err) {cb(err);}
             else {
@@ -200,18 +200,18 @@ UserSchema.statics.addImage = function(obj, cb) {
         });
     }
     else {
-        var error = new Error('No imageId in obj');
+        let error = new Error('No imageId in obj');
         cb(error);
     }
 };
 
 /* Adds one image for this user. */
 UserSchema.statics.removeImage = function(obj, cb) {
-    var User = this.model('User');
-    var imageId = obj.imageId;
+    let User = this.model('User');
+    let imageId = obj.imageId;
     if (imageId) {
-        var query = getQuery(obj);
-        var pullObj = getPullObj(obj);
+        let query = getQuery(obj);
+        let pullObj = getPullObj(obj);
         User.update(query, pullObj, (err, res) => {
             if (err) {cb(err);}
             else {
@@ -220,44 +220,44 @@ UserSchema.statics.removeImage = function(obj, cb) {
         });
     }
     else {
-        var error = new Error('No imageId in obj');
+        let error = new Error('No imageId in obj');
         cb(error);
     }
 };
 
 UserSchema.statics.addLinkedImage = function(obj, cb) {
-    var User = this.model('User');
-    var newObj = Object.assign({}, obj);
+    let User = this.model('User');
+    let newObj = Object.assign({}, obj);
     newObj.link = true;
     User.addImage(newObj, cb);
 };
 
 UserSchema.statics.addLikedImage = function(obj, cb) {
-    var User = this.model('User');
-    var newObj = Object.assign({}, obj);
+    let User = this.model('User');
+    let newObj = Object.assign({}, obj);
     newObj.like = true;
     User.addImage(newObj, cb);
 };
 
 UserSchema.statics.removeLinkedImage = function(obj, cb) {
-    var User = this.model('User');
-    var newObj = Object.assign({}, obj);
+    let User = this.model('User');
+    let newObj = Object.assign({}, obj);
     newObj.link = true;
     User.removeImage(newObj, cb);
 };
 
 UserSchema.statics.removeLikedImage = function(obj, cb) {
-    var User = this.model('User');
-    var newObj = Object.assign({}, obj);
+    let User = this.model('User');
+    let newObj = Object.assign({}, obj);
     newObj.like = true;
     User.removeImage(newObj, cb);
 };
 
 /* Returns all images for the given user. Does a populate. */
 UserSchema.statics.getImagesForUser = function(obj, cb) {
-    var User = this.model('User');
-    var queryObj = getQuery(obj);
-    var filter = {username: 1, added: 1, linkedTo: 1, liked: 1, _id: 0};
+    let User = this.model('User');
+    let queryObj = getQuery(obj);
+    let filter = {username: 1, added: 1, linkedTo: 1, liked: 1, _id: 0};
     User.findOne(queryObj, filter)
         .populate('added')
         .populate('liked')
@@ -275,7 +275,7 @@ UserSchema.statics.getImagesForUser = function(obj, cb) {
 /* Updates the user info with given object. Note that obj must match the user
  * schema.*/
 UserSchema.methods.update = function(obj, cb) {
-    var setVals = {$set: obj};
+    let setVals = {$set: obj};
     this.model('User').update({_id: this._id}, setVals, {}, (err, data) => {
         if (err) {cb(err, null);}
         cb(null, data);

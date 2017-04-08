@@ -1,18 +1,18 @@
 'use strict';
 
-var path = process.cwd();
-var ctrlPath = path + '/server/ctrl';
+let path = process.cwd();
+let ctrlPath = path + '/server/ctrl';
 
 const ImageController = require(ctrlPath + '/image-ctrl.server.js');
 const UserController = require(ctrlPath + '/user-ctrl.server.js');
 const debug = require('debug')('book:routes');
 
-var _log = function(msg) {
+let _log = function(msg) {
     console.log('[LOG@SERVER]: ' + msg);
 };
 
 /* Function for debug logging requests.*/
-var reqDebug = function(req) {
+let reqDebug = function(req) {
 	_log('\t\tHeaders: ' + JSON.stringify(req.headers));
 	_log('\t\tBody: ' + JSON.stringify(req.body));
 	_log('\t\tParams: ' + JSON.stringify(req.params));
@@ -27,22 +27,22 @@ const _u = function(username) {
 };
 
 // Msg objects sent back to the client
-var notAuthorized = {msg: 'Operation not authorized. Log in first.'};
-var errorInternal = {msg: 'Server internal error.'};
-var errorForbidden = {msg: 'Requested action forbidden.'};
+let notAuthorized = {msg: 'Operation not authorized. Log in first.'};
+let errorInternal = {msg: 'Server internal error.'};
+let errorForbidden = {msg: 'Requested action forbidden.'};
 
 /* Contains all routes for this application. */
 module.exports = function(app, passport) {
 
     /* Renders a pug template.*/
-    var renderPug = function(req, res, pugFile) {
-        var isAuth = req.isAuthenticated();
+    let renderPug = function(req, res, pugFile) {
+        let isAuth = req.isAuthenticated();
         debug('renderPug auth: ' + isAuth + ' file: ' + pugFile);
         res.render(path + '/pug/' + pugFile, {isAuth: isAuth});
     };
 
     /* loggedIn func from clementine.js. */
-	var isLoggedInOrRedirect = function(req, res, next) {
+	let isLoggedInOrRedirect = function(req, res, next) {
 		if (req.isAuthenticated()) {
 			return next();
 		}
@@ -52,7 +52,7 @@ module.exports = function(app, passport) {
 		}
 	};
 
-    var isLoggedInAjax = function(req, res, next) {
+    let isLoggedInAjax = function(req, res, next) {
 		if (req.isAuthenticated()) {
 			return next();
 		}
@@ -65,7 +65,7 @@ module.exports = function(app, passport) {
 
     /* Returns the username from the request. Logs an error if username is not
      * present. */
-    var getUserName = function(req, route) {
+    let getUserName = function(req, route) {
         if (req.user) {
             if (req.user.username) {
                 return req.user.username;
@@ -81,27 +81,27 @@ module.exports = function(app, passport) {
         return null;
     };
 
-    var logErrorReq = function(req) {
+    let logErrorReq = function(req) {
         console.error('Error REQ headers: ');
         reqDebug(req);
     };
 
     /* Logs an error with route and request information included.*/
-    var logError = function(route, err, req) {
-        var date = new Date();
+    let logError = function(route, err, req) {
+        let date = new Date();
         console.error(date + ' [ERROR@SERVER] route ' + route + ' | ' + err);
         if (req) {
             logErrorReq(req);
         }
     };
 
-    var debugJSON = function(msg, obj) {
+    let debugJSON = function(msg, obj) {
         debug(msg + ' ' + JSON.stringify(obj));
     };
 
     // CONTROLLERS
-    var userController = new UserController(path);
-    var imageController = new ImageController(path);
+    let userController = new UserController(path);
+    let imageController = new ImageController(path);
 
     //----------------------------------------------------------------------
     // ROUTES
@@ -164,7 +164,7 @@ module.exports = function(app, passport) {
     // Called by client to check their authentication status
 	app.route('/users/amiauth')
 		.get((req, res) => {
-            var data = {isAuth: false};
+            let data = {isAuth: false};
             if (req.isAuthenticated()) {
                 data.isAuth = true;
                 data.username = req.user.username;
@@ -187,7 +187,7 @@ module.exports = function(app, passport) {
 
     app.route('/users/:name')
         .get(isLoggedInAjax, (req, res) => {
-            var username = req.params.name;
+            let username = req.params.name;
             if (username === req.user.username) {
                 userController.getUserByName(username, (err, data) => {
                     if (err) {
@@ -210,8 +210,8 @@ module.exports = function(app, passport) {
 
     app.route('/users/update')
         .post(isLoggedInAjax, (req, res) => {
-            var username = getUserName(req, '/user/update');
-            var userInfo = req.body;
+            let username = getUserName(req, '/user/update');
+            let userInfo = req.body;
             debugJSON('/users/update ' + _u(username) + ' info: ', userInfo);
             userController.updateUserInfo(username, userInfo, (err, data) => {
                 if (err) {
@@ -226,7 +226,7 @@ module.exports = function(app, passport) {
 
     app.route('/users')
         .get(isLoggedInAjax, (req, res) => {
-            var username = req.user.username;
+            let username = req.user.username;
             userController.getUserByName(username, (err, data) => {
                 if (err) {
                     logError('/users/' + username, err, req);
@@ -261,7 +261,7 @@ module.exports = function(app, passport) {
         /* Used for updating existing images. */
         .put(isLoggedInAjax, (req, res) => {
             debugJSON('PUT /images req.body: ', req.body);
-            var username = req.user.username;
+            let username = req.user.username;
             imageController.updateImage(username, req.body, (err, result) => {
                 if (err) {
                     logError('/images', err, req);
@@ -278,7 +278,7 @@ module.exports = function(app, passport) {
         .post(isLoggedInAjax, (req, res) => {
             debug('POST /images');
             debugJSON('POST /images req.body: ', req.body);
-            var username = req.user.username;
+            let username = req.user.username;
             imageController.addImage(username, req.body, (err, result) => {
                 if (err) {
                     logError('/images', err, req);
@@ -295,7 +295,7 @@ module.exports = function(app, passport) {
         .delete(isLoggedInAjax, (req, res) => {
             debug('DELETE /images');
             debugJSON('DELETE /images req.body: ', req.body);
-            var username = req.user.username;
+            let username = req.user.username;
             imageController.removeImage(username, req.body, (err, result) => {
                 if (err) {
                     logError('/images', err, req);

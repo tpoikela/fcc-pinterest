@@ -6,7 +6,7 @@ const hash = require('../common/hash-password');
 
 module.exports = function(path) {
 
-    var errorHandler = function(err, res) {
+    let errorHandler = function(err, res) {
         console.error('userController Server error: ' + err);
         res.sendStatus(500);
     };
@@ -14,14 +14,14 @@ module.exports = function(path) {
     // Adds one user to the database. Fails if a user exists already. This is
     // used only for local registration. github users are added in passport.js
     this.addLocalUser = function(req, res) {
-        var username = req.body.username;
-        var password = req.body.password;
+        let username = req.body.username;
+        let password = req.body.password;
         if (username && password) {
             User.findOne({username: username}, function(err, user) {
                 if (err) {errorHandler(err, res);}
                 // If the user doesn't exist, create new one and store into DB
                 else if (!user) {
-					var newUser = new User();
+					let newUser = new User();
                     newUser.username = username;
                     newUser.local = {};
                     newUser.local.username = username;
@@ -51,7 +51,7 @@ module.exports = function(path) {
         }
     };
 
-    var sendAuthenticatedUserInfo = function(res, username) {
+    let sendAuthenticatedUserInfo = function(res, username) {
         User.findOne({username: username})
             // .populate('bookList')
             .exec(function(err, user) {
@@ -61,7 +61,7 @@ module.exports = function(path) {
                     return res.json(user);
                 }
                 else {
-                    var obj = {error:
+                    let obj = {error:
                         'No user ' + username + ' found in database.'};
                     return res.json(obj);
                 }
@@ -72,7 +72,7 @@ module.exports = function(path) {
     this.getUser = function(req, res) {
         if (req.isAuthenticated()) {
             console.log('getUser Req auth, user ' + JSON.stringify(req.user));
-            var username = req.user.username;
+            let username = req.user.username;
             sendAuthenticatedUserInfo(res, username);
         }
         else {
@@ -112,7 +112,7 @@ module.exports = function(path) {
     /* Adds a venue where user is going. Needs appID and username to perform
      * the update.*/
     this.updateUserInfo = function(username, info, cb) {
-        var updateObj = {$set: info};
+        let updateObj = {$set: info};
         User.update({username: username}, updateObj, (err, data) => {
             if (err) {return cb(err);}
             else {

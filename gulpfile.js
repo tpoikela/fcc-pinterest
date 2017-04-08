@@ -1,4 +1,4 @@
-/* gulpfile for project fcc-pinterest.*/
+/* gulpfile for React/NodeJS full-stack development.*/
 
 const gulp = require('gulp');
 const sass = require('gulp-sass');
@@ -9,7 +9,7 @@ const browserify = require('browserify');
 const source = require('vinyl-source-stream');
 const notify = require('gulp-notify');
 
-const port = process.env.PORT || 8080;
+const serverPort = process.env.PORT || 8080;
 
 // Define paths for all source files here
 const paths = {
@@ -60,8 +60,8 @@ gulp.task('build-js', function() {
 
 gulp.task('build-sass', function() {
     return gulp.src('./scss/*.scss')
-    .pipe(sass().on('error', sass.logError))
-    .pipe(gulp.dest('./build'));
+        .pipe(sass().on('error', sass.logError))
+        .pipe(gulp.dest('./build'));
 
 });
 
@@ -73,7 +73,7 @@ gulp.task('build', buildTasks, function() {
 
 
 //--------------
-// DEV-section
+// DEV-tasks
 //--------------
 
 if (process.env.NODE_ENV !== 'production') {
@@ -83,9 +83,9 @@ const nodemon = require('gulp-nodemon');
 const ctags = require('gulp-ctags');
 
 gulp.task('tags', function() {
-  return gulp.src(paths.tags)
-    .pipe(ctags({name: 'tags'}))
-    .pipe(gulp.dest('./'));
+    return gulp.src(paths.tags)
+        .pipe(ctags({name: 'tags'}))
+        .pipe(gulp.dest('./'));
 });
 
 /* Task for starting/restarting server on any changes.*/
@@ -98,12 +98,12 @@ gulp.task('serve', function(cb) {
         env: {
             NODE_ENV: process.env.NODE_ENV || 'development',
             DEBUG: process.env.DEBUG || 0,
-            PORT: port
+            PORT: serverPort
         }
     })
     .on('start', function() {
         if (!called) {
-            console.log('Server started on port ' + port);
+            console.log('Server started on port ' + serverPort);
             called = true;
             cb();
         }
@@ -145,9 +145,9 @@ gulp.task('build-js-inc', function() {
 });
 
 var watchDependents = [
-  'build-js-inc',
-  'tags',
-  'build-sass'
+    'build-js-inc',
+    'tags',
+    'build-sass'
 ];
 
 gulp.task('watch-cli', watchDependents, function() {
@@ -158,7 +158,6 @@ gulp.task('watch-cli', watchDependents, function() {
 
 gulp.task('watch-server', ['serve'], function() {
     gulp.watch(paths.server, ['serve']);
-
 });
 
 gulp.task('watch-test', ['build-test'], function() {

@@ -6,10 +6,10 @@ const React = require('react');
 class ImageComp extends React.Component {
 
     render() {
-        var image = this.props.image;
+        let image = this.props.image;
 
-        var numLinks = image.linkedBy.length;
-        var numLikes = image.likedBy.length;
+        let numLinks = image.linkedBy.length;
+        let numLikes = image.likedBy.length;
         return (
             <div className='img-component'>
                 <img

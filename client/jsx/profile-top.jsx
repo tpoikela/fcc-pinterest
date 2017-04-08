@@ -29,10 +29,10 @@ class ProfileTop extends React.Component {
 
     render() {
         console.log('ProfileTop render()');
-        var userData = this.props.userData;
-        var username = '';
-        var userID = '';
-        var images = [];
+        let userData = this.props.userData;
+        let username = '';
+        let userID = '';
+        let images = [];
 
         if (userData) {
             username = userData.username;

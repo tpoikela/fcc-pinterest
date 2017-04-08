@@ -36,7 +36,7 @@ module.exports = function(passport) {
               if (err) { return done(err); }
               if (!user) { return done(null, false); }
 
-              var hashed = hash.getHash(password);
+              let hashed = hash.getHash(password);
 
               if (user.local.password !== hashed) { return done(null, false); }
               return done(null, user);

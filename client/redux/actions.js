@@ -106,7 +106,7 @@ export let removeImage = (img) => {
     return function(dispatch) {
         dispatch(actionAjaxStart('removeImage'));
         let url = appUrl + '/images';
-        let obj = img;
+        let obj = {image: img};
         ajax.delete(url, obj, (err, respText) => {
             if (err) {
                 dispatch(actionError(err));

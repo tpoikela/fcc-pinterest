@@ -17,10 +17,10 @@ class ProfileImages extends React.Component {
 
     render() {
 
-        var images = this.props.images;
+        let images = this.props.images;
 
-        var imageElems = images.map( (image, index) => {
-            var onClickRemove = this.onClickRemove.bind(this, image);
+        let imageElems = images.map( (image, index) => {
+            let onClickRemove = this.onClickRemove.bind(this, image);
             return (
                 <li key={index}>
                     <ImageComp image={image}/>
