@@ -1,7 +1,7 @@
 
 const ajax = require('../common/ajax-functions');
 
-var appUrl = window.location.origin;
+let appUrl = window.location.origin;
 
 //---------------
 // Actions
@@ -12,18 +12,18 @@ var appUrl = window.location.origin;
 //----------------------------------------------
 
 // Thunk action to retrieve user info
-var getUserInfo = () => {
+export let getUserInfo = () => {
     return function(dispatch) {
 
         dispatch(fetchUser());
 
-        var url = appUrl + '/users';
+        let url = appUrl + '/users';
         ajax.get(url, (err, respText) => {
             if (err) {
                 dispatch(actionError(err));
             }
             else {
-                var json = JSON.parse(respText);
+                let json = JSON.parse(respText);
                 dispatch(receiveUser(json));
             }
         });
@@ -31,16 +31,16 @@ var getUserInfo = () => {
 };
 
 // Thunk action to send POST to server with image data
-var addImage = (obj) => {
+export let addImage = (obj) => {
     return function(dispatch) {
         dispatch(fetchImage());
-        var url = appUrl + '/images';
+        let url = appUrl + '/images';
         ajax.post(url, obj, (err, respText) => {
             if (err) {
                 dispatch(actionError(err));
             }
             else {
-                var json = JSON.parse(respText);
+                let json = JSON.parse(respText);
                 dispatch(receiveImage(json));
             }
         });
@@ -48,17 +48,17 @@ var addImage = (obj) => {
     };
 };
 
-var linkImage = (image) => {
+export let linkImage = (image) => {
     return function(dispatch) {
         dispatch(actionAjaxStart('linkImage'));
-        var url = appUrl + '/images';
-        var obj = {image: image, link: true};
+        let url = appUrl + '/images';
+        let obj = {image: image, link: true};
         ajax.put(url, obj, (err, respText) => {
             if (err) {
                 dispatch(actionError(err));
             }
             else {
-                var json = JSON.parse(respText);
+                let json = JSON.parse(respText);
                 dispatch(actionAjaxDone('linkImage', json));
             }
         });
@@ -66,17 +66,17 @@ var linkImage = (image) => {
     };
 };
 
-var likeImage = (image) => {
+export let likeImage = (image) => {
     return function(dispatch) {
         dispatch(actionAjaxStart('likeImage'));
-        var url = appUrl + '/images';
-        var obj = {image: image, like: true};
+        let url = appUrl + '/images';
+        let obj = {image: image, like: true};
         ajax.put(url, obj, (err, respText) => {
             if (err) {
                 dispatch(actionError(err));
             }
             else {
-                var json = JSON.parse(respText);
+                let json = JSON.parse(respText);
                 dispatch(actionAjaxDone('likeImage', json));
             }
         });
@@ -85,17 +85,35 @@ var likeImage = (image) => {
 };
 
 // Thunk action to GET all images from the server
-var getAllImages = () => {
+export let getAllImages = () => {
     return function(dispatch) {
         dispatch(actionAjaxStart('allImages'));
-        var url = appUrl + '/images';
+        let url = appUrl + '/images';
         ajax.get(url, (err, respText) => {
             if (err) {
                 dispatch(actionError(err));
             }
             else {
-                var json = JSON.parse(respText);
+                let json = JSON.parse(respText);
                 dispatch(actionAjaxDone('allImages', json));
+            }
+        });
+    };
+};
+
+// Thunk action to remove an image from the user profile
+export let removeImage = (img) => {
+    return function(dispatch) {
+        dispatch(actionAjaxStart('removeImage'));
+        let url = appUrl + '/images';
+        let obj = img;
+        ajax.delete(url, obj, (err, respText) => {
+            if (err) {
+                dispatch(actionError(err));
+            }
+            else {
+                let json = JSON.parse(respText);
+                dispatch(actionAjaxDone('removeImage', json));
             }
         });
     };
@@ -152,5 +170,4 @@ let receiveImage = (json) => {
     };
 };
 
-export {addImage, getAllImages, getUserInfo, actionClicked,
-        likeImage, linkImage, fetchUser, receiveUser};
+export {actionClicked, fetchUser, receiveUser};

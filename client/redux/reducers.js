@@ -1,22 +1,22 @@
 'use strict';
 
-var receiveUser = (nextState, action) => {
+let receiveUser = (nextState, action) => {
     nextState.userData = action.json;
     return nextState;
 };
 
-var receiveImage = (nextState, action) => {
+let receiveImage = (nextState, action) => {
     nextState.resp = action.json;
     return nextState;
 };
 
-var handleAjaxStart = (nextState, action) => {
+let handleAjaxStart = (nextState, action) => {
     nextState.isFetching = true;
     nextState.fetchingWhat = action.what;
     return nextState;
 };
 
-var handleAjaxDone = (nextState, action) => {
+let handleAjaxDone = (nextState, action) => {
     nextState.isFetching = false;
     nextState.fetchingWhat = '';
     switch (action.what) {
@@ -26,7 +26,7 @@ var handleAjaxDone = (nextState, action) => {
 
 };
 
-var handleError = (nextState, action) => {
+let handleError = (nextState, action) => {
     nextState.err = action.err;
     nextState.isFetching = false;
     nextState.fetchingWhat = '';
