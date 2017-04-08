@@ -290,6 +290,23 @@ module.exports = function(app, passport) {
                 }
             });
 
+        })
+
+        .delete(isLoggedInAjax, (req, res) => {
+            debug('DELETE /images');
+            debugJSON('DELETE /images req.body: ', req.body);
+            var username = req.user.username;
+            imageController.removeImage(username, req.body, (err, result) => {
+                if (err) {
+                    logError('/images', err, req);
+                    res.status(500).json(errorInternal);
+                }
+                else {
+                    debugJSON('DELETE /images result (200): ', result);
+                    res.status(200).json({msg: 'OK'});
+                }
+            });
+
         });
 
     //--------------------------------------
