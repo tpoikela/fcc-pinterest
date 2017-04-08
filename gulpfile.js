@@ -29,7 +29,7 @@ const paths = {
 
 /* Used to notify on build/compile errors.*/
 function handleErrors() {
-    var args = Array.prototype.slice.call(arguments);
+    let args = Array.prototype.slice.call(arguments);
     notify.onError({
         title: 'Compile Error',
         message: '<%= error.message %>'
@@ -65,7 +65,7 @@ gulp.task('build-sass', function() {
 
 });
 
-var buildTasks = ['build-js', 'build-sass'];
+let buildTasks = ['build-js', 'build-sass'];
 
 gulp.task('build', buildTasks, function() {
     console.log('Building the application.');
@@ -90,7 +90,7 @@ gulp.task('tags', function() {
 
 /* Task for starting/restarting server on any changes.*/
 gulp.task('serve', function(cb) {
-    var called = false;
+    let called = false;
     nodemon({
         script: paths.server,
         ext: '.js',
@@ -130,7 +130,7 @@ gulp.task('build-test', function() {
 
 // Incrementally building the js
 gulp.task('build-js-inc', function() {
-	var b = browserify(Object.assign({}, browserifyInc.args,
+	let b = browserify(Object.assign({}, browserifyInc.args,
 		browserifyOpts
 	));
 
@@ -144,7 +144,7 @@ gulp.task('build-js-inc', function() {
         .pipe(notify('Build OK'));
 });
 
-var watchDependents = [
+let watchDependents = [
     'build-js-inc',
     'tags',
     'build-sass'
