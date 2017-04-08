@@ -70,7 +70,7 @@ var AjaxFuncs = {
 
     },
 
-    /* Send ajax-DELETE with JSON data.*/
+    /* Send ajax-DELETE with JSON data. */
     delete: (url, data, cb) => {
         if ($DEBUG) {console.log('ajax-delete to URL: ' + url);}
         var xhr = new XMLHttpRequest();
