@@ -47,15 +47,6 @@ let UserSchema = new Schema({
 
     },
 
-    // Complementary (optional) user info
-    /*
-    userAddress: {type: String},
-    userEmail: {type: String},
-    userFullname: {type: String},
-    userPostCode: {type: String},
-    userState: {type: String},
-    */
-
     linkedTo: [{type: ObjectId, ref: 'Image'}],
     liked: [{type: ObjectId, ref: 'Image'}],
     added: [{type: ObjectId, ref: 'Image'}]
@@ -76,6 +67,7 @@ function getQuery(obj) {
     else if (obj.query) {
         return obj.query;
     }
+    console.error('Error. getQuery returning null.');
     return null;
 }
 
