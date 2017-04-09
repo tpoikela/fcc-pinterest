@@ -74,7 +74,11 @@ function getQuery(obj) {
 /* Returns the object which is used to add given imageId to the user. */
 function getPushObj(obj) {
     if (obj.add) {
-        return {$addToSet: {added: obj.imageId}};
+        return {
+            $addToSet: {
+                added: obj.imageId,
+                linkedTo: obj.imageId
+            }};
     }
     else if (obj.like) {
         return {$addToSet: {liked: obj.imageId}};
@@ -83,27 +87,27 @@ function getPushObj(obj) {
         return {$addToSet: {linkedTo: obj.imageId}};
     }
     else {
-        // By default, add the imageId to 'owned' images
-        return {$addToSet: {added: obj.imageId}};
+        // By default, add and link to the image
+        return {
+            $addToSet: {
+                added: obj.imageId,
+                linkedTo: obj.imageId
+            }};
     }
 }
 
 /* Returns the object which is used to remove given imageId from a user. */
 function getPullObj(obj) {
-    if (obj.add) {
-        return {$pull: {added: obj.imageId}};
-    }
-    else if (obj.like) {
+    if (obj.like) {
         return {$pull: {liked: obj.imageId}};
     }
     else if (obj.link) {
         return {$pull: {linkedTo: obj.imageId}};
     }
     else {
-        // By default, add the imageId to 'owned' images
-        return {$pull: {added: obj.imageId}};
+        console.error('UserSchema getPullObj missing obj.like or obj.link');
+        return null;
     }
-
 }
 
 //---------------------------------------------------------------------------
@@ -197,7 +201,7 @@ UserSchema.statics.addImage = function(obj, cb) {
     }
 };
 
-/* Adds one image for this user. */
+/* Adds unlinks/unlikes one image for user given in obj. */
 UserSchema.statics.removeImage = function(obj, cb) {
     let User = this.model('User');
     let imageId = obj.imageId;
@@ -249,9 +253,9 @@ UserSchema.statics.removeLikedImage = function(obj, cb) {
 UserSchema.statics.getImagesForUser = function(obj, cb) {
     let User = this.model('User');
     let queryObj = getQuery(obj);
-    let filter = {username: 1, added: 1, linkedTo: 1, liked: 1, _id: 0};
+    let filter = {username: 1, added: 0, linkedTo: 1, liked: 1, _id: 0};
     User.findOne(queryObj, filter)
-        .populate('added')
+        // .populate('added')
         .populate('liked')
         .populate('linkedTo')
         .exec( (err, user) => {
