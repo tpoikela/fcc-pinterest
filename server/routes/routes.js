@@ -276,16 +276,16 @@ module.exports = function(app, passport) {
         })
 
         .post(isLoggedInAjax, (req, res) => {
-            debug('POST /images');
-            debugJSON('POST /images req.body: ', req.body);
+            debug('/images POST');
+            debugJSON('/images POST req.body: ', req.body);
             let username = req.user.username;
             imageController.addImage(username, req.body, (err, result) => {
                 if (err) {
-                    logError('/images', err, req);
+                    logError('/images POST', err, req);
                     res.status(500).json(errorInternal);
                 }
                 else {
-                    debugJSON('POST /images result (200): ', result);
+                    debugJSON('/images POST result (200): ', result);
                     res.status(200).json({msg: 'OK'});
                 }
             });
@@ -293,16 +293,16 @@ module.exports = function(app, passport) {
         })
 
         .delete(isLoggedInAjax, (req, res) => {
-            debug('DELETE /images');
-            debugJSON('DELETE /images req.body: ', req.body);
+            debug('/images DELETE');
+            debugJSON('/images DELETE req.body: ', req.body);
             let username = req.user.username;
             imageController.removeImage(username, req.body, (err, result) => {
                 if (err) {
-                    logError('/images', err, req);
+                    logError('/images DELETE', err, req);
                     res.status(500).json(errorInternal);
                 }
                 else {
-                    debugJSON('DELETE /images result (200): ', result);
+                    debugJSON('/images DELETE result (200): ', result);
                     res.status(200).json({msg: 'OK'});
                 }
             });
