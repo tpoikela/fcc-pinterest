@@ -78,22 +78,18 @@ class ImageController {
                 id: imageId,
                 linkedBy: username
             };
-            Image.removeLink(obj, (err, result) => {
+            Image.removeLink(obj, (err, imgResult) => {
                 if (err) {cb(err);}
-                else if (result.nModified === 1) {
-                    let userObj = {};
-                    User.removeLinkedImage(userObj, (err, result) => {
+                else {
+                    let userObj = {imageId: imageId, username: username};
+                    User.removeLinkedImage(userObj, (err, userResult) => {
                         if (err) {cb(err);} // TODO handle link removal
                         else {
-                            cb(null, result);
+                            this.checkModResult(imgResult, userResult);
+                            cb(null, userResult);
                         }
 
                     });
-                }
-                else {
-                    let error = new Error('Error in Image.removeLink');
-                    console.log('removeLink result: ' + JSON.stringify(result));
-                    cb(error);
                 }
             });
         }
@@ -103,11 +99,22 @@ class ImageController {
         }
     }
 
+    /* Returns all images from the database.*/
     getAllImages(cb) {
         Image.find({}, (err, data) => {
             if (err) {cb(err);}
             else {cb(null, data);}
         });
+    }
+
+    /* Checks that image/user documents were properly modified.*/
+    checkModResult(imgRes, userRes) {
+        if (imgRes.nModified === 1 && userRes.nModified === 0) {
+            console.warn('Image modified, but User NOT modified');
+        }
+        else if (imgRes.nModified === 0 && userRes.nModified === 1) {
+            console.warn('Image NOT modified, but User modified');
+        }
     }
 
 }
