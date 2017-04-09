@@ -37,7 +37,7 @@ class ProfileTop extends React.Component {
         if (userData) {
             username = userData.username;
             userID = userData.userID;
-            images = userData.added.concat(userData.linkedTo, userData.liked);
+            images = userData.linkedTo;
         }
 
         return (
