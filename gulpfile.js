@@ -15,6 +15,9 @@ const serverPort = process.env.PORT || 8080;
 const paths = {
     jsxDir: './client/jsx',
     client: ['./client/jsx/*.jsx', './client/**/*.js'],
+
+    grid: ['./client/common/grid-app.js'],
+
     sass: ['./scss/*.*'],
 
     server: './server.js',
@@ -127,6 +130,17 @@ gulp.task('build-test', function() {
         .pipe(gulp.dest('build'));
 });
 
+// Build the grid-js
+gulp.task('build-grid', function() {
+    return browserify({entries:
+        ['./client/common/grid-app.js'],
+        extensions: ['.js'], debug: true})
+        .transform(babelify)
+        .bundle()
+        .on('error', handleErrors)
+        .pipe(source('./bundle-grid.js'))
+        .pipe(gulp.dest('build'));
+});
 
 // Incrementally building the js
 gulp.task('build-js-inc', function() {
@@ -147,13 +161,15 @@ gulp.task('build-js-inc', function() {
 let watchDependents = [
     'build-js-inc',
     'tags',
-    'build-sass'
+    'build-sass',
+    'build-grid'
 ];
 
 gulp.task('watch-cli', watchDependents, function() {
     gulp.watch(paths.client, ['build-js-inc']);
     gulp.watch(paths.sass, ['build-sass']);
     gulp.watch(paths.tags, ['tags']);
+    gulp.watch(paths.grid, ['build-grid']);
 });
 
 gulp.task('watch-server', ['serve'], function() {
