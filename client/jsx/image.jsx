@@ -7,11 +7,12 @@ class ImageComp extends React.Component {
 
     render() {
         let image = this.props.image;
+        let className = this.props.className;
 
         let numLinks = image.linkedBy.length;
         let numLikes = image.likedBy.length;
         return (
-            <div className='img-component'>
+            <div className={className}>
                 <img
                     className='img-responsive'
                     src={image.url}
@@ -29,6 +30,7 @@ class ImageComp extends React.Component {
 }
 
 ImageComp.propTypes = {
+    className: React.PropTypes.string,
     image: React.PropTypes.object,
     linkImage: React.PropTypes.func,
     likeImage: React.PropTypes.func

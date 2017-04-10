@@ -5,10 +5,13 @@ const React = require('react');
 const ImageComp = require('./image');
 
 // const Masonry = require('masonry-layout');
-const Masonry = require('react-masonry-component');
+//const Masonry = require('react-masonry-component');
+// const MasonryLayout = require('react-masonry-layout');
+//
+import MasonryInfiniteScroller from 'react-masonry-infinite';
 
-let masonryOptions = {
-    columnWidth: 50
+const masonryOptions = {
+    columnWidth: '.grid-item'
 };
 
 /* Top-level component which shows all images. */
@@ -34,6 +37,11 @@ class ImagesTop extends React.Component {
         this.props.getAllImages();
     }
 
+    /* Loads more images from the server.*/
+    loadMore() {
+
+    }
+
     render() {
         let images = this.props.images;
 
@@ -50,7 +58,9 @@ class ImagesTop extends React.Component {
             let likeCb = this.likeImage.bind(this, img);
             let linkCb = this.linkImage.bind(this, img);
             return (
-                <ImageComp image={img} key={index}
+                <ImageComp
+                    className='grid-item'
+                    image={img} key={index}
                     likeImage={likeCb}
                     linkImage={linkCb}
                 />
@@ -60,13 +70,27 @@ class ImagesTop extends React.Component {
         return (
             <div>
                 <h2>ImagesTop</h2>
+
+                <MasonryInfiniteScroller
+                    hasMore={false}
+                    loadMore={this.loadMore}
+                    sizes={[{columns: 3}]}
+                    >
+                    {imgElems}
+                </MasonryInfiniteScroller>
+
+            </div>
+
+
+            /*
                 <Masonry
+                    className='masonry-grid'
                     elementType={'div'}
                     options={masonryOptions}
                     >
                     {imgElems}
                 </Masonry>
-            </div>
+                */
         );
 
     }
