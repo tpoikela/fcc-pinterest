@@ -117,6 +117,11 @@ module.exports = function(app, passport) {
             renderPug(req, res, 'about.pug');
 		});
 
+	app.route('/grid')
+		.get((req, res) => {
+            renderPug(req, res, 'grid.pug');
+		});
+
 	app.route('/all-images')
 		.get((req, res) => {
             renderPug(req, res, 'images.pug');
