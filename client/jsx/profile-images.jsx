@@ -20,7 +20,11 @@ class ProfileImages extends React.Component {
 
         return (
             <div>
-                <Gallery elements={images} />
+                <Gallery
+                    elements={images}
+                    likeImage={this.props.likeImage}
+                    linkImage={this.props.linkImage}
+                />
             </div>
 
         );
@@ -31,6 +35,8 @@ class ProfileImages extends React.Component {
 
 ProfileImages.propTypes = {
     images: React.PropTypes.array,
+    likeImage: React.PropTypes.func,
+    linkImage: React.PropTypes.func,
     onClickRemove: React.PropTypes.func
 
 };

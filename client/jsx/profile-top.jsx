@@ -49,6 +49,8 @@ class ProfileTop extends React.Component {
 
                 <ProfileImages
                     images={images}
+                    likeImage={this.props.likeImage}
+                    linkImage={this.props.linkImage}
                     onClickRemove={this.props.onClickRemoveImage}
                 />
 
@@ -61,6 +63,8 @@ class ProfileTop extends React.Component {
 ProfileTop.propTypes = {
     addImage: React.PropTypes.func,
     getUserInfo: React.PropTypes.func,
+    likeImage: React.PropTypes.func,
+    linkImage: React.PropTypes.func,
     onClickButton: React.PropTypes.func,
     onClickRemoveImage: React.PropTypes.func,
     userData: React.PropTypes.object

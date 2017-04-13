@@ -14,11 +14,11 @@ class Gallery extends React.Component {
     }
 
     likeImage(img) {
-
+        this.props.likeImage(img);
     }
 
     linkImage(img) {
-
+        this.props.linkImage(img);
     }
 
     render() {
@@ -47,16 +47,6 @@ class Gallery extends React.Component {
             );
         });
 
-        /*
-        let childElements = this.props.elements.map( (item, index) => {
-            return (
-                <div key={index} style={item.style}>
-                    <p>Elem {index}</p>
-                </div>
-            );
-        });
-        */
-
         return (
             <Masonry
                 className={'my-gallery-class'}
@@ -72,7 +62,9 @@ class Gallery extends React.Component {
 }
 
 Gallery.propTypes = {
-	elements: React.PropTypes.array
+	elements: React.PropTypes.array,
+    likeImage: React.PropTypes.func,
+    linkImage: React.PropTypes.func
 };
 
 module.exports = Gallery;
