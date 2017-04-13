@@ -1,10 +1,15 @@
 
-$grid-col-width: 175px;
+$grid-col-width: 200px;
+$grid-image-width: 175px;
+
+$border-color: #000;
 
 img.grid-image {
-    width: $grid-col-width;
+    width: $grid-image-width;
 }
 
 .grid-item {
-    width: 100px;
+    border: 1px solid $border-color;
+    padding: 3px;
+    width: $grid-col-width;
 }
