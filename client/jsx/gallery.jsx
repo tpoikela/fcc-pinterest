@@ -36,14 +36,13 @@ class Gallery extends React.Component {
         let childElements = images.map( (img, index) => {
             let likeCb = this.likeImage.bind(this, img);
             let linkCb = this.linkImage.bind(this, img);
-            let style = {width: '175px', marginRight: '10px'};
+            // let style = {width: '175px', marginRight: '10px'};
             return (
                 <ImageComp
                     className='grid-item'
                     image={img} key={index}
                     likeImage={likeCb}
                     linkImage={linkCb}
-                    style={style}
                 />
             );
         });

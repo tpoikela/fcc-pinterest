@@ -1,7 +1,7 @@
 'use strict';
 
 const React = require('react');
-const ImageComp = require('./image');
+const Gallery = require('./gallery');
 
 /* Component which renders the images in profile view.*/
 class ProfileImages extends React.Component {
@@ -16,24 +16,11 @@ class ProfileImages extends React.Component {
     }
 
     render() {
-
         let images = this.props.images;
-
-        let imageElems = images.map( (image, index) => {
-            let onClickRemove = this.onClickRemove.bind(this, image);
-            return (
-                <li key={index}>
-                    <ImageComp image={image}/>
-                    <button onClick={onClickRemove}>Remove</button>
-                </li>
-            );
-        });
 
         return (
             <div>
-                <ul>
-                    {imageElems}
-                </ul>
+                <Gallery elements={images} />
             </div>
 
         );
