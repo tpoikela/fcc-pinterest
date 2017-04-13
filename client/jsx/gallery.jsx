@@ -1,7 +1,7 @@
 
-
-let React = require('react');
-let Masonry = require('react-masonry-component');
+const React = require('react');
+const Masonry = require('react-masonry-component');
+const ImageComp = require('./image.jsx');
 
 let masonryOptions = {
     transitionDuration: 0
@@ -9,7 +9,20 @@ let masonryOptions = {
 
 class Gallery extends React.Component {
 
+    constructor(props) {
+        super(props);
+    }
+
+    likeImage(img) {
+
+    }
+
+    linkImage(img) {
+
+    }
+
     render() {
+        let images = this.props.elements;
 
         /*
         let childElements = this.props.elements.map(function(element) {
@@ -20,6 +33,22 @@ class Gallery extends React.Component {
             );
         });*/
 
+        let childElements = images.map( (img, index) => {
+            let likeCb = this.likeImage.bind(this, img);
+            let linkCb = this.linkImage.bind(this, img);
+            let style = {width: '175px', marginRight: '10px'};
+            return (
+                <ImageComp
+                    className='grid-item'
+                    image={img} key={index}
+                    likeImage={likeCb}
+                    linkImage={linkCb}
+                    style={style}
+                />
+            );
+        });
+
+        /*
         let childElements = this.props.elements.map( (item, index) => {
             return (
                 <div key={index} style={item.style}>
@@ -27,6 +56,7 @@ class Gallery extends React.Component {
                 </div>
             );
         });
+        */
 
         return (
             <Masonry

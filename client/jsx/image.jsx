@@ -6,15 +6,15 @@ const React = require('react');
 class ImageComp extends React.Component {
 
     render() {
+        let style = this.props.style;
         let image = this.props.image;
         let className = this.props.className;
 
         let numLinks = image.linkedBy.length;
         let numLikes = image.likedBy.length;
         return (
-            <div className={className}>
-                <img
-                    className='img-responsive'
+            <div className={className} style={style}>
+                <img className='grid-image'
                     src={image.url}
                 />
                 <p>Title: {image.title}</p>
@@ -33,7 +33,8 @@ ImageComp.propTypes = {
     className: React.PropTypes.string,
     image: React.PropTypes.object,
     linkImage: React.PropTypes.func,
-    likeImage: React.PropTypes.func
+    likeImage: React.PropTypes.func,
+    style: React.PropTypes.object
 };
 
 module.exports = ImageComp;
