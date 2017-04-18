@@ -56,8 +56,25 @@ class ImageController {
                 });
             }
             else if (body.like) {
-                let error = new Error('body.like not implemented yet');
-                cb(error);
+                let obj = {
+                    id: imageId,
+                    likedBy: username
+                };
+                Image.addLike(obj, (err) => {
+                    if (err) {cb(err);}
+                    else {
+                        let updateObj = {
+                            username: username,
+                            imageId: imageId
+                        };
+                        User.addLikedImage(updateObj, (err, result) => {
+                            if (err) {cb(err);}
+                            else {
+                                cb(null, result);
+                            }
+                        });
+                    }
+                });
             }
             else {
                 let error = new Error('body.link or body.like not given');
@@ -70,28 +87,44 @@ class ImageController {
         }
     }
 
-    /* Removes linked image from a user.*/
+    /* Removes linked/liked image from a user.*/
     removeImage(username, body, cb) {
         let imageId = body.image._id;
+        let obj = {id: imageId};
         if (imageId) {
-            let obj = {
-                id: imageId,
-                linkedBy: username
-            };
-            Image.removeLink(obj, (err, imgResult) => {
-                if (err) {cb(err);}
-                else {
-                    let userObj = {imageId: imageId, username: username};
-                    User.removeLinkedImage(userObj, (err, userResult) => {
-                        if (err) {cb(err);} // TODO handle link removal
-                        else {
-                            this.checkModResult(imgResult, userResult);
-                            cb(null, userResult);
-                        }
+            if (body.image.link) {
+                obj.linkedBy = username;
+                Image.removeLink(obj, (err, imgResult) => {
+                    if (err) {cb(err);}
+                    else {
+                        let userObj = {imageId: imageId, username: username};
+                        User.removeLinkedImage(userObj, (err, userResult) => {
+                            if (err) {cb(err);}
+                            else {
+                                this.checkModResult(imgResult, userResult);
+                                cb(null, userResult);
+                            }
 
-                    });
-                }
-            });
+                        });
+                    }
+                });
+            }
+            else {
+                obj.likedBy = username;
+                Image.removeLike(obj, (err, imgResult) => {
+                    if (err) {cb(err);}
+                    else {
+                        let userObj = {imageId: imageId, username: username};
+                        User.removeLikedImage(userObj, (err, userResult) => {
+                            if (err) {cb(err);}
+                            else {
+                                this.checkModResult(imgResult, userResult);
+                                cb(null, userResult);
+                            }
+                        });
+                    }
+                });
+            }
         }
         else {
             let error = new Error('image not found within body');
