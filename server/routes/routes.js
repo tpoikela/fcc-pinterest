@@ -127,6 +127,11 @@ module.exports = function(app, passport) {
             renderPug(req, res, 'images.pug');
 		});
 
+	app.route('/walls')
+		.get((req, res) => {
+            renderPug(req, res, 'walls.pug');
+		});
+
 	app.route('/signup')
 		.get((req, res) => {
             renderPug(req, res, 'signup.pug');
@@ -189,6 +194,20 @@ module.exports = function(app, passport) {
             }
 		});
 
+    // Returns names of all users
+    app.route('/users/list')
+        .get((req, res) => {
+            userController.getUserList(req, (err, resp) => {
+                if (err) {
+                    logError('/users/list', err, req);
+                    res.status(500).json({error: 'No user list found.'});
+                }
+                else {
+                    res.status(200).json(resp);
+                }
+
+            });
+        });
 
     app.route('/users/:name')
         .get(isLoggedInAjax, (req, res) => {
