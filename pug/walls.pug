@@ -1,0 +1,18 @@
+//- Page showing all walls of the users
+
+include mixins.pug
+
+doctype html
+html
+  +pageHead("Walls")
+
+  body
+    +layoutBase()
+      +appTitle()
+      +topMenu("walls")
+
+      div#walls-top
+
+      +appFooter()
+
+    script(type="text/javascript" src="/build/bundle.js" charset="utf-8")
