@@ -72,11 +72,13 @@ fcc-pinterest=~/git/fcc-pinterest CD=. filter="*" flags=S {
   }
   jsx=jsx {
    app.jsx
+   gallery.jsx
    image.jsx
    images-top.jsx
    profile-add-image.jsx
    profile-images.jsx
    profile-top.jsx
+   walls-top.jsx
   }
   redux=redux {
    actions.js
