@@ -77,7 +77,7 @@ ImageSchema.statics.removeLike = function(obj, cb) {
     const Image = this.model('Image');
     let query = {_id: obj.id};
     let pullObj = {
-        $pull: {likedBy: obj.userId}
+        $pull: {likedBy: obj.likedBy}
     };
 
     Image.update(query, pullObj, (err, res) => {
@@ -86,7 +86,7 @@ ImageSchema.statics.removeLike = function(obj, cb) {
     });
 };
 
-
+/* Adds a link to the image. */
 ImageSchema.statics.addLink = function(obj, cb) {
     const Image = this.model('Image');
     let id = obj.id;
@@ -103,6 +103,7 @@ ImageSchema.statics.addLink = function(obj, cb) {
 
 };
 
+/* Removes a link from the image. */
 ImageSchema.statics.removeLink = function(obj, cb) {
     const Image = this.model('Image');
     let id = obj.id;
