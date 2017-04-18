@@ -5,7 +5,8 @@ import {profileReducer, wallsReducer} from '../redux/reducers.js';
 
 import {getUserInfo, getAllImages, actionClicked,
     likeImage, linkImage, addImage, removeImage,
-    unlikeImage, unlinkImage, getUserList
+    unlikeImage, unlinkImage, getUserList, getUserWall,
+    showUserList
 } from '../redux/actions';
 
 import ThunkMiddleware from 'redux-thunk';
@@ -69,12 +70,17 @@ let mapStateToProps = (state) => {
 };
 
 let wallsMapDispatchToProps = dispatch => ({
-    getUserList: () => dispatch(getUserList())
+    getUserList: () => dispatch(getUserList()),
+    getUserWall: (username) => dispatch(getUserWall(username)),
+    showUserList: () => dispatch(showUserList())
 });
 
 let wallsMapStateToProps = (state) => {
     return {
-        userList: state.wallsReducer.userList
+        isFetching: state.wallsReducer.isFetching,
+        showWall: state.wallsReducer.showWall,
+        userList: state.wallsReducer.userList,
+        userWall: state.wallsReducer.userWall
     };
 };
 

@@ -22,6 +22,11 @@ let handleAjaxDone = (nextState, action) => {
     switch (action.what) {
         case 'allImages': return {nextState, images: action.json};
         case 'getUserList': return {nextState, userList: action.json};
+        case 'getUserWall': {
+            nextState.showWall = true;
+            nextState.userWall = action.json;
+            return nextState;
+        }
         default: return nextState;
     }
 
@@ -34,6 +39,7 @@ let handleError = (nextState, action) => {
     return nextState;
 };
 
+/* Reducer for ProfileTop component.*/
 export function profileReducer(state, action) {
     if (typeof state === 'undefined') {
         return {
@@ -64,10 +70,14 @@ export function profileReducer(state, action) {
     }
 }
 
+/* Reducer for the WallsTop component.*/
 export function wallsReducer(state, action) {
     if (typeof state === 'undefined') {
         return {
-            userList: []
+            isFetching: false,
+            showWall: false,
+            userList: [],
+            userWall: null
         };
     }
 
@@ -77,6 +87,9 @@ export function wallsReducer(state, action) {
     switch (action.type) {
         case 'AJAX_START': return handleAjaxStart(nextState, action);
         case 'AJAX_DONE': return handleAjaxDone(nextState, action);
+        case 'SHOW_USER_LIST': {
+            return Object.assign(nextState, {showWall: false});
+        }
         default: return nextState;
     }
 }

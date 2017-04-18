@@ -30,6 +30,22 @@ export let getUserList = () => {
     };
 };
 
+export let getUserWall = (username) => {
+    return function(dispatch) {
+        dispatch(actionAjaxStart('getUserWall'));
+        let url = appUrl + '/users/wall/' + username;
+        ajax.get(url, (err, respText) => {
+            if (err) {
+                dispatch(actionError(err));
+            }
+            else {
+                let json = JSON.parse(respText);
+                dispatch(actionAjaxDone('getUserWall', json));
+            }
+        });
+    };
+};
+
 // Thunk action to retrieve user info
 export let getUserInfo = () => {
     return function(dispatch) {
@@ -225,4 +241,10 @@ let receiveImage = (json) => {
     };
 };
 
-export {actionClicked, fetchUser, receiveUser};
+let showUserList = () => {
+    return {
+        type: 'SHOW_USER_LIST'
+    };
+};
+
+export {actionClicked, fetchUser, receiveUser, showUserList};

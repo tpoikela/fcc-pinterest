@@ -77,6 +77,19 @@ module.exports = function(path) {
         });
     };
 
+    /* Returns the relevant data for user wall. */
+    this.getUserWall = function(username, cb) {
+        let filterObj = {username: 1, _id: 0, linkedTo: 1};
+        User.findOne({username: username}, filterObj)
+            .populate('linkedTo')
+            .exec((err, result) => {
+                if (err) {cb(err);}
+                else {
+                    cb(null, result);
+                }
+            });
+    };
+
     /* Responds with info about the requested user (if authenticated).*/
     this.getUser = function(req, res) {
         if (req.isAuthenticated()) {

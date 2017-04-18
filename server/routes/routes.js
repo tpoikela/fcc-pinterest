@@ -31,6 +31,8 @@ let notAuthorized = {msg: 'Operation not authorized. Log in first.'};
 let errorInternal = {msg: 'Server internal error.'};
 let errorForbidden = {msg: 'Requested action forbidden.'};
 
+let errorNoUserInUrl = {msg: 'No username given in URL'};
+
 /* Contains all routes for this application. */
 module.exports = function(app, passport) {
 
@@ -207,6 +209,26 @@ module.exports = function(app, passport) {
                 }
 
             });
+        });
+
+    app.route('/users/wall/:username')
+        .get((req, res) => {
+            let username = req.params.username;
+            if (username) {
+                userController.getUserWall(username, (err, resp) => {
+                    if (err) {
+                        logError('/users/wall', err, req);
+                        res.status(500).json({error: 'No user wall found.'});
+                    }
+                    else {
+                        res.status(200).json(resp);
+                    }
+
+                });
+            }
+            else {
+                res.status(400).json(errorNoUserInUrl);
+            }
         });
 
     app.route('/users/:name')
