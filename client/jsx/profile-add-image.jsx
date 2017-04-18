@@ -2,7 +2,7 @@
 
 const React = require('react');
 
-
+/* Component for adding images to user's profile.*/
 class ProfileAddImage extends React.Component {
 
     constructor(props) {
@@ -37,12 +37,20 @@ class ProfileAddImage extends React.Component {
 
     render() {
         return (
-            <div>
-                <label>Title:
-                    <input name='title' onChange={this.onChangeTitle} />
+            <div className='add-image-div'>
+                <label htmlFor='input-url'>URL:
+                    <input
+                        id='input-url'
+                        name='url'
+                        onChange={this.onChangeUrl}
+                    />
                 </label>
-                <label>URL:
-                    <input name='url' onChange={this.onChangeUrl} />
+                <label htmlFor='input-title' >Title:
+                    <input
+                        id='input-title'
+                        name='title'
+                        onChange={this.onChangeTitle}
+                    />
                 </label>
                 <button onClick={this.addImage}>Add</button>
             </div>
