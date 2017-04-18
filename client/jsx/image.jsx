@@ -12,16 +12,38 @@ class ImageComp extends React.Component {
 
         let numLinks = image.linkedBy.length;
         let numLikes = image.likedBy.length;
+
+        let linkButton = (
+            <button onClick={this.props.likeImage}>Link</button>
+        );
+        if (this.props.userHasLinked) {
+            linkButton = (
+                <button onClick={this.props.unlinkImage}>Unlink</button>
+            );
+        }
+
+        let likeButton = (
+            <button onClick={this.props.likeImage}>Like</button>
+        );
+        if (this.props.userHasLiked) {
+            likeButton = (
+                <button onClick={this.props.unlikeImage}>Unlike</button>
+            );
+        }
+
         return (
             <div className={className} style={style}>
                 <img className='grid-image'
                     src={image.url}
                 />
-                <p>Title: {image.title}</p>
-                <p>Likes: {numLikes}</p>
-                <p>Linked by: {numLinks}</p>
-                <button onClick={this.props.linkImage}>Link</button>
-                <button onClick={this.props.likeImage}>Like</button>
+                <p className='text-center'>{image.title}</p>
+
+                {linkButton}
+                <span className='badge'>{numLinks}</span>
+
+                {likeButton}
+                <span className='badge'>{numLikes}</span>
+
             </div>
         );
 
@@ -34,7 +56,11 @@ ImageComp.propTypes = {
     image: React.PropTypes.object,
     linkImage: React.PropTypes.func,
     likeImage: React.PropTypes.func,
-    style: React.PropTypes.object
+    style: React.PropTypes.object,
+    unlikeImage: React.PropTypes.func,
+    unlinkImage: React.PropTypes.func,
+    userHasLiked: React.PropTypes.bool,
+    userHasLinked: React.PropTypes.bool
 };
 
 module.exports = ImageComp;
