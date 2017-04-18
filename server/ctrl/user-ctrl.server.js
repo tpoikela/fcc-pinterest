@@ -53,7 +53,6 @@ module.exports = function(path) {
 
     let sendAuthenticatedUserInfo = function(res, username) {
         User.findOne({username: username})
-            // .populate('bookList')
             .exec(function(err, user) {
                 if (err) {return errorHandler(err, res);}
 
@@ -65,6 +64,16 @@ module.exports = function(path) {
                         'No user ' + username + ' found in database.'};
                     return res.json(obj);
                 }
+        });
+    };
+
+    this.getUserList = function(cb) {
+        User.find({}, {username: 1, _id: 0}, (err, result) => {
+            if (err) {cb(err);}
+            else {
+                console.log('getUserList result' + JSON.stringify(result));
+                cb(null, result);
+            }
         });
     };
 
