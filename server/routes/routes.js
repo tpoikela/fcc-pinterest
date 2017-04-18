@@ -197,7 +197,7 @@ module.exports = function(app, passport) {
     // Returns names of all users
     app.route('/users/list')
         .get((req, res) => {
-            userController.getUserList(req, (err, resp) => {
+            userController.getUserList((err, resp) => {
                 if (err) {
                     logError('/users/list', err, req);
                     res.status(500).json({error: 'No user list found.'});
