@@ -1,11 +1,11 @@
 
 'use strict';
 
-import {profileReducer} from '../redux/reducers.js';
+import {profileReducer, wallsReducer} from '../redux/reducers.js';
 
 import {getUserInfo, getAllImages, actionClicked,
     likeImage, linkImage, addImage, removeImage,
-    unlikeImage, unlinkImage
+    unlikeImage, unlinkImage, getUserList
 } from '../redux/actions';
 
 import ThunkMiddleware from 'redux-thunk';
@@ -26,9 +26,18 @@ let imgTopElem = document.querySelector('#images-top');
 let profTopElem = document.querySelector('#profile-app');
 let wallsTopElem = document.querySelector('#walls-top');
 
-let store = createStore(
+let mainStore = createStore(
     combineReducers({
         profileReducer: profileReducer
+    }),
+    applyMiddleware(
+        ThunkMiddleware // Lets us dispatch functions
+    )
+);
+
+let wallsStore = createStore(
+    combineReducers({
+        wallsReducer: wallsReducer
     }),
     applyMiddleware(
         ThunkMiddleware // Lets us dispatch functions
@@ -59,6 +68,16 @@ let mapStateToProps = (state) => {
     };
 };
 
+let wallsMapDispatchToProps = dispatch => ({
+    getUserList: () => dispatch(getUserList())
+});
+
+let wallsMapStateToProps = (state) => {
+    return {
+        userList: state.wallsReducer.userList
+    };
+};
+
 // Select which React component is rendered  based on which element was found
 // with querySelector()
 
@@ -69,7 +88,7 @@ if (profTopElem) {
     )(ProfileTop);
 
     ReactDOM.render(
-        <Provider store={store}>
+        <Provider store={mainStore}>
             <ProfileTopConnected />
         </Provider>
         ,
@@ -82,7 +101,7 @@ else if (imgTopElem) {
     )(ImagesTop);
 
     ReactDOM.render(
-        <Provider store={store}>
+        <Provider store={mainStore}>
             <ImagesTopConnected />
         </Provider>
         ,
@@ -91,11 +110,11 @@ else if (imgTopElem) {
 else if (wallsTopElem) {
 
     let WallsTopConnected = ReactRedux.connect(
-        mapStateToProps, mapDispatchToProps
+        wallsMapStateToProps, wallsMapDispatchToProps
     )(WallsTop);
 
     ReactDOM.render(
-        <Provider store={store}>
+        <Provider store={wallsStore}>
             <WallsTopConnected />
         </Provider>
         ,
