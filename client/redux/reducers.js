@@ -21,6 +21,7 @@ let handleAjaxDone = (nextState, action) => {
     nextState.fetchingWhat = '';
     switch (action.what) {
         case 'allImages': return {nextState, images: action.json};
+        case 'getUserList': return {nextState, userList: action.json};
         default: return nextState;
     }
 
@@ -62,3 +63,22 @@ export function profileReducer(state, action) {
         default: return nextState;
     }
 }
+
+export function wallsReducer(state, action) {
+    if (typeof state === 'undefined') {
+        return {
+            userList: []
+        };
+    }
+
+    // State copy done here
+    let nextState = Object.assign({}, state);
+
+    switch (action.type) {
+        case 'AJAX_START': return handleAjaxStart(nextState, action);
+        case 'AJAX_DONE': return handleAjaxDone(nextState, action);
+        default: return nextState;
+    }
+}
+
+
