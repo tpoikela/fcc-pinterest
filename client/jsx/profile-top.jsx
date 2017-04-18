@@ -31,27 +31,34 @@ class ProfileTop extends React.Component {
         console.log('ProfileTop render()');
         let userData = this.props.userData;
         let username = '';
-        let userID = '';
         let images = [];
+        let likedImages = [];
 
         if (userData) {
             username = userData.username;
-            userID = userData.userID;
             images = userData.linkedTo;
+            likedImages = userData.liked;
         }
 
         return (
             <div>
-                <p>ProfileTop was rendered: |{username}|</p>
-                <p>userID: |{userID}|</p>
-                <button onClick={this.props.onClickButton}>Push</button>
+                <p>Welcome {username}!</p>
+
+                <p>
+                    You can add images to your profile by using the
+                    following fields:
+                </p>
+
                 <ProfileAddImage addImage={this.addImage} />
 
                 <ProfileImages
                     images={images}
+                    likedImages={likedImages}
                     likeImage={this.props.likeImage}
                     linkImage={this.props.linkImage}
                     onClickRemove={this.props.onClickRemoveImage}
+                    unlikeImage={this.props.unlikeImage}
+                    unlinkImage={this.props.unlinkImage}
                 />
 
             </div>
@@ -67,6 +74,8 @@ ProfileTop.propTypes = {
     linkImage: React.PropTypes.func,
     onClickButton: React.PropTypes.func,
     onClickRemoveImage: React.PropTypes.func,
+    unlikeImage: React.PropTypes.func,
+    unlinkImage: React.PropTypes.func,
     userData: React.PropTypes.object
 };
 
