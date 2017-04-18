@@ -2,8 +2,11 @@
 'use strict';
 
 import {profileReducer} from '../redux/reducers.js';
+
 import {getUserInfo, getAllImages, actionClicked,
-    likeImage, linkImage, addImage, removeImage} from '../redux/actions';
+    likeImage, linkImage, addImage, removeImage,
+    unlikeImage, unlinkImage
+} from '../redux/actions';
 
 import ThunkMiddleware from 'redux-thunk';
 import {createStore, applyMiddleware, combineReducers} from 'redux';
@@ -15,11 +18,13 @@ const ReactRedux = require('react-redux');
 
 const ProfileTop = require('./profile-top');
 const ImagesTop = require('./images-top');
+const WallsTop = require('./walls-top');
 
 const Provider = ReactRedux.Provider;
 
 let imgTopElem = document.querySelector('#images-top');
 let profTopElem = document.querySelector('#profile-app');
+let wallsTopElem = document.querySelector('#walls-top');
 
 let store = createStore(
     combineReducers({
@@ -41,7 +46,9 @@ let mapDispatchToProps = dispatch => ({
     addImage: (obj) => dispatch(addImage(obj)),
     getAllImages: () => dispatch(getAllImages()),
     linkImage: (img) => dispatch(linkImage(img)),
-    likeImage: (img) => dispatch(likeImage(img))
+    likeImage: (img) => dispatch(likeImage(img)),
+    unlinkImage: (img) => dispatch(unlinkImage(img)),
+    unlikeImage: (img) => dispatch(unlikeImage(img))
 });
 
 let mapStateToProps = (state) => {
@@ -52,6 +59,8 @@ let mapStateToProps = (state) => {
     };
 };
 
+// Select which React component is rendered  based on which element was found
+// with querySelector()
 
 if (profTopElem) {
 
@@ -59,12 +68,12 @@ if (profTopElem) {
         mapStateToProps, mapDispatchToProps
     )(ProfileTop);
 
-        ReactDOM.render(
-            <Provider store={store}>
-                <ProfileTopConnected />
-            </Provider>
-            ,
-            profTopElem);
+    ReactDOM.render(
+        <Provider store={store}>
+            <ProfileTopConnected />
+        </Provider>
+        ,
+        profTopElem);
 }
 else if (imgTopElem) {
 
@@ -72,11 +81,24 @@ else if (imgTopElem) {
         mapStateToProps, mapDispatchToProps
     )(ImagesTop);
 
-        ReactDOM.render(
-            <Provider store={store}>
-                <ImagesTopConnected />
-            </Provider>
-            ,
-            imgTopElem);
+    ReactDOM.render(
+        <Provider store={store}>
+            <ImagesTopConnected />
+        </Provider>
+        ,
+        imgTopElem);
+}
+else if (wallsTopElem) {
+
+    let WallsTopConnected = ReactRedux.connect(
+        mapStateToProps, mapDispatchToProps
+    )(WallsTop);
+
+    ReactDOM.render(
+        <Provider store={store}>
+            <WallsTopConnected />
+        </Provider>
+        ,
+        wallsTopElem);
 }
 
