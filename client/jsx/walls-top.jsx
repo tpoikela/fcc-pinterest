@@ -9,14 +9,39 @@ class WallsTop extends React.Component {
         super(props);
     }
 
+    componentDidMount() {
+        this.props.getUserList();
+    }
+
     render() {
+        let users = this.props.userList;
+
+        let userList = null;
+        if (users) {
+            userList = users.map( (item, index) => {
+                return (
+                    <li key={index}>
+                        User: {item.username}
+                    </li>
+                );
+            });
+        }
+
         return (
-
-            <h2>WallsTop</h2>
+            <div>
+                <h2>WallsTop</h2>
+                <ul>
+                    {userList}
+                </ul>
+            </div>
         );
-
     }
 
 }
+
+WallsTop.propTypes = {
+    getUserList: React.PropTypes.func,
+    userList: React.PropTypes.array
+};
 
 module.exports = WallsTop;
