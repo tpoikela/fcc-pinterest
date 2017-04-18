@@ -11,13 +11,32 @@ let appUrl = window.location.origin;
 // THUNK ACTIONS
 //----------------------------------------------
 
+// Thunk action to retrieve a list of users
+export let getUserList = () => {
+    return function(dispatch) {
+
+        dispatch(actionAjaxStart('getUserList'));
+        let url = appUrl + '/users/list';
+
+        ajax.get(url, (err, respText) => {
+            if (err) {
+                dispatch(actionError(err));
+            }
+            else {
+                let json = JSON.parse(respText);
+                dispatch(actionAjaxDone('getUserList', json));
+            }
+        });
+    };
+};
+
 // Thunk action to retrieve user info
 export let getUserInfo = () => {
     return function(dispatch) {
 
         dispatch(fetchUser());
-
         let url = appUrl + '/users';
+
         ajax.get(url, (err, respText) => {
             if (err) {
                 dispatch(actionError(err));
@@ -66,6 +85,24 @@ export let linkImage = (image) => {
     };
 };
 
+export let unlinkImage = (image) => {
+    return function(dispatch) {
+        dispatch(actionAjaxStart('unlinkImage'));
+        let url = appUrl + '/images';
+        let obj = {image: image, link: true};
+        ajax.delete(url, obj, (err, respText) => {
+            if (err) {
+                dispatch(actionError(err));
+            }
+            else {
+                let json = JSON.parse(respText);
+                dispatch(actionAjaxDone('unlinkImage', json));
+            }
+        });
+
+    };
+};
+
 export let likeImage = (image) => {
     return function(dispatch) {
         dispatch(actionAjaxStart('likeImage'));
@@ -78,6 +115,24 @@ export let likeImage = (image) => {
             else {
                 let json = JSON.parse(respText);
                 dispatch(actionAjaxDone('likeImage', json));
+            }
+        });
+
+    };
+};
+
+export let unlikeImage = (image) => {
+    return function(dispatch) {
+        dispatch(actionAjaxStart('unlikeImage'));
+        let url = appUrl + '/images';
+        let obj = {image: image, like: true};
+        ajax.delete(url, obj, (err, respText) => {
+            if (err) {
+                dispatch(actionError(err));
+            }
+            else {
+                let json = JSON.parse(respText);
+                dispatch(actionAjaxDone('unlikeImage', json));
             }
         });
 
