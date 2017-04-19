@@ -15,6 +15,10 @@ class WallsTop extends React.Component {
         this.props.getUserList();
     }
 
+    closeUserWall(username) {
+        this.props.closeUserWall(username);
+    }
+
     showWall(username) {
         this.props.getUserWall(username);
     }
@@ -25,11 +29,13 @@ class WallsTop extends React.Component {
 
     render() {
         let wallsBody = this.getRenderedBody();
+        let userTabs = this.getUserTabs();
 
         return (
             <div>
                 <h2>WallsTop</h2>
                 <button onClick={this.showUserList}>Users</button>
+                {userTabs}
                 <ul>
                     {wallsBody}
                 </ul>
@@ -75,9 +81,30 @@ class WallsTop extends React.Component {
         return userList;
     }
 
+    /* Returns the tabs to navigate between user walls. */
+    getUserTabs() {
+        let tabs = null;
+        let userWall = this.props.userWall;
+        if (userWall) {
+
+            let username = userWall.username;
+            let closeUserWall = this.closeUserWall.bind(this, username);
+
+            tabs = (
+                <span>
+                    {userWall.username}
+                    <button onClick={closeUserWall}>X</button>
+                </span>
+            );
+
+        }
+        return tabs;
+    }
+
 }
 
 WallsTop.propTypes = {
+    closeUserWall: React.PropTypes.func,
     getUserList: React.PropTypes.func,
     getUserWall: React.PropTypes.func,
     showWall: React.PropTypes.bool,
