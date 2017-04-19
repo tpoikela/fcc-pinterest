@@ -13,6 +13,13 @@ class ImageController {
         this.path = path;
     }
 
+    isImageUrl(url) {
+        if (url.match(/\.(jpg|jpeg|gif|png|bmp|svg)$/) !== null) {
+            return true;
+        }
+        return false;
+    }
+
     /* Adds image to the database and for the user.*/
     addImage(username, body, cb) {
         let options = {};
@@ -25,6 +32,9 @@ class ImageController {
 				if (result.broken || result.excluded) {
                     isBroken = true;
                     console.error('ERROR. Broken link: ' + body.url);
+                }
+                else if (!this.isImageUrl(body.url)) {
+                    isBroken = true;
                 }
 
                 let imgObj = {title: body.title, url: body.url,
