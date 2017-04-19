@@ -20,6 +20,11 @@ let ImageSchema = new Schema({
         type: String
     },
 
+    broken: {
+        required: true,
+        type: Boolean
+    },
+
     likedBy: [{type: String, ref: 'User'}],
     linkedBy: [{type: String, ref: 'User'}]
 
