@@ -2,6 +2,7 @@
 'use strict';
 
 const React = require('react');
+const Gallery = require('./gallery');
 
 class WallsTop extends React.Component {
 
@@ -57,8 +58,34 @@ class WallsTop extends React.Component {
     getRenderedUserWall() {
         let wall = null;
         let userWall = this.props.userWall;
+        let images = userWall.linkedTo;
+        console.log('WallsTop userwall is ' + JSON.stringify(userWall));
+        let emptyArr = [];
+
         if (userWall) {
-            wall = <p>Userwall rendered: {userWall.username}</p>;
+            let username = userWall.username;
+
+            if (images.length > 0) {
+                wall = (
+                    <Gallery
+                        elements={images}
+                        likeImage={this.dummyFunc}
+                        linkImage={this.dummyFunc}
+                        unlikeImage={this.dummyFunc}
+                        unlinkImage={this.dummyFunc}
+                        userLikedImages={emptyArr}
+                        userLinkedImages={emptyArr}
+                    />
+                );
+            }
+            else {
+                wall = (
+                    <div>
+                        User {username} has no linked images.
+                    </div>
+                );
+
+            }
         }
         return wall;
     }
@@ -101,6 +128,9 @@ class WallsTop extends React.Component {
         return tabs;
     }
 
+    dummyFunc() {
+        console.log('Called dummyFunc');
+    }
 }
 
 WallsTop.propTypes = {
