@@ -218,6 +218,11 @@ let actionAjaxDone = (recWhat, json) => {
     };
 };
 
+let closeUserWall = (username) => ({
+    type: 'CLOSE_USER',
+    username: username
+});
+
 
 let fetchUser = () => ({
     type: 'FETCH_USER'
@@ -247,4 +252,4 @@ let showUserList = () => {
     };
 };
 
-export {actionClicked, fetchUser, receiveUser, showUserList};
+export {actionClicked, closeUserWall, fetchUser, receiveUser, showUserList};
