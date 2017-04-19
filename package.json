@@ -27,6 +27,7 @@
     "babel-preset-react": "^6.22.0",
     "babelify": "^7.3.0",
     "body-parser": "^1.16.1",
+    "broken-link-checker": "^0.7.4",
     "browserify": "^14.0.0",
     "express": "^4.14.1",
     "express-session": "^1.15.1",
@@ -47,7 +48,9 @@
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
     "request": "^2.79.0",
-    "vinyl-source-stream": "^1.1.0"
+    "url-parse": "^1.1.8",
+    "vinyl-source-stream": "^1.1.0",
+    "yamlparser": "0.0.2"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
