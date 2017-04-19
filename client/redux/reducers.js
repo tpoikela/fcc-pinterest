@@ -32,6 +32,14 @@ let handleAjaxDone = (nextState, action) => {
 
 };
 
+let handleCloseUser = (nextState, action) => {
+    let username = action.username;
+    console.log('Closing wall for user ' + username);
+    nextState.userWall = null;
+    nextState.showWall = false;
+    return nextState;
+};
+
 let handleError = (nextState, action) => {
     nextState.err = action.err;
     nextState.isFetching = false;
@@ -87,6 +95,7 @@ export function wallsReducer(state, action) {
     switch (action.type) {
         case 'AJAX_START': return handleAjaxStart(nextState, action);
         case 'AJAX_DONE': return handleAjaxDone(nextState, action);
+        case 'CLOSE_USER': return handleCloseUser(nextState, action);
         case 'SHOW_USER_LIST': {
             return Object.assign(nextState, {showWall: false});
         }
