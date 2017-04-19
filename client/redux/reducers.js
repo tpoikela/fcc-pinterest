@@ -25,6 +25,7 @@ let handleAjaxDone = (nextState, action) => {
         case 'getUserWall': {
             nextState.showWall = true;
             nextState.userWall = action.json;
+            console.log('userwall is ' + JSON.stringify(nextState.userWall));
             return nextState;
         }
         default: return nextState;

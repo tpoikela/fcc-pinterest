@@ -5,6 +5,7 @@ const React = require('react');
 /* Component for adding images to user's profile.*/
 class ProfileAddImage extends React.Component {
 
+
     constructor(props) {
         super(props);
         this.state = {
