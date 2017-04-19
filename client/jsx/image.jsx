@@ -31,10 +31,16 @@ class ImageComp extends React.Component {
             );
         }
 
+        let isBroken = image.broken;
+        let imageSrc = image.url;
+        if (isBroken) {
+            imageSrc = '/public/broken.png';
+        }
+
         return (
             <div className={className} style={style}>
                 <img className='grid-image'
-                    src={image.url}
+                    src={imageSrc}
                 />
                 <p className='text-center'>{image.title}</p>
 
