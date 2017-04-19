@@ -6,7 +6,7 @@ import {profileReducer, wallsReducer} from '../redux/reducers.js';
 import {getUserInfo, getAllImages, actionClicked,
     likeImage, linkImage, addImage, removeImage,
     unlikeImage, unlinkImage, getUserList, getUserWall,
-    showUserList
+    showUserList, closeUserWall
 } from '../redux/actions';
 
 import ThunkMiddleware from 'redux-thunk';
@@ -70,6 +70,7 @@ let mapStateToProps = (state) => {
 };
 
 let wallsMapDispatchToProps = dispatch => ({
+    closeUserWall: (username) => dispatch(closeUserWall(username)),
     getUserList: () => dispatch(getUserList()),
     getUserWall: (username) => dispatch(getUserWall(username)),
     showUserList: () => dispatch(showUserList())
