@@ -2,6 +2,8 @@
 
 include mixins.pug
 
+- var brokenLink = "http://www.cbronline.com/wp-content/uploads/2017/01/virtual-machines-cyber-security-weak-link.png"
+
 doctype html
 html
   +pageHead("About")
@@ -24,5 +26,10 @@ html
         p
           | You can access the full source code of the project from 
           a(href="http://www.github/tpoikela/fcc-pinterest") GitHub.
+
+        p
+          | The original image used for broken links can be found from 
+          a(href="" + brokenLink) here.
+
 
       +appFooter()
