@@ -6,10 +6,11 @@ List of user features to implement:
   2. [X] A user can view their profile page.
   3. [X] A user can add images to their wall.
   4. [X] A user can unlink images from their wall.
-  5. [ ] A user can can see walls of other users.
-  6. [ ] Anonymous user can see walls of other users.
+  5. [X] A user can can see walls of other users.
+  6. [X] Anonymous user can see walls of other users.
   7. [X] A user can link to images posted by other users.
   8. [ ] A user can search the walls created by others.
+  9. [ ] When a broken URL is used, a special image is shown.
 
 ## Database schemas
 
