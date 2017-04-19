@@ -3,6 +3,8 @@
 const Image = require('../model/image-schema.js');
 const User = require('../model/user-schema.js');
 
+const blc = require('broken-link-checker');
+
 /* ImageController handles the DB access for adding/removing image related
  * information for users. */
 class ImageController {
@@ -13,20 +15,41 @@ class ImageController {
 
     /* Adds image to the database and for the user.*/
     addImage(username, body, cb) {
-        let imgObj = {title: body.title, url: body.url,
-            linkedBy: username};
-        Image.createNew(imgObj, (err, img) => {
-            if (err) {cb(err);}
-            else {
-                let imageId = img._id;
-                let obj = {username: username, imageId: imageId};
-                User.addImage(obj, (err, result) => {
+        let options = {};
+
+		let urlChecker = new blc.UrlChecker(options, {
+			link: function(result) {
+                console.log('Checking link ' + body.url);
+
+                let isBroken = false;
+				if (result.broken || result.excluded) {
+                    isBroken = true;
+                    console.error('ERROR. Broken link: ' + body.url);
+                }
+
+                let imgObj = {title: body.title, url: body.url,
+                    linkedBy: username, broken: isBroken};
+
+                Image.createNew(imgObj, (err, img) => {
                     if (err) {cb(err);}
-                    else {cb(null, result);}
+                    else {
+                        let imageId = img._id;
+                        let obj = {username: username, imageId: imageId};
+                        User.addImage(obj, (err, result) => {
+                            if (err) {cb(err);}
+                            else {cb(null, result);}
+                        });
+
+                    }
                 });
 
-            }
-        });
+			},
+			end: function() {
+                console.log('Finished checking broken URLs');
+			}
+		});
+
+		urlChecker.enqueue(body.url);
 
     }
 
