@@ -14,13 +14,23 @@ html
 
       .bg-well
         p
-          | Join a community of thousands of users!
+          | Join a community of thousands of users! You can browse image 
+          a(href='/walls') Walls 
+          | created by registered users.
+
         - if (isAuth) {
           p
             | Go to 
             a(href='/profile') 'Profile' 
             | to see your profile.
+        - } else {
+          p
+            a(href='/signup')
+              button.btn.btn-danger Signup
+            |  
+            | today and create your own wall of images!
         - }
+
       +appFooter()
 
     script(type="text/javascript" src="/build/bundle.js" charset="utf-8")
