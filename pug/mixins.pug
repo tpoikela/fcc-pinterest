@@ -76,7 +76,7 @@ mixin topMenu(title)
     hr
 
 mixin appTitle()
-  h1.app-title-text Pinterest-clone
+ //-  h1.app-title-text Pinterest-clone
 
 mixin button(text)
   button.btn-pint {text}
@@ -93,45 +93,50 @@ mixin appFooter()
       i(class="fa fa-free-code-camp fa-2x")
     span.author-p Tuomas Poikela, 2017
 
+mixin navbarListItem(page, href, text)
+  - if (page === href) {
+    li.active
+      a(href="" + href) #{text}
+        block
+  - } else {
+    li
+      a(href="" + href) #{text}
+        block
+  - }
+
+mixin hamburgerIcon()
+  span.icon-bar
+  span.icon-bar
+  span.icon-bar
+
 // navBar that collapses for small screens
-mixin navBarCollapsible()
+mixin navBarCollapsible(page)
   nav.navbar.navbar-inverse
    div.container-fluid
 
      div.navbar-header
        button.navbar-toggle(type="button" data-toggle="collapse" data-target="#top-navbar")
-         span.icon-bar
-         span.icon-bar
-         span.icon-bar
+         +hamburgerIcon()
        a.navbar-brand(href="/") PintClone
 
      div#top-navbar.collapse.navbar-collapse
 
        ul.nav.navbar-nav
-         li.active
-           a(href="#") Home
-         li
-           a(href="/all-images") Images
-         li
-           a(href="/walls") Walls
-         li
-           a(href="/about") About
+         +navbarListItem(page, '/', "Home")
+         +navbarListItem(page, '/all-images', "Images")
+         +navbarListItem(page, '/walls', "Walls")
+         +navbarListItem(page, '/about', "About")
 
        ul.nav.navbar-nav.navbar-right
          - if (!isAuth) {
-           li
-             a(href="/signup")
-               span.glyphicon.glyphicon-user Sign Up
-           li
-             a(href="/login")
-               span.glyphicon.glyphicon-log-in Login
+           +navbarListItem(page, '/signup', "")
+             span.glyphicon.glyphicon-user Sign Up
+           +navbarListItem(page, '/login', "")
+             span.glyphicon.glyphicon-log-in Login
          - } else {
-           li
-             a(href="/profile")
-               span.glyphicon.glyphicon-user Profile
-           li
-             a(href="/logout")
-               span.glyphicon.glyphicon-log-in Logout
+           +navbarListItem(page, '/profile', "")
+             span.glyphicon.glyphicon-user Profile
+           +navbarListItem(page, '/logout', "")
+             span.glyphicon.glyphicon-log-in Logout
          - }
-
 
