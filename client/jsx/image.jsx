@@ -14,20 +14,32 @@ class ImageComp extends React.Component {
         let numLikes = image.likedBy.length;
 
         let linkButton = (
-            <button onClick={this.props.likeImage}>Link</button>
+            <span
+                className='glyphicon glyphicon-link'
+                onClick={this.props.linkImage}
+            />
         );
         if (this.props.userHasLinked) {
             linkButton = (
-                <button onClick={this.props.unlinkImage}>Unlink</button>
+                <span
+                    className='text-danger glyphicon glyphicon-remove'
+                    onClick={this.props.unlinkImage}
+                />
             );
         }
 
         let likeButton = (
-            <button onClick={this.props.likeImage}>Like</button>
+            <span
+                className='glyphicon glyphicon-star-empty'
+                onClick={this.props.likeImage}
+            />
         );
         if (this.props.userHasLiked) {
             likeButton = (
-                <button onClick={this.props.unlikeImage}>Unlike</button>
+                <span
+                    className='glyphicon glyphicon-star'
+                    onClick={this.props.unlikeImage}
+                />
             );
         }
 
@@ -47,8 +59,10 @@ class ImageComp extends React.Component {
                 {linkButton}
                 <span className='badge'>{numLinks}</span>
 
-                {likeButton}
-                <span className='badge'>{numLikes}</span>
+                <span className='pull-right'>
+                    {likeButton}
+                    <span className='badge'>{numLikes}</span>
+                </span>
 
             </div>
         );
