@@ -5,7 +5,6 @@ const React = require('react');
 /* Component for adding images to user's profile.*/
 class ProfileAddImage extends React.Component {
 
-
     constructor(props) {
         super(props);
         this.state = {
@@ -39,21 +38,38 @@ class ProfileAddImage extends React.Component {
     render() {
         return (
             <div className='add-image-div'>
-                <label htmlFor='input-url'>URL:
-                    <input
-                        id='input-url'
-                        name='url'
-                        onChange={this.onChangeUrl}
-                    />
-                </label>
-                <label htmlFor='input-title' >Title:
-                    <input
-                        id='input-title'
-                        name='title'
-                        onChange={this.onChangeTitle}
-                    />
-                </label>
-                <button onClick={this.addImage}>Add</button>
+                <form>
+                    <div className='form-group'>
+                    <label
+                        className='label label-default'
+                        htmlFor='input-url'
+                        >URL</label>
+                        <input
+                            className='form-control'
+                            id='input-url'
+                            name='url'
+                            onChange={this.onChangeUrl}
+                            type='url'
+                        />
+
+                    </div>
+                    <div className='form-group'>
+                    <label
+                        className='label label-default'
+                        htmlFor='input-title'
+                        >Title</label>
+                        <input
+                            className='form-control'
+                            id='input-title'
+                            name='title'
+                            onChange={this.onChangeTitle}
+                            type='text'
+                        />
+                    </div>
+                    <button className='btn btn-default' onClick={this.addImage}>
+                        Add
+                    </button>
+                </form>
             </div>
 
         );
