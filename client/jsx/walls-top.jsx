@@ -35,11 +35,8 @@ class WallsTop extends React.Component {
         return (
             <div>
                 <h2>WallsTop</h2>
-                <button onClick={this.showUserList}>Users</button>
                 {userTabs}
-                <ul>
-                    {wallsBody}
-                </ul>
+                {wallsBody}
             </div>
         );
     }
@@ -48,7 +45,6 @@ class WallsTop extends React.Component {
     getRenderedBody() {
         if (this.props.showWall) {
             return this.getRenderedUserWall();
-
         }
         else {
             return this.getRenderedUserList();
@@ -99,33 +95,57 @@ class WallsTop extends React.Component {
                 let username = item.username;
                 let onClickCb = this.showWall.bind(this, username);
                 return (
-                    <li key={index} onClick={onClickCb}>
+                    <a
+                        className='list-group-item'
+                        href='#'
+                        key={index}
+                        onClick={onClickCb}
+                        >
                         User: {username}
-                    </li>
+                    </a>
                 );
             });
         }
-        return userList;
+        return <div className='list-group'>{userList}</div>;
     }
 
     /* Returns the tabs to navigate between user walls. */
     getUserTabs() {
         let tabs = null;
         let userWall = this.props.userWall;
+        let isWallShown = this.props.showWall;
+
         if (userWall) {
 
             let username = userWall.username;
             let closeUserWall = this.closeUserWall.bind(this, username);
+            let wallClass = isWallShown ? 'active' : '';
 
             tabs = (
-                <span>
+                <li className={wallClass}>
+                    <a href='#'>
                     {userWall.username}
-                    <button onClick={closeUserWall}>X</button>
-                </span>
+                    <span
+                        className='glyphicon glyphicon-remove'
+                        onClick={closeUserWall}
+                    />
+                    </a>
+                </li>
             );
 
         }
-        return tabs;
+
+        let usersClass = isWallShown ? '' : 'active';
+
+        return (
+          <ul className='nav nav-tabs'>
+              <li className={usersClass}
+                  onClick={this.showUserList}
+                  >
+                  <a href='#'>Users</a></li>
+              {tabs}
+          </ul>
+        );
     }
 
     dummyFunc() {
