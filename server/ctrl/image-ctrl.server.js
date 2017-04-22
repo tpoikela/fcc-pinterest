@@ -13,6 +13,14 @@ class ImageController {
         this.path = path;
     }
 
+    log(msg, obj) {
+        console.log('[ImageCtrl]: ' + msg);
+        if (obj) {
+            console.log('\t' + JSON.stringify(obj));
+
+        }
+    }
+
     isImageUrl(url) {
         if (url.match(/\.(jpg|jpeg|gif|png|bmp|svg)$/) !== null) {
             return true;
@@ -66,6 +74,7 @@ class ImageController {
     /* Updates existing images with link/like.*/
     updateImage(username, body, cb) {
         let imageId = body.image._id;
+        this.log('updateImage', {username: username, body: body});
         if (imageId) {
             let obj = {
                 id: imageId,
@@ -124,8 +133,10 @@ class ImageController {
     removeImage(username, body, cb) {
         let imageId = body.image._id;
         let obj = {id: imageId};
+        this.log('removeImage', {obj: obj, body: body});
+
         if (imageId) {
-            if (body.image.link) {
+            if (body.link === true) {
                 obj.linkedBy = username;
                 Image.removeLink(obj, (err, imgResult) => {
                     if (err) {cb(err);}
@@ -137,7 +148,6 @@ class ImageController {
                                 this.checkModResult(imgResult, userResult);
                                 cb(null, userResult);
                             }
-
                         });
                     }
                 });
