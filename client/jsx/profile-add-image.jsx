@@ -49,6 +49,7 @@ class ProfileAddImage extends React.Component {
                             id='input-url'
                             name='url'
                             onChange={this.onChangeUrl}
+                            title='Enter an address for your image'
                             type='url'
                         />
 
@@ -63,11 +64,12 @@ class ProfileAddImage extends React.Component {
                             id='input-title'
                             name='title'
                             onChange={this.onChangeTitle}
+                            title='Enter a title for your image'
                             type='text'
                         />
                     </div>
-                    <button className='btn btn-default' onClick={this.addImage}>
-                        Add
+                    <button className='btn btn-primary' onClick={this.addImage}>
+                        Add Image
                     </button>
                 </form>
             </div>
