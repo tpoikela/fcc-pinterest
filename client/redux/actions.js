@@ -7,6 +7,14 @@ let appUrl = window.location.origin;
 // Actions
 //---------------
 
+let _actionDebug = (info, json) => {
+    console.log('[ActionDebug]: ' + info);
+    if (json) {
+        console.log('[ActionDebug] ' + info + ' json: '
+            + JSON.stringify(json));
+    }
+};
+
 //----------------------------------------------
 // THUNK ACTIONS
 //----------------------------------------------
@@ -49,17 +57,15 @@ export let getUserWall = (username) => {
 // Thunk action to retrieve user info
 export let getUserInfo = () => {
     return function(dispatch) {
-
-        dispatch(fetchUser());
+        dispatch(actionAjaxStart('getUserInfo'));
         let url = appUrl + '/users';
-
         ajax.get(url, (err, respText) => {
             if (err) {
                 dispatch(actionError(err));
             }
             else {
                 let json = JSON.parse(respText);
-                dispatch(receiveUser(json));
+                dispatch(actionAjaxDone('getUserInfo', json));
             }
         });
     };
@@ -199,11 +205,8 @@ let actionError = (err) => ({
     err: err
 });
 
-let actionClicked = () => ({
-    type: 'BUTTON_CLICKED'
-});
-
 let actionAjaxStart = (fetchWhat) => {
+    _actionDebug(fetchWhat);
     return {
         type: 'AJAX_START',
         what: fetchWhat
@@ -211,6 +214,7 @@ let actionAjaxStart = (fetchWhat) => {
 };
 
 let actionAjaxDone = (recWhat, json) => {
+    _actionDebug(recWhat, json);
     return {
         type: 'AJAX_DONE',
         what: recWhat,
@@ -222,18 +226,6 @@ let closeUserWall = (username) => ({
     type: 'CLOSE_USER',
     username: username
 });
-
-
-let fetchUser = () => ({
-    type: 'FETCH_USER'
-});
-
-let receiveUser = (json) => {
-    return {
-        type: 'RECEIVE_USER',
-        json
-    };
-};
 
 let fetchImage = () => ({
     type: 'FETCH_IMAGE'
@@ -252,4 +244,4 @@ let showUserList = () => {
     };
 };
 
-export {actionClicked, closeUserWall, fetchUser, receiveUser, showUserList};
+export {closeUserWall, showUserList};
