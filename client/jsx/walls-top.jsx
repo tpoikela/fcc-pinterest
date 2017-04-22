@@ -10,13 +10,18 @@ class WallsTop extends React.Component {
         super(props);
         this.showWall = this.showWall.bind(this);
         this.showUserList = this.showUserList.bind(this);
+        this.showUserWall = this.showUserWall.bind(this);
+        this.closeUserWall = this.closeUserWall.bind(this);
     }
 
     componentDidMount() {
         this.props.getUserList();
     }
 
-    closeUserWall(username) {
+    closeUserWall(e) {
+        e.stopPropagation();
+        let t = e.target;
+        let username = t.getAttribute('id');
         this.props.closeUserWall(username);
     }
 
@@ -28,12 +33,18 @@ class WallsTop extends React.Component {
         this.props.showUserList();
     }
 
+    showUserWall(e) {
+        let aElem = e.target;
+        console.log('aElem.text ' + aElem.text);
+        this.props.showUserWall(aElem.text);
+    }
+
     render() {
         let wallsBody = this.getRenderedBody();
         let userTabs = this.getUserTabs();
 
         return (
-            <div>
+            <div className='walls-top'>
                 <h2>WallsTop</h2>
                 {userTabs}
                 {wallsBody}
@@ -111,30 +122,37 @@ class WallsTop extends React.Component {
 
     /* Returns the tabs to navigate between user walls. */
     getUserTabs() {
-        let tabs = null;
+        let userTabsOpen = this.props.userTabsOpen;
         let userWall = this.props.userWall;
-        let isWallShown = this.props.showWall;
+        let openUserTabs = null;
 
-        if (userWall) {
+        if (userTabsOpen && userTabsOpen.length > 0) {
 
-            let username = userWall.username;
-            let closeUserWall = this.closeUserWall.bind(this, username);
-            let wallClass = isWallShown ? 'active' : '';
+            openUserTabs = userTabsOpen.map( (username, index) => {
 
-            tabs = (
-                <li className={wallClass}>
-                    <a href='#'>
-                    {userWall.username}
-                    <span
-                        className='glyphicon glyphicon-remove'
-                        onClick={closeUserWall}
-                    />
-                    </a>
-                </li>
-            );
+                let shownUser = null;
+                if (userWall) {shownUser = userWall.username;}
+                let wallClass = shownUser === username ? 'active' : '';
+
+                return (
+                    <li className={wallClass} key={index}>
+                        <a href='#'
+                            onClick={this.showUserWall}
+                            >
+                        {username}
+                            <span
+                                className='glyphicon glyphicon-remove'
+                                id={username}
+                                onClick={this.closeUserWall}
+                            />
+                        </a>
+                    </li>
+                );
+            });
 
         }
 
+        let isWallShown = this.props.showWall;
         let usersClass = isWallShown ? '' : 'active';
 
         return (
@@ -142,8 +160,9 @@ class WallsTop extends React.Component {
               <li className={usersClass}
                   onClick={this.showUserList}
                   >
-                  <a href='#'>Users</a></li>
-              {tabs}
+                  <a href='#'>Users</a>
+              </li>
+              {openUserTabs}
           </ul>
         );
     }
@@ -159,8 +178,10 @@ WallsTop.propTypes = {
     getUserWall: React.PropTypes.func,
     showWall: React.PropTypes.bool,
     showUserList: React.PropTypes.func,
+    showUserWall: React.PropTypes.func,
     userList: React.PropTypes.array,
-    userWall: React.PropTypes.object
+    userWall: React.PropTypes.object,
+    userTabsOpen: React.PropTypes.array
 };
 
 module.exports = WallsTop;

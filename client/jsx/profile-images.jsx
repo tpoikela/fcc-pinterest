@@ -19,13 +19,13 @@ class ProfileImages extends React.Component {
         let images = this.props.images;
         let likedImages = this.props.likedImages;
 
-        let msg = '';
+        let msg = <p>Images you have added</p>;
         if (images.length === 0) {
             msg = <p>You haven't added any images.</p>;
         }
 
         return (
-            <div>
+            <div className='profile-images'>
                 {msg}
                 <Gallery
                     elements={images}

@@ -6,11 +6,11 @@ import {profileReducer, wallsReducer} from '../redux/reducers.js';
 import {getUserInfo, getAllImages,
     likeImage, linkImage, addImage, removeImage,
     unlikeImage, unlinkImage, getUserList, getUserWall,
-    showUserList, closeUserWall
+    showUserList, closeUserWall, showUserWall
 } from '../redux/actions';
 
 import ThunkMiddleware from 'redux-thunk';
-import {createStore, applyMiddleware, combineReducers} from 'redux';
+import {createStore, applyMiddleware, compose, combineReducers} from 'redux';
 
 const React = require('react');
 const ReactDOM = require('react-dom');
@@ -27,6 +27,15 @@ let imgTopElem = document.querySelector('#images-top');
 let profTopElem = document.querySelector('#profile-app');
 let wallsTopElem = document.querySelector('#walls-top');
 
+// This monster is used only for debugging using Redux-dev-tools
+const composeEnhancers =
+	typeof window === 'object' &&
+	window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
+	window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+		// Specify extension’s options like name, actionsBlacklist,
+		// actionsCreators, serialize...
+	}) : compose;
+
 let mainStore = createStore(
     combineReducers({
         profileReducer: profileReducer
@@ -36,17 +45,26 @@ let mainStore = createStore(
     )
 );
 
-let wallsStore = createStore(
-    combineReducers({
-        wallsReducer: wallsReducer
-    }),
+let reducersCombined = combineReducers({
+    wallsReducer: wallsReducer
+});
+
+let wallsEnhancer = composeEnhancers(
     applyMiddleware(
         ThunkMiddleware // Lets us dispatch functions
     )
 );
 
-//---------------
+let wallsStore = createStore(
+    reducersCombined, wallsEnhancer
+);
+
+//---------------------------
 // MAP FUNCTIONS
+//---------------------------
+
+//---------------
+// ProfileReducer
 //---------------
 
 let mapDispatchToProps = dispatch => ({
@@ -67,11 +85,16 @@ let mapStateToProps = (state) => {
     };
 };
 
+//-------------
+// WallsReducer
+//-------------
+
 let wallsMapDispatchToProps = dispatch => ({
     closeUserWall: (username) => dispatch(closeUserWall(username)),
     getUserList: () => dispatch(getUserList()),
     getUserWall: (username) => dispatch(getUserWall(username)),
-    showUserList: () => dispatch(showUserList())
+    showUserList: () => dispatch(showUserList()),
+    showUserWall: (username) => dispatch(showUserWall(username))
 });
 
 let wallsMapStateToProps = (state) => {
@@ -79,7 +102,10 @@ let wallsMapStateToProps = (state) => {
         isFetching: state.wallsReducer.isFetching,
         showWall: state.wallsReducer.showWall,
         userList: state.wallsReducer.userList,
-        userWall: state.wallsReducer.userWall
+        userTabsOpen: state.wallsReducer.userTabsOpen,
+        userTabsData: state.wallsReducer.userTabsData,
+        userWall: state.wallsReducer.userWall,
+        shownUserName: state.wallsReducer.shownUserName
     };
 };
 

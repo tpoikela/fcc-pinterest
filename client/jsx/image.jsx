@@ -51,7 +51,7 @@ class ImageComp extends React.Component {
 
         return (
             <div className={className} style={style}>
-                <img className='grid-image'
+                <img className='grid-image text-center'
                     src={imageSrc}
                 />
                 <p className='text-center'>{image.title}</p>

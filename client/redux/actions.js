@@ -227,6 +227,11 @@ let closeUserWall = (username) => ({
     username: username
 });
 
+let showUserWall = (username) => ({
+    type: 'SHOW_USER_WALL',
+    username: username
+});
+
 let fetchImage = () => ({
     type: 'FETCH_IMAGE'
 });
@@ -244,4 +249,4 @@ let showUserList = () => {
     };
 };
 
-export {closeUserWall, showUserList};
+export {closeUserWall, showUserList, showUserWall};

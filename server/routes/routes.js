@@ -349,7 +349,7 @@ module.exports = function(app, passport) {
                 }
                 else {
                     debugJSON('/images DELETE result (200): ', result);
-                    res.status(200).json({msg: 'OK'});
+                    res.status(200).json({msg: 'OK', result: result});
                 }
             });
 

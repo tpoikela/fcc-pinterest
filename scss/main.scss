@@ -4,15 +4,24 @@ $grid-image-width: 175px;
 
 $border-color: #000;
 
+$grid-item-margin: 5px;
+$grid-item-padding: 3px;
+
 $margin-top: 10px;
+$margin-side: 5px;
+$margin-side-grid-img: ($grid-col-width - $grid-image-width) / 2 - $grid-item-padding;
 
 img.grid-image {
-    margin: 0 auto;
+    margin-top: 5px;
+    margin-left: $margin-side-grid-img;
+    margin-right: $margin-side-grid-img;
     width: $grid-image-width;
 }
 
 .grid-item {
     border: 1px solid $border-color;
+    margin-left: $grid-item-margin;
+    margin-top: $grid-item-margin;
     padding: 3px;
     width: $grid-col-width;
 }
