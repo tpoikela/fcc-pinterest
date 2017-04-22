@@ -1,26 +1,24 @@
 'use strict';
 
-let receiveUser = (nextState, action) => {
-    nextState.userData = action.json;
-    return nextState;
-};
-
 let receiveImage = (nextState, action) => {
     nextState.resp = action.json;
     return nextState;
 };
 
+/* This function handles ajax-started actions. */
 let handleAjaxStart = (nextState, action) => {
     nextState.isFetching = true;
     nextState.fetchingWhat = action.what;
     return nextState;
 };
 
+/* This function handles all finished ajax calls.*/
 let handleAjaxDone = (nextState, action) => {
     nextState.isFetching = false;
     nextState.fetchingWhat = '';
     switch (action.what) {
         case 'allImages': return {nextState, images: action.json};
+        case 'getUserInfo': return {nextState, userData: action.json};
         case 'getUserList': return {nextState, userList: action.json};
         case 'getUserWall': {
             nextState.showWall = true;
@@ -48,18 +46,24 @@ let handleError = (nextState, action) => {
     return nextState;
 };
 
+let getCommonState = () => {
+    return {
+        err: null,
+        fetchingWhat: '',
+        isFetching: false,
+        userData: null,
+        username: ''
+    };
+};
+
 /* Reducer for ProfileTop component.*/
 export function profileReducer(state, action) {
     if (typeof state === 'undefined') {
+        let commonState = getCommonState();
         return {
-            clicked: false,
-            err: null,
-            fetchingWhat: '',
+            commonState,
             images: [],
-            isFetching: false,
-            msg: '',
-            userData: null,
-            username: ''
+            msg: ''
         };
     }
 
@@ -68,11 +72,7 @@ export function profileReducer(state, action) {
 
     switch (action.type) {
         case 'AJAX_START': return handleAjaxStart(nextState, action);
-        case 'BUTTON_CLICKED': return Object.assign(
-                nextState, {clicked: true});
         case 'ERROR': return handleError(nextState, action);
-        case 'FETCH_USER':
-        case 'RECEIVE_USER': return receiveUser(nextState, action);
         case 'RECEIVE_IMAGE': return receiveImage(nextState, action);
         case 'AJAX_DONE': return handleAjaxDone(nextState, action);
         default: return nextState;
