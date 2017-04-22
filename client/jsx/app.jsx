@@ -3,7 +3,7 @@
 
 import {profileReducer, wallsReducer} from '../redux/reducers.js';
 
-import {getUserInfo, getAllImages, actionClicked,
+import {getUserInfo, getAllImages,
     likeImage, linkImage, addImage, removeImage,
     unlikeImage, unlinkImage, getUserList, getUserWall,
     showUserList, closeUserWall
@@ -50,7 +50,6 @@ let wallsStore = createStore(
 //---------------
 
 let mapDispatchToProps = dispatch => ({
-    onClickButton: () => dispatch(actionClicked()),
     onClickRemoveImage: (img) => dispatch(removeImage(img)),
     getUserInfo: () => dispatch(getUserInfo()),
     addImage: (obj) => dispatch(addImage(obj)),
@@ -62,7 +61,6 @@ let mapDispatchToProps = dispatch => ({
 });
 
 let mapStateToProps = (state) => {
-    console.log('mapStateToProps with ' + JSON.stringify(state));
     return {
         userData: state.profileReducer.userData,
         images: state.profileReducer.images
