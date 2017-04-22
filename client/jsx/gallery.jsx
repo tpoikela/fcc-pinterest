@@ -27,7 +27,7 @@ class Gallery extends React.Component {
     }
 
     unlikeImage(img) {
-        this.props.unlinkImage(img);
+        this.props.unlikeImage(img);
     }
 
     render() {
