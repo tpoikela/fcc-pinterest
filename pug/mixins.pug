@@ -81,17 +81,6 @@ mixin appTitle()
 mixin button(text)
   button.btn-pint {text}
 
-//- Footer for the pages with various link symbols
-mixin appFooter()
-  div.author-footer
-    hr
-    a(href="https://www.github.com/tpoikela")
-      i(class="fa fa-github fa-2x")
-    a(href="https://www.twitter.com/tuomaspoi")
-      i(class="fa fa-twitter fa-2x")
-    a(href="https://www.freecodecamp.com/tpoikela")
-      i(class="fa fa-free-code-camp fa-2x")
-    span.author-p Tuomas Poikela, 2017
 
 mixin navbarListItem(page, href, text)
   - if (page === href) {
@@ -140,3 +129,14 @@ mixin navBarCollapsible(page)
              span.glyphicon.glyphicon-log-in Logout
          - }
 
+//- Footer for the pages with various link symbols
+mixin appFooter()
+  div.author-footer
+    hr
+    a(href="https://www.github.com/tpoikela")
+      i(class="fa fa-github fa-2x")
+    a(href="https://www.twitter.com/tuomaspoi")
+      i(class="fa fa-twitter fa-2x")
+    a(href="https://www.freecodecamp.com/tpoikela")
+      i(class="fa fa-free-code-camp fa-2x")
+    span.author-p Tuomas Poikela, 2017
