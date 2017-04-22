@@ -38,6 +38,7 @@ class ImagesTop extends React.Component {
     }
 
     componentDidMount() {
+        // TODO ensuer that getUserInfo executes first
         this.props.getUserInfo();
         this.props.getAllImages();
     }
@@ -54,9 +55,12 @@ class ImagesTop extends React.Component {
         }
 
         return (
-            <div>
-                <h2>ImagesTop</h2>
-
+            <div className='images-top'>
+                <p className='text-primary'>
+                    Here you can browse all images posted by
+                    registered users. If you are logged in, you can
+                    also like and link to the images.
+                </p>
                 <Gallery
                     elements={images}
                     likeImage={this.likeImage}
