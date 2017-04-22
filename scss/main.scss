@@ -4,13 +4,26 @@ $grid-image-width: 175px;
 
 $border-color: #000;
 
+$margin-top: 10px;
+
 img.grid-image {
-    width: $grid-image-width;
     margin: 0 auto;
+    width: $grid-image-width;
 }
 
 .grid-item {
     border: 1px solid $border-color;
     padding: 3px;
     width: $grid-col-width;
+}
+
+.profile-images {
+    margin-top: $margin-top;
+}
+
+.author-footer {
+    a {
+        margin-right: 5px;
+    }
+
 }
