@@ -39,8 +39,13 @@ module.exports = function(app, passport) {
     /* Renders a pug template.*/
     let renderPug = function(req, res, pugFile) {
         let isAuth = req.isAuthenticated();
+        let username = '';
+        if (isAuth) {
+            username = req.user.username;
+        }
         debug('renderPug auth: ' + isAuth + ' file: ' + pugFile);
-        res.render(path + '/pug/' + pugFile, {isAuth: isAuth});
+        res.render(path + '/pug/' + pugFile,
+            {isAuth: isAuth, username: username});
     };
 
     /* loggedIn func from clementine.js. */
