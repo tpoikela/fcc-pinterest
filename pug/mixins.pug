@@ -93,20 +93,26 @@ mixin navbarListItem(page, href, text)
         block
   - }
 
+  // Used in the collapsible navigation bar
 mixin hamburgerIcon()
   span.icon-bar
   span.icon-bar
   span.icon-bar
 
-// navBar that collapses for small screens
+// Responsive navBar that collapses for smaller screens
 mixin navBarCollapsible(page)
-  nav.navbar.navbar-inverse
+  nav.navbar.navbar-default
    div.container-fluid
 
-     div.navbar-header
+     div.navbar-header.pull-left
+       a.navbar-brand(href="/") PintClone
+     div.navbar-header.pull-right
+       - if (isAuth) {
+         ul.nav.pull-left.navbar-username
+           li.navbar-text.pull-left #{username}
+       - }
        button.navbar-toggle(type="button" data-toggle="collapse" data-target="#top-navbar")
          +hamburgerIcon()
-       a.navbar-brand(href="/") PintClone
 
      div#top-navbar.collapse.navbar-collapse
 

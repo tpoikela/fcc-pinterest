@@ -33,13 +33,14 @@ html
           input#userPasswordField.form-control(
             name="password" type="password" placeholder="Password")
 
-        button#login-btn.books-btn(type="submit") Login
+        button#login-btn.btn.btn-primary(type="submit") Login
 
       form(action="/auth/twitter")
-        button(type="submit") Login with Twitter
+        button.btn.btn-primary(type="submit") Login with Twitter
 
       br
       p No account yet? Then 
-        a(href='/signup') Signup!
+        a(href='/signup')
+          button.btn.btn-danger Signup!
 
       +appFooter()
