@@ -122,13 +122,14 @@ class WallsTop extends React.Component {
 
     /* Returns the tabs to navigate between user walls. */
     getUserTabs() {
+        console.log('WallsTop render() => getUserTabs()');
         let userTabsOpen = this.props.userTabsOpen;
         let userWall = this.props.userWall;
-        let openUserTabs = null;
+        let userTabsElem = null;
 
         if (userTabsOpen && userTabsOpen.length > 0) {
 
-            openUserTabs = userTabsOpen.map( (username, index) => {
+            userTabsElem = userTabsOpen.map( (username, index) => {
 
                 let shownUser = null;
                 if (userWall) {shownUser = userWall.username;}
@@ -151,6 +152,9 @@ class WallsTop extends React.Component {
             });
 
         }
+        else {
+            console.log('WallsTop no user tabs open');
+        }
 
         let isWallShown = this.props.showWall;
         let usersClass = isWallShown ? '' : 'active';
@@ -162,7 +166,7 @@ class WallsTop extends React.Component {
                   >
                   <a href='#'>Users</a>
               </li>
-              {openUserTabs}
+              {userTabsElem}
           </ul>
         );
     }

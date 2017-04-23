@@ -35,8 +35,11 @@ let handleAjaxDone = (nextState, action) => {
             console.log('userTabsOpen: '
                 + JSON.stringify(nextState.userTabsOpen));
 
-            nextState.userTabsOpen.push(username);
-            nextState.userTabsData.push(action.json);
+            let index = nextState.userTabsOpen.indexOf(username);
+            if (index < 0) {
+                nextState.userTabsOpen.push(username);
+                nextState.userTabsData.push(action.json);
+            }
 
             console.log('userwall is ' + JSON.stringify(nextState.userWall));
             return nextState;
@@ -49,13 +52,24 @@ let handleAjaxDone = (nextState, action) => {
 let handleCloseUser = (nextState, action) => {
     let username = action.username;
     console.log('Closing wall for user ' + username);
-    nextState.userWall = null;
-    nextState.showWall = false;
-    nextState.shownUserName = '';
+
+    if (username === nextState.shownUserName) {
+        nextState.userWall = null;
+        nextState.showWall = false;
+        nextState.shownUserName = '';
+    }
+
+
     let index = nextState.userTabsOpen.indexOf(username);
+
     if (index >= 0) {
-        nextState.userTabsOpen.splice(index, 1);
-        nextState.userTabsData.splice(index, 1);
+        let newUserTabsOpen = nextState.userTabsOpen.slice();
+        let newUserTabsData = nextState.userTabsData.slice();
+        newUserTabsOpen.splice(index, 1);
+        newUserTabsData.splice(index, 1);
+
+        nextState.userTabsOpen = newUserTabsOpen;
+        nextState.userTabsData = newUserTabsData;
     }
     return nextState;
 };
@@ -133,6 +147,7 @@ export function wallsReducer(state, action) {
     let act = action.type;
     console.log(act + ' wallsReducer state: ' + JSON.stringify(state));
     let nextState = Object.assign({}, state);
+
     console.log(act + ' wallsReducer nextState: ' + JSON.stringify(nextState));
 
     switch (action.type) {
@@ -142,6 +157,8 @@ export function wallsReducer(state, action) {
         case 'SHOW_USER_WALL': return handleShowUser(nextState, action);
         case 'SHOW_USER_LIST': {
             nextState.showWall = false;
+            nextState.shownUserName = '';
+            nextState.userWall = null;
             return nextState;
         }
         default: return nextState;
