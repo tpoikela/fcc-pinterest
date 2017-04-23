@@ -35,36 +35,41 @@ class Gallery extends React.Component {
         let userLinkedImages = this.props.userLinkedImages;
         let userLikedImages = this.props.userLikedImages;
 
-        let childElements = images.map( (img, index) => {
+        let childElements = null;
 
-            let likeCb = this.likeImage.bind(this, img);
-            let linkCb = this.linkImage.bind(this, img);
-            let unlikeCb = this.unlikeImage.bind(this, img);
-            let unlinkCb = this.unlinkImage.bind(this, img);
+        if (images) {
 
-            let imageLinkedIndex = userLinkedImages.findIndex(elem => {
-                return elem._id === img._id;
+            childElements = images.map( (img, index) => {
+
+                let likeCb = this.likeImage.bind(this, img);
+                let linkCb = this.linkImage.bind(this, img);
+                let unlikeCb = this.unlikeImage.bind(this, img);
+                let unlinkCb = this.unlinkImage.bind(this, img);
+
+                let imageLinkedIndex = userLinkedImages.findIndex(elem => {
+                    return elem._id === img._id;
+                });
+                let userHasLinked = imageLinkedIndex >= 0;
+
+                let imageLikedIndex = userLikedImages.findIndex(elem => {
+                    return elem._id === img._id;
+                });
+                let userHasLiked = imageLikedIndex >= 0;
+
+                return (
+                    <ImageComp
+                        className='grid-item'
+                        image={img} key={index}
+                        likeImage={likeCb}
+                        linkImage={linkCb}
+                        unlikeImage={unlikeCb}
+                        unlinkImage={unlinkCb}
+                        userHasLiked={userHasLiked}
+                        userHasLinked={userHasLinked}
+                    />
+                );
             });
-            let userHasLinked = imageLinkedIndex >= 0;
-
-            let imageLikedIndex = userLikedImages.findIndex(elem => {
-                return elem._id === img._id;
-            });
-            let userHasLiked = imageLikedIndex >= 0;
-
-            return (
-                <ImageComp
-                    className='grid-item'
-                    image={img} key={index}
-                    likeImage={likeCb}
-                    linkImage={linkCb}
-                    unlikeImage={unlikeCb}
-                    unlinkImage={unlinkCb}
-                    userHasLiked={userHasLiked}
-                    userHasLinked={userHasLinked}
-                />
-            );
-        });
+        }
 
         return (
             <Masonry
