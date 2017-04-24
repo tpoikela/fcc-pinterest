@@ -7,13 +7,13 @@
 - var bsTheme = bsCdn + "/bootstrap/3.3.2/css/bootstrap-theme.min.css";
 - var jqueryJs = "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js";
 - var domain = "http://127.0.0.1";
-- var appTitle = 'Pinterest-clone';
+- var appTitle = 'Picaterest';
 
 mixin metaProps()
   meta(property="og:url" content="" + domain)
   meta(property="og:type" content="website")
   meta(property="og:title" content={appTitle})
-  meta(property="og:description" content="Pinterest-clone")
+  meta(property="og:description" content="Picaterest")
   meta(name='viewport' content='initial-scale=1')
   //- meta(property="og:image" content="http://www.your-domain.com/path/image.jpg" )
 
@@ -76,7 +76,7 @@ mixin topMenu(title)
     hr
 
 mixin appTitle()
- //-  h1.app-title-text Pinterest-clone
+ //-  h1.app-title-text Picaterest
 
 mixin button(text)
   button.btn-pint {text}
@@ -105,7 +105,7 @@ mixin navBarCollapsible(page)
    div.container-fluid
 
      div.navbar-header.pull-left
-       a.navbar-brand(href="/") PintClone
+       a.navbar-brand(href="/") Picaterest
      div.navbar-header.pull-right
        - if (isAuth) {
          ul.nav.pull-left.navbar-username

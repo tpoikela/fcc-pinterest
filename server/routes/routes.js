@@ -220,7 +220,7 @@ module.exports = function(app, passport) {
         .get((req, res) => {
             let username = req.params.username;
             if (username) {
-                userController.getUserWall(username, (err, resp) => {
+                userController.getPublicUserWall(username, (err, resp) => {
                     if (err) {
                         logError('/users/wall', err, req);
                         res.status(500).json({error: 'No user wall found.'});
@@ -246,7 +246,6 @@ module.exports = function(app, passport) {
                         res.status(500).json(errorInternal);
                     }
                     else {
-                        delete data.local.password;
                         res.json(data);
                     }
                 });
@@ -284,7 +283,6 @@ module.exports = function(app, passport) {
                     res.status(500).json(errorInternal);
                 }
                 else {
-                    delete data.local.password;
                     res.json(data);
                 }
             });
