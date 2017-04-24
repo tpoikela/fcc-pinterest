@@ -18,9 +18,11 @@ html
       - if (ok) {
         p.text-success Registered user #{name} successfully.
         p
-          | Click 
-          a(href='/login') here 
-          | to login.
+          | You can 
+          a(href='/login')
+            button.btn.btn-success Login
+          |  
+          | now.
       - } else {
         p.text-danger
           Username #{name} already taken. Try again.
