@@ -74,20 +74,23 @@ class WallsTop extends React.Component {
 
             if (images.length > 0) {
                 wall = (
-                    <Gallery
-                        elements={images}
-                        likeImage={this.dummyFunc}
-                        linkImage={this.dummyFunc}
-                        unlikeImage={this.dummyFunc}
-                        unlinkImage={this.dummyFunc}
-                        userLikedImages={emptyArr}
-                        userLinkedImages={emptyArr}
-                    />
+                    <div className='user-wall'>
+                        <p>User {username} has the following images:</p>
+                        <Gallery
+                            elements={images}
+                            likeImage={this.dummyFunc}
+                            linkImage={this.dummyFunc}
+                            unlikeImage={this.dummyFunc}
+                            unlinkImage={this.dummyFunc}
+                            userLikedImages={emptyArr}
+                            userLinkedImages={emptyArr}
+                        />
+                    </div>
                 );
             }
             else {
                 wall = (
-                    <div>
+                    <div className='user-wall'>
                         User {username} has no linked images.
                     </div>
                 );
