@@ -38,8 +38,19 @@ module.exports = function(passport) {
 
               let hashed = hash.getHash(password);
 
-              if (user.local.password !== hashed) { return done(null, false); }
-              return done(null, user);
+              if (user.local.password !== hashed) {
+                  return done(null, false);
+              }
+              else {
+                  user.lastLoginOn = new Date().getTime();
+                  user.save(err => {
+                      if (err) {return done(err);}
+                      else {
+                          return done(null, user);
+                      }
+                  });
+              }
+
             });
         }
     ));

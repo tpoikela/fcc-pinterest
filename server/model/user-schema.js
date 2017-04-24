@@ -49,7 +49,11 @@ let UserSchema = new Schema({
 
     linkedTo: [{type: ObjectId, ref: 'Image'}],
     liked: [{type: ObjectId, ref: 'Image'}],
-    added: [{type: ObjectId, ref: 'Image'}]
+    added: [{type: ObjectId, ref: 'Image'}],
+
+    // Additional information
+    registeredOn: {type: String},
+    lastLoginOn: {type: String}
 
 },
 {collection: 'pint_users'}
@@ -120,7 +124,13 @@ UserSchema.statics.findOrCreate = function(token, profile, cb) {
 		if (err) {cb(err);}
 		else if (user) {
             console.log('Found existing user ' + user.username);
-			cb(null, user); // user found, return that user
+            user.lastLoginOn = new Date().getTime();
+            user.save(err => {
+                if (err) {cb(err);}
+                else {
+                    cb(null, user); // user found, return that user
+                }
+            });
 		}
 		else {
             console.log('Creating a new user ' + profile.username);
@@ -133,6 +143,7 @@ UserSchema.statics.findOrCreate = function(token, profile, cb) {
 			newUser.twitter.username = profile.username;
 			newUser.twitter.displayName = profile.displayName;
 			newUser.username = profile.username;
+            newUser.registeredOn = new Date().getTime();
 
 			// save our user into the database
 			newUser.save(err => {

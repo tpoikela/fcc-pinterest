@@ -29,6 +29,7 @@ module.exports = function(path) {
                     newUser.local = {};
                     newUser.local.username = username;
                     newUser.local.password = hash.getHash(password);
+                    newUser.registeredOn = new Date().getTime();
 
                     newUser.save(function(err) {
                         if (err) {errorHandler(err, res);}
