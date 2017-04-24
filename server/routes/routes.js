@@ -5,6 +5,7 @@ let ctrlPath = path + '/server/ctrl';
 
 const ImageController = require(ctrlPath + '/image-ctrl.server.js');
 const UserController = require(ctrlPath + '/user-ctrl.server.js');
+const BingSearch = require('../common/bing-search');
 const debug = require('debug')('book:routes');
 
 let _log = function(msg) {
@@ -109,6 +110,8 @@ module.exports = function(app, passport) {
     // CONTROLLERS
     let userController = new UserController(path);
     let imageController = new ImageController(path);
+
+    let imageSearch = new BingSearch(process.env.BING_KEY);
 
     //----------------------------------------------------------------------
     // ROUTES
@@ -357,6 +360,24 @@ module.exports = function(app, passport) {
             });
 
         });
+
+
+        /* Route for image searches. For registered users only. */
+        app.route('/search')
+            .post(isLoggedInAjax, (req, res) => {
+                let query = req.body.query;
+                imageSearch.search(query, (err, result) => {
+                    if (err) {
+                        logError('/search POST', err, req);
+                        res.status(500).json(errorInternal);
+                    }
+                    else {
+                        // TODO add search into user data
+                        res.status(200).json(result);
+                    }
+
+                });
+            });
 
     //--------------------------------------
     // User registration and authentication
