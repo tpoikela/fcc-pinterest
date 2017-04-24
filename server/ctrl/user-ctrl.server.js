@@ -4,6 +4,9 @@
 const User = require('../model/user-schema');
 const hash = require('../common/hash-password');
 
+const USER_FILTER = {_id: 1, username: 1, added: 1,
+    liked: 1, linkedTo: 1};
+
 module.exports = function(path) {
 
     let errorHandler = function(err, res) {
@@ -78,7 +81,7 @@ module.exports = function(path) {
     };
 
     /* Returns the relevant data for user wall. */
-    this.getUserWall = function(username, cb) {
+    this.getPublicUserWall = function(username, cb) {
         let filterObj = {username: 1, _id: 0, linkedTo: 1};
         User.findOne({username: username}, filterObj)
             .populate('linkedTo')
@@ -114,7 +117,7 @@ module.exports = function(path) {
     /* Given username, fetches corresponding user data from the DB and passes
      * it to callback.*/
     this.getUserByName = function(username, cb) {
-        User.findOne({username: username})
+        User.findOne({username: username}, USER_FILTER)
             .populate('added')
             .populate('liked')
             .populate('linkedTo')
