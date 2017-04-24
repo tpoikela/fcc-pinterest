@@ -18,17 +18,29 @@ html
           a(href='/walls') Walls 
           | created by registered users.
 
+        p
+          | You can see all 
+          a(href='/all-images') Images 
+          | posted and linked by our users.
         - if (isAuth) {
           p
             | Go to 
             a(href='/profile') 'Profile' 
-            | to see your profile.
+            | to see your profile and add images to your own wall.
         - } else {
           p
             a(href='/signup')
               button.btn.btn-danger Signup
             |  
             | today and create your own wall of images!
+          p
+            | If you have already registered or you have a Twitter account,
+            | you can 
+            a(href='/login')
+              button.btn.btn-success Login
+            |  
+            | directly.
+
         - }
 
       +appFooter()
