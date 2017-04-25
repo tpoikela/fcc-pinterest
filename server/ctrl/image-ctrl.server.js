@@ -5,12 +5,15 @@ const User = require('../model/user-schema.js');
 
 const blc = require('broken-link-checker');
 
+const debug = require('debug')('image-ctrl');
+
 /* ImageController handles the DB access for adding/removing image related
  * information for users. */
 class ImageController {
 
     constructor(path) {
         this.path = path;
+        this.isImageUrl = this.isImageUrl.bind(this);
     }
 
     log(msg, obj) {
@@ -22,7 +25,7 @@ class ImageController {
     }
 
     isImageUrl(url) {
-        if (url.match(/\.(jpg|jpeg|gif|png|bmp|svg)$/) !== null) {
+        if (url.match(/\.(jpg|jpeg|gif|png|bmp|svg)/) !== null) {
             return true;
         }
         return false;
@@ -34,7 +37,7 @@ class ImageController {
 
 		let urlChecker = new blc.UrlChecker(options, {
 			link: function(result) {
-                console.log('Checking link ' + body.url);
+                debug('Checking link ' + body.url);
 
                 let isBroken = false;
 				if (result.broken || result.excluded) {
@@ -63,7 +66,7 @@ class ImageController {
 
 			},
 			end: function() {
-                console.log('Finished checking broken URLs');
+                debug('Finished checking broken URLs');
 			}
 		});
 
