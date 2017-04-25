@@ -36,7 +36,7 @@ class ImageController {
         let options = {};
 
 		let urlChecker = new blc.UrlChecker(options, {
-			link: function(result) {
+			link: (result) => {
                 debug('Checking link ' + body.url);
 
                 let isBroken = false;
@@ -65,7 +65,7 @@ class ImageController {
                 });
 
 			},
-			end: function() {
+			end: () => {
                 debug('Finished checking broken URLs');
 			}
 		});
