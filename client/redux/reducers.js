@@ -20,8 +20,14 @@ let handleAjaxDone = (nextState, action) => {
     nextState.isFetching = false;
     nextState.fetchingWhat = '';
     switch (action.what) {
-        case 'allImages': return {nextState, images: action.json};
-        case 'getUserInfo': return {nextState, userData: action.json};
+        case 'allImages': {
+            nextState.images = action.json;
+            return nextState;
+        }
+        case 'getUserInfo': {
+            nextState.userData = action.json;
+            return nextState;
+        }
         case 'getUserList': {
             nextState.userList = action.json;
             return nextState;
@@ -126,13 +132,12 @@ let getCommonState = () => {
 export function profileReducer(state, action) {
     if (typeof state === 'undefined') {
         let commonState = getCommonState();
-        return {
-            commonState,
+        return Object.assign(commonState, {
             images: [],
             msg: '',
             searchResults: [],
             shownTab: TAB_ADD
-        };
+        });
     }
 
     // State copy done here
