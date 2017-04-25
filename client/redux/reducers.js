@@ -1,5 +1,8 @@
 'use strict';
 
+export let TAB_ADD = 'Tab_add';
+export let TAB_SEARCH = 'Tab_search';
+
 let receiveImage = (nextState, action) => {
     nextState.resp = action.json;
     return nextState;
@@ -44,11 +47,16 @@ let handleAjaxDone = (nextState, action) => {
             console.log('userwall is ' + JSON.stringify(nextState.userWall));
             return nextState;
         }
+        case 'searchImages': {
+            nextState.searchResults = action.json.data;
+            return nextState;
+        }
         default: return nextState;
     }
 
 };
 
+/* Called when a user wall is closed. */
 let handleCloseUser = (nextState, action) => {
     let username = action.username;
     console.log('Closing wall for user ' + username);
@@ -96,6 +104,11 @@ let handleError = (nextState, action) => {
     return nextState;
 };
 
+let handleTabChange = (nextState, action) => {
+    nextState.shownTab = action.newTab;
+    return nextState;
+};
+
 let getCommonState = () => {
     return {
         err: null,
@@ -106,14 +119,19 @@ let getCommonState = () => {
     };
 };
 
+//----------------------------------------
 /* Reducer for ProfileTop component.*/
+//----------------------------------------
+
 export function profileReducer(state, action) {
     if (typeof state === 'undefined') {
         let commonState = getCommonState();
         return {
             commonState,
             images: [],
-            msg: ''
+            msg: '',
+            searchResults: [],
+            shownTab: TAB_ADD
         };
     }
 
@@ -125,11 +143,15 @@ export function profileReducer(state, action) {
         case 'ERROR': return handleError(nextState, action);
         case 'RECEIVE_IMAGE': return receiveImage(nextState, action);
         case 'AJAX_DONE': return handleAjaxDone(nextState, action);
+        case 'CHANGE_TAB': return handleTabChange(nextState, action);
         default: return nextState;
     }
 }
 
+//----------------------------------------
 /* Reducer for the WallsTop component.*/
+//----------------------------------------
+
 export function wallsReducer(state, action) {
     if (typeof state === 'undefined') {
         return {
