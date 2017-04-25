@@ -41,8 +41,10 @@ let mainStore = createStore(
     combineReducers({
         profileReducer: profileReducer
     }),
-    applyMiddleware(
-        ThunkMiddleware // Lets us dispatch functions
+    composeEnhancers(
+        applyMiddleware(
+            ThunkMiddleware // Lets us dispatch functions
+        )
     )
 );
 
