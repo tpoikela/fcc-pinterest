@@ -196,6 +196,26 @@ export let removeImage = (img) => {
     };
 };
 
+/* Used when a user sends an image search request.*/
+export let searchImages = (query) => {
+    return function(dispatch) {
+        dispatch(actionAjaxStart('searchImages'));
+        let url = appUrl + '/search';
+        let obj = {query: query};
+        ajax.post(url, obj, (err, respText) => {
+            if (err) {
+                dispatch(actionError(err));
+            }
+            else {
+                let json = JSON.parse(respText);
+                dispatch(actionAjaxDone('searchImages', json));
+            }
+        });
+
+    };
+
+};
+
 //----------------------------------------------
 // SIMPLE ACTIONS
 //----------------------------------------------
@@ -221,6 +241,12 @@ let actionAjaxDone = (recWhat, json) => {
         json
     };
 };
+
+export let actionChangeTab = (newTab, oldTab) => ({
+    type: 'CHANGE_TAB',
+    newTab: newTab,
+    oldTab: oldTab
+});
 
 let closeUserWall = (username) => ({
     type: 'CLOSE_USER',
