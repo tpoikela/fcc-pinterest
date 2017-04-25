@@ -6,7 +6,8 @@ import {profileReducer, wallsReducer} from '../redux/reducers.js';
 import {getUserInfo, getAllImages,
     likeImage, linkImage, addImage, removeImage,
     unlikeImage, unlinkImage, getUserList, getUserWall,
-    showUserList, closeUserWall, showUserWall
+    showUserList, closeUserWall, showUserWall, actionChangeTab,
+    searchImages
 } from '../redux/actions';
 
 import ThunkMiddleware from 'redux-thunk';
@@ -68,20 +69,24 @@ let wallsStore = createStore(
 //---------------
 
 let mapDispatchToProps = dispatch => ({
-    onClickRemoveImage: (img) => dispatch(removeImage(img)),
-    getUserInfo: () => dispatch(getUserInfo()),
     addImage: (obj) => dispatch(addImage(obj)),
+    changeTab: (newTab, oldTab) => dispatch(actionChangeTab(newTab, oldTab)),
     getAllImages: () => dispatch(getAllImages()),
-    linkImage: (img) => dispatch(linkImage(img)),
+    getUserInfo: () => dispatch(getUserInfo()),
     likeImage: (img) => dispatch(likeImage(img)),
-    unlinkImage: (img) => dispatch(unlinkImage(img)),
-    unlikeImage: (img) => dispatch(unlikeImage(img))
+    linkImage: (img) => dispatch(linkImage(img)),
+    onClickRemoveImage: (img) => dispatch(removeImage(img)),
+    searchImages: (query) => dispatch(searchImages(query)),
+    unlikeImage: (img) => dispatch(unlikeImage(img)),
+    unlinkImage: (img) => dispatch(unlinkImage(img))
 });
 
 let mapStateToProps = (state) => {
     return {
-        userData: state.profileReducer.userData,
-        images: state.profileReducer.images
+        images: state.profileReducer.images,
+        searchResults: state.profileReducer.searchResults,
+        shownTab: state.profileReducer.shownTab,
+        userData: state.profileReducer.userData
     };
 };
 
