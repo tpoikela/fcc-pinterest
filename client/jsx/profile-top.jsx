@@ -8,22 +8,23 @@ const ProfileAddImage = require('./profile-add-image');
 const ProfileImages = require('./profile-images');
 const ProfileSearch = require('./profile-search');
 
+/* Top-level component on the profile page. Has tabbed views and component  body
+ * is rendered based on tab selection.*/
 class ProfileTop extends React.Component {
 
     constructor(props) {
         super(props);
         this.addImage = this.addImage.bind(this);
         this.addImageFromSearch = this.addImageFromSearch.bind(this);
+        this.unlinkImage = this.unlinkImage.bind(this);
+        this.unlikeImage = this.unlikeImage.bind(this);
     }
 
     componentDidMount() {
         this.props.getUserInfo();
     }
 
-    componentWillReceiveProps() {
-        console.log('componentWillReceiverProps');
-    }
-
+    /* Adds image for the user, and then links to it. Updates user info. */
     addImage(obj) {
         obj.userId = this.props.userData._id;
         Promise.all([this.props.addImage(obj)]).then( () => {
@@ -34,6 +35,19 @@ class ProfileTop extends React.Component {
     addImageFromSearch(obj) {
         obj.userId = this.props.userData._id;
         this.props.addImage(obj);
+    }
+
+    /* Dispatch unlink and then updates user info.*/
+    unlinkImage(img) {
+        Promise.all([this.props.unlinkImage(img)]).then( () => {
+            this.props.getUserInfo();
+        });
+    }
+
+    unlikeImage(img) {
+        Promise.all([this.props.unlikeImage(img)]).then( () => {
+            this.props.getUserInfo();
+        });
     }
 
     render() {
@@ -135,8 +149,8 @@ class ProfileTop extends React.Component {
                 likeImage={this.props.likeImage}
                 linkImage={this.props.linkImage}
                 onClickRemove={this.props.onClickRemoveImage}
-                unlikeImage={this.props.unlikeImage}
-                unlinkImage={this.props.unlinkImage}
+                unlikeImage={this.unlikeImage}
+                unlinkImage={this.unlinkImage}
             />
         </div>
         );
