@@ -28,7 +28,7 @@ export let getUserList = () => {
 
         ajax.get(url, (err, respText) => {
             if (err) {
-                dispatch(actionError(err));
+                dispatch(actionError('getUserList', err));
             }
             else {
                 let json = JSON.parse(respText);
@@ -44,7 +44,7 @@ export let getUserWall = (username) => {
         let url = appUrl + '/users/wall/' + username;
         ajax.get(url, (err, respText) => {
             if (err) {
-                dispatch(actionError(err));
+                dispatch(actionError('getUserWall', err));
             }
             else {
                 let json = JSON.parse(respText);
@@ -61,7 +61,7 @@ export let getUserInfo = () => {
         let url = appUrl + '/users';
         ajax.get(url, (err, respText) => {
             if (err) {
-                dispatch(actionError(err));
+                dispatch(actionError('getUserInfo', err));
             }
             else {
                 let json = JSON.parse(respText);
@@ -76,7 +76,7 @@ let ajaxPostPromise = (dispatch, funcName, url, obj) => {
     return new Promise( function(resolve, reject) {
         ajax.post(url, obj, (err, respText) => {
             if (err) {
-                dispatch(actionError(err));
+                dispatch(actionError(funcName, err));
                 reject(err);
             }
             else {
@@ -93,7 +93,7 @@ let ajaxDeletePromise = (dispatch, funcName, url, obj) => {
     return new Promise( function(resolve, reject) {
         ajax.delete(url, obj, (err, respText) => {
             if (err) {
-                dispatch(actionError(err));
+                dispatch(actionError(funcName, err));
                 reject(err);
             }
             else {
@@ -130,7 +130,7 @@ export let linkImage = (image) => {
         let obj = {image: image, link: true};
         ajax.put(url, obj, (err, respText) => {
             if (err) {
-                dispatch(actionError(err));
+                dispatch(actionError('linkImage', err));
             }
             else {
                 let json = JSON.parse(respText);
@@ -157,7 +157,7 @@ export let likeImage = (image) => {
         let obj = {image: image, like: true};
         ajax.put(url, obj, (err, respText) => {
             if (err) {
-                dispatch(actionError(err));
+                dispatch(actionError('likeImage', err));
             }
             else {
                 let json = JSON.parse(respText);
@@ -184,7 +184,7 @@ export let getAllImages = () => {
         let url = appUrl + '/images';
         ajax.get(url, (err, respText) => {
             if (err) {
-                dispatch(actionError(err));
+                dispatch(actionError('getAllImages', err));
             }
             else {
                 let json = JSON.parse(respText);
@@ -202,7 +202,7 @@ export let removeImage = (img) => {
         let obj = {image: img};
         ajax.delete(url, obj, (err, respText) => {
             if (err) {
-                dispatch(actionError(err));
+                dispatch(actionError('removeImage', err));
             }
             else {
                 let json = JSON.parse(respText);
@@ -220,7 +220,7 @@ export let searchImages = (query) => {
         let obj = {query: query};
         ajax.post(url, obj, (err, respText) => {
             if (err) {
-                dispatch(actionError(err));
+                dispatch(actionError('searchImages', err));
             }
             else {
                 let json = JSON.parse(respText);
@@ -236,7 +236,8 @@ export let searchImages = (query) => {
 // SIMPLE ACTIONS
 //----------------------------------------------
 
-let actionError = (err) => ({
+let actionError = (funcName, err) => ({
+    funcName: funcName,
     type: 'ERROR',
     err: err
 });
