@@ -1,24 +1,27 @@
 fcc-pinterest=~/git/fcc-pinterest CD=. filter="*" flags=S {
+ browserify-cache.json
  gulpfile.js
  LICENSE
  package.json
  README.md
  server.js
  tags
+ testem.json
  TODO.md
  vimproject
  . # pragma keep
  build=build {
+  bundle-grid.js
   bundle.js
   main.css
  }
  .git=.git {
-  COMMIT_EDITMSG
+  FETCH_HEAD
   HEAD
+  ORIG_HEAD
   config
   description
   index
-  packed-refs
   hooks=hooks {
    applypatch-msg.sample
    commit-msg.sample
@@ -44,12 +47,14 @@ fcc-pinterest=~/git/fcc-pinterest CD=. filter="*" flags=S {
   }
  }
  test=test {
+  ajaxFunctionsTest.js
   imageSchemaTest.js
   test-utils.js
   userSchemaTest.js
  }
  pug=pug {
   about.pug
+  grid.pug
   images.pug
   index.pug
   login.pug
@@ -57,8 +62,10 @@ fcc-pinterest=~/git/fcc-pinterest CD=. filter="*" flags=S {
   profile.pug
   signup.pug
   signup_done.pug
+  walls.pug
  }
  public=public {
+  broken.png
   css=css {
    font-awesome.css
   }
@@ -69,6 +76,7 @@ fcc-pinterest=~/git/fcc-pinterest CD=. filter="*" flags=S {
  client=client {
   common=common {
    ajax-functions.js
+   grid-app.js
   }
   jsx=jsx {
    app.jsx
@@ -77,6 +85,7 @@ fcc-pinterest=~/git/fcc-pinterest CD=. filter="*" flags=S {
    images-top.jsx
    profile-add-image.jsx
    profile-images.jsx
+   profile-search.jsx
    profile-top.jsx
    walls-top.jsx
   }
@@ -101,6 +110,7 @@ fcc-pinterest=~/git/fcc-pinterest CD=. filter="*" flags=S {
    user-schema.js
   }
   common=common {
+   bing-search.js
    hash-password.js
    validation.js
   }
