@@ -3,11 +3,6 @@
 export let TAB_ADD = 'Tab_add';
 export let TAB_SEARCH = 'Tab_search';
 
-let receiveImage = (nextState, action) => {
-    nextState.resp = action.json;
-    return nextState;
-};
-
 /* This function handles ajax-started actions. */
 let handleAjaxStart = (nextState, action) => {
     nextState.isFetching = true;
@@ -20,6 +15,10 @@ let handleAjaxDone = (nextState, action) => {
     nextState.isFetching = false;
     nextState.fetchingWhat = '';
     switch (action.what) {
+        case 'addImage': {
+            nextState.resp = action.json;
+            return nextState;
+        }
         case 'allImages': {
             nextState.images = action.json;
             return nextState;
@@ -146,7 +145,6 @@ export function profileReducer(state, action) {
     switch (action.type) {
         case 'AJAX_START': return handleAjaxStart(nextState, action);
         case 'ERROR': return handleError(nextState, action);
-        case 'RECEIVE_IMAGE': return receiveImage(nextState, action);
         case 'AJAX_DONE': return handleAjaxDone(nextState, action);
         case 'CHANGE_TAB': return handleTabChange(nextState, action);
         default: return nextState;
