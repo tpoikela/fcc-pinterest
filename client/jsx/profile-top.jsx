@@ -34,7 +34,9 @@ class ProfileTop extends React.Component {
 
     addImageFromSearch(obj) {
         obj.userId = this.props.userData._id;
-        this.props.addImage(obj);
+        Promise.all([this.props.addImage(obj)]).then( () => {
+            this.props.getUserInfo();
+        });
     }
 
     /* Dispatch unlink and then updates user info.*/
