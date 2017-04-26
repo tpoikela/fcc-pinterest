@@ -4,7 +4,7 @@
 import {profileReducer, wallsReducer} from '../redux/reducers.js';
 
 import {getUserInfo, getAllImages,
-    likeImage, linkImage, addImage, removeImage,
+    likeImage, linkImage, addImage, addImageFromSearch, removeImage,
     unlikeImage, unlinkImage, getUserList, getUserWall,
     showUserList, closeUserWall, showUserWall, actionChangeTab,
     searchImages
@@ -72,6 +72,7 @@ let wallsStore = createStore(
 
 let mapDispatchToProps = dispatch => ({
     addImage: (obj) => dispatch(addImage(obj)),
+    addImageFromSearch: (obj) => dispatch(addImageFromSearch(obj)),
     changeTab: (newTab, oldTab) => dispatch(actionChangeTab(newTab, oldTab)),
     getAllImages: () => dispatch(getAllImages()),
     getUserInfo: () => dispatch(getUserInfo()),
