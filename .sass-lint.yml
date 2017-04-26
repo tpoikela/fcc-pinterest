@@ -8,3 +8,5 @@ rules:
     brace-style: 0
     leading-zero: 0
     force-pseudo-nesting: 0
+    force-element-nesting: 0
+
