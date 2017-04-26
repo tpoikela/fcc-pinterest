@@ -71,21 +71,55 @@ export let getUserInfo = () => {
     };
 };
 
-// Thunk action to send POST to server with image data
-export let addImage = (obj) => {
-    return function(dispatch) {
-        dispatch(fetchImage());
-        let url = appUrl + '/images';
+/* Promise-wrapper for ajax.post. */
+let ajaxPostPromise = (dispatch, funcName, url, obj) => {
+    return new Promise( function(resolve, reject) {
         ajax.post(url, obj, (err, respText) => {
             if (err) {
                 dispatch(actionError(err));
+                reject(err);
             }
             else {
                 let json = JSON.parse(respText);
-                dispatch(receiveImage(json));
+                dispatch(actionAjaxDone(funcName, json));
+                resolve();
             }
         });
+    });
+};
 
+/* Promise-wrapper for ajax.post. */
+let ajaxDeletePromise = (dispatch, funcName, url, obj) => {
+    return new Promise( function(resolve, reject) {
+        ajax.delete(url, obj, (err, respText) => {
+            if (err) {
+                dispatch(actionError(err));
+                reject(err);
+            }
+            else {
+                let json = JSON.parse(respText);
+                dispatch(actionAjaxDone(funcName, json));
+                resolve();
+            }
+        });
+    });
+};
+
+// Thunk action to send POST to server with image data
+export let addImage = (obj) => {
+    return function(dispatch) {
+        dispatch(actionAjaxStart('addImage'));
+        let url = appUrl + '/images';
+        return ajaxPostPromise(dispatch, 'addImage', url, obj);
+    };
+};
+
+export let addImageFromSearch = (obj) => {
+    return function(dispatch) {
+        dispatch(addImage(obj)).then( () => {
+            console.log('addImageFromSearch now calling getUserInfo');
+            dispatch(getUserInfo());
+        });
     };
 };
 
@@ -112,16 +146,7 @@ export let unlinkImage = (image) => {
         dispatch(actionAjaxStart('unlinkImage'));
         let url = appUrl + '/images';
         let obj = {image: image, link: true};
-        ajax.delete(url, obj, (err, respText) => {
-            if (err) {
-                dispatch(actionError(err));
-            }
-            else {
-                let json = JSON.parse(respText);
-                dispatch(actionAjaxDone('unlinkImage', json));
-            }
-        });
-
+        return ajaxDeletePromise(dispatch, 'unlinkImage', url, obj);
     };
 };
 
@@ -148,16 +173,7 @@ export let unlikeImage = (image) => {
         dispatch(actionAjaxStart('unlikeImage'));
         let url = appUrl + '/images';
         let obj = {image: image, like: true};
-        ajax.delete(url, obj, (err, respText) => {
-            if (err) {
-                dispatch(actionError(err));
-            }
-            else {
-                let json = JSON.parse(respText);
-                dispatch(actionAjaxDone('unlikeImage', json));
-            }
-        });
-
+        return ajaxDeletePromise(dispatch, 'unlikeImage', url, obj);
     };
 };
 
@@ -257,17 +273,6 @@ let showUserWall = (username) => ({
     type: 'SHOW_USER_WALL',
     username: username
 });
-
-let fetchImage = () => ({
-    type: 'FETCH_IMAGE'
-});
-
-let receiveImage = (json) => {
-    return {
-        type: 'RECEIVE_IMAGE',
-        json
-    };
-};
 
 let showUserList = () => {
     return {
