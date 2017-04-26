@@ -57,17 +57,27 @@ class BingSearch {
             res.on('end', () => {
                 debug('response finished OK');
                 let str = data.map( item => {return item.toString();});
-                let respObj = JSON.parse(str);
+                let respObj = null;
+
+                try {
+                    respObj = JSON.parse(str);
+                }
+                catch (err) {
+                    console.error('BingSearch search() error: ' + err);
+                    return cb(err);
+                }
+
                 debug('data finished: ' + JSON.stringify(respObj));
                 let images = respObj.value;
                 let filteredImages = images.map( item => {
                     return {
                         thumbnailUrl: item.thumbnailUrl,
-                        url: item.contentUrl,
+                        // url: item.contentUrl,
+                        url: item.thumbnailUrl,
                         title: item.name
                     };
                 });
-                cb(null, {data: filteredImages});
+                return cb(null, {data: filteredImages});
             });
 
         });
