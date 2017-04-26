@@ -40,6 +40,10 @@ class ProfileSearch extends React.Component {
     render() {
         let images = this.props.images;
         let emptyArr = [];
+
+        let buttonOrSpinner = this.getButtonOrSpinner();
+        let errorMsg = this.getErrorMessage();
+
         return (
             <div className='profile-view-search'>
                 <p>You can search for images here. After the search, click the
@@ -64,12 +68,9 @@ class ProfileSearch extends React.Component {
                     </div>
                 </form>
 
-                <button
-                    className='btn btn-primary'
-                    onClick={this.search}
-                    >
-                    Search
-                </button>
+                {errorMsg}
+
+                {buttonOrSpinner}
 
                 <Gallery
                     elements={images}
@@ -85,11 +86,43 @@ class ProfileSearch extends React.Component {
         );
     }
 
+    getErrorMessage() {
+        if (this.props.err) {
+            return (
+                <p>{this.props.err}</p>
+            );
+        }
+        return null;
+    }
+
+    /* Returns either search button or spinner if search is in progress.*/
+    getButtonOrSpinner() {
+        if (this.props.isFetching) {
+            return (
+                <div>
+                    <i className='fa fa-spin fa-spinner fa-2x '/>
+                </div>
+            );
+        }
+        else {
+            return (
+                <button
+                    className='btn btn-primary'
+                    onClick={this.search}
+                    >
+                    Search
+                </button>
+            );
+        }
+    }
+
 }
 
 ProfileSearch.propTypes = {
     addImage: React.PropTypes.func,
+    err: React.PropTypes.objectOf(Error),
     images: React.PropTypes.array,
+    isFetching: React.PropTypes.bool,
     searchImages: React.PropTypes.func
 };
 
