@@ -41,6 +41,11 @@ let xhrReadyCallback = (xhr, cb) => {
     }
 };
 
+let createRequest = () => {
+    let xhr = new XMLHttpRequest();
+    xhr.timeout = 5000;
+    return xhr;
+};
 
 /* Contains basic ajax-functions for communicating with the server. */
 let AjaxFuncs = {
@@ -59,8 +64,13 @@ let AjaxFuncs = {
     /* Send ajax-POST with JSON data.*/
     post: (url, data, cb) => {
         if ($DEBUG) {console.log('ajax-post to URL: ' + url);}
-        let xhr = new XMLHttpRequest();
+        let xhr = createRequest();
         xhr.onreadystatechange = xhrReadyCallback.bind(this, xhr, cb);
+
+        xhr.ontimeout = function(e) {
+            console.error(e);
+            cb(500, {err: 'Timeout occurred.'});
+        };
 
         xhr.open('post', url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
