@@ -41,7 +41,10 @@ class ProfileSearch extends React.Component {
         let images = this.props.images;
         let emptyArr = [];
         return (
-            <div>
+            <div className='profile-view-search'>
+                <p>You can search for images here. After the search, click the
+                    link icon to add the image into your profile.
+                </p>
                 <form>
 
                     <div className='form-group'>
