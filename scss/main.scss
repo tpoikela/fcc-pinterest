@@ -11,7 +11,13 @@ $margin-top: 10px;
 $margin-side: 5px;
 $margin-side-grid-img: ($grid-col-width - $grid-image-width) / 2 - $grid-item-padding;
 
-img.grid-image {
+$icon-size: 1.5em;
+
+.badge {
+    font-size: $icon-size;
+}
+
+.grid-image {
     margin-left: $margin-side-grid-img;
     margin-right: $margin-side-grid-img;
     margin-top: 5px;
@@ -49,6 +55,10 @@ img.grid-image {
     margin-top: 5px;
 }
 
+//---------------
+// PROFILE VIEW
+//---------------
+
 .profile-view-add {
     margin-top: $margin-top;
 }
@@ -56,3 +66,24 @@ img.grid-image {
 .profile-view-search {
     margin-top: $margin-top;
 }
+
+//-------------------
+// IMAGE COMPONENT
+//-------------------
+
+.link-btn {
+    font-size: $icon-size;
+}
+
+.link-btn:hover {
+    cursor: pointer;
+}
+
+.like-btn {
+    font-size: $icon-size;
+}
+
+.like-btn:hover {
+    cursor: pointer;
+}
+
