@@ -15,14 +15,14 @@ class ImageComp extends React.Component {
 
         let linkButton = (
             <span
-                className='glyphicon glyphicon-link'
+                className='link-btn glyphicon glyphicon-link'
                 onClick={this.props.linkImage}
             />
         );
         if (this.props.userHasLinked) {
             linkButton = (
                 <span
-                    className='text-danger glyphicon glyphicon-remove'
+                    className='link-btn text-danger glyphicon glyphicon-remove'
                     onClick={this.props.unlinkImage}
                 />
             );
@@ -30,14 +30,14 @@ class ImageComp extends React.Component {
 
         let likeButton = (
             <span
-                className='glyphicon glyphicon-star-empty'
+                className='like-btn glyphicon glyphicon-star-empty'
                 onClick={this.props.likeImage}
             />
         );
         if (this.props.userHasLiked) {
             likeButton = (
                 <span
-                    className='glyphicon glyphicon-star'
+                    className='like-btn glyphicon glyphicon-star'
                     onClick={this.props.unlikeImage}
                 />
             );
