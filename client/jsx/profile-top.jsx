@@ -120,6 +120,7 @@ class ProfileTop extends React.Component {
             <ProfileSearch
                 addImage={this.addImageFromSearch}
                 images={images}
+                isFetching={this.props.isFetching}
                 searchImages={this.props.searchImages}
             />
         );
@@ -178,7 +179,9 @@ ProfileTop.propTypes = {
     addImage: React.PropTypes.func,
     addImageFromSearch: React.PropTypes.func,
     changeTab: React.PropTypes.func,
+    err: React.PropTypes.objectOf(Error),
     getUserInfo: React.PropTypes.func,
+    isFetching: React.PropTypes.bool,
     likeImage: React.PropTypes.func,
     linkImage: React.PropTypes.func,
     onClickButton: React.PropTypes.func,
