@@ -5,7 +5,6 @@
 const debug = require('debug')('search');
 
 const https = require('https');
-const Search = require('bing.search');
 const querystring = require('querystring');
 
 const apiHostname = 'api.cognitive.microsoft.com';
@@ -21,7 +20,6 @@ class BingSearch {
             let err = new Error('Bing API_KEY not given.');
             throw err;
         }
-        this.searchObj = new Search(key);
     }
 
     /* Performs a bing api image search. Query can contain keyword (q), offset
