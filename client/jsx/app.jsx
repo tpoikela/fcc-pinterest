@@ -86,7 +86,9 @@ let mapDispatchToProps = dispatch => ({
 
 let mapStateToProps = (state) => {
     return {
+        err: state.profileReducer.err,
         images: state.profileReducer.images,
+        isFetching: state.profileReducer.isFetching,
         searchResults: state.profileReducer.searchResults,
         shownTab: state.profileReducer.shownTab,
         userData: state.profileReducer.userData
