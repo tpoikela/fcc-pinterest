@@ -44,9 +44,9 @@ class ImageController {
                     isBroken = true;
                     console.error('ERROR. Broken link: ' + body.url);
                 }
-                else if (!this.isImageUrl(body.url)) {
+                /*else if (!this.isImageUrl(body.url)) {
                     isBroken = true;
-                }
+                }*/
 
                 let imgObj = {title: body.title, url: body.url,
                     linkedBy: username, broken: isBroken};
