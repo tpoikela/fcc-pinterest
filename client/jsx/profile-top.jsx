@@ -51,7 +51,6 @@ class ProfileTop extends React.Component {
     }
 
     render() {
-        console.log('ProfileTop render()');
         let userData = this.props.userData;
         let username = '';
 
@@ -161,7 +160,6 @@ class ProfileTop extends React.Component {
     /* Converts image search results to an array of Gallery-compatible
      * objects. */
     toImages(results) {
-        console.log('toImages results: ' + JSON.stringify(results));
         let images = results.map( item => {
             return {
                 url: item.url,

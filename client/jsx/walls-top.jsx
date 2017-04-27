@@ -12,6 +12,8 @@ class WallsTop extends React.Component {
         this.showUserList = this.showUserList.bind(this);
         this.showUserWall = this.showUserWall.bind(this);
         this.closeUserWall = this.closeUserWall.bind(this);
+
+        this.$DEBUG = 0;
     }
 
     componentDidMount() {
@@ -25,6 +27,13 @@ class WallsTop extends React.Component {
         this.props.closeUserWall(username);
     }
 
+    /* For printing debug messages.*/
+    debug(msg) {
+        if (this.$DEBUG) {
+            console.log(msg);
+        }
+    }
+
     showWall(username) {
         this.props.getUserWall(username);
     }
@@ -35,7 +44,7 @@ class WallsTop extends React.Component {
 
     showUserWall(e) {
         let aElem = e.target;
-        console.log('aElem.text ' + aElem.text);
+        this.debug('aElem.text ' + aElem.text);
         this.props.showUserWall(aElem.text);
     }
 
@@ -66,7 +75,7 @@ class WallsTop extends React.Component {
         let wall = null;
         let userWall = this.props.userWall;
         let images = userWall.linkedTo;
-        console.log('WallsTop userwall is ' + JSON.stringify(userWall));
+        this.debug('WallsTop userwall is ' + JSON.stringify(userWall));
         let emptyArr = [];
 
         if (userWall) {
@@ -125,7 +134,7 @@ class WallsTop extends React.Component {
 
     /* Returns the tabs to navigate between user walls. */
     getUserTabs() {
-        console.log('WallsTop render() => getUserTabs()');
+        this.debug('WallsTop render() => getUserTabs()');
         let userTabsOpen = this.props.userTabsOpen;
         let userWall = this.props.userWall;
         let userTabsElem = null;
@@ -156,7 +165,7 @@ class WallsTop extends React.Component {
 
         }
         else {
-            console.log('WallsTop no user tabs open');
+            this.debug('WallsTop no user tabs open');
         }
 
         let isWallShown = this.props.showWall;
@@ -175,7 +184,7 @@ class WallsTop extends React.Component {
     }
 
     dummyFunc() {
-        console.log('Called dummyFunc');
+        this.debug('Called dummyFunc');
     }
 }
 
