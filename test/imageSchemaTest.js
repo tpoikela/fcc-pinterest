@@ -1,4 +1,5 @@
 
+'use strict';
 
 const expect = require('chai').expect;
 const Utils = require('./test-utils');
@@ -40,7 +41,8 @@ describe('Image-model', function() {
         testImg = new Image({
             title: 'xxx',
             url: 'http://yyy.com/img.png',
-            addedBy: getObjectId()
+            addedBy: getObjectId(),
+            broken: false
         });
         testImg.save( err => {
             if (err) {throw new Error(err);}
@@ -69,7 +71,8 @@ describe('Image-model', function() {
         let obj = {
             linkedBy: 'myusername',
             url: testUrl,
-            title: 'A test image for the user'
+            title: 'A test image for the user',
+            broken: false
         };
 
         Image.createNew(obj, (err, img) => {
