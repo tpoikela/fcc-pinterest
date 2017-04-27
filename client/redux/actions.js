@@ -2,16 +2,19 @@
 const ajax = require('../common/ajax-functions');
 
 let appUrl = window.location.origin;
+let $DEBUG = 0;
 
 //---------------
 // Actions
 //---------------
 
 let _actionDebug = (info, json) => {
-    console.log('[ActionDebug]: ' + info);
-    if (json) {
-        console.log('[ActionDebug] ' + info + ' json: '
-            + JSON.stringify(json));
+    if ($DEBUG) {
+        console.log('[ActionDebug]: ' + info);
+        if (json) {
+            console.log('[ActionDebug] ' + info + ' json: '
+                + JSON.stringify(json));
+        }
     }
 };
 
@@ -117,7 +120,6 @@ export let addImage = (obj) => {
 export let addImageFromSearch = (obj) => {
     return function(dispatch) {
         dispatch(addImage(obj)).then( () => {
-            console.log('addImageFromSearch now calling getUserInfo');
             dispatch(getUserInfo());
         });
     };

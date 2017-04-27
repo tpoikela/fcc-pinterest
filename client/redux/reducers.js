@@ -34,14 +34,9 @@ let handleAjaxDone = (nextState, action) => {
         case 'getUserWall': {
             let username = action.json.username;
 
-            console.log('handleAjaxDone state ' + JSON.stringify(nextState));
             nextState.showWall = true;
             nextState.userWall = action.json;
             nextState.shownUserName = username;
-            console.log('handleAjaxDone state P2 ' + JSON.stringify(nextState));
-
-            console.log('userTabsOpen: '
-                + JSON.stringify(nextState.userTabsOpen));
 
             let index = nextState.userTabsOpen.indexOf(username);
             if (index < 0) {
@@ -49,7 +44,6 @@ let handleAjaxDone = (nextState, action) => {
                 nextState.userTabsData.push(action.json);
             }
 
-            console.log('userwall is ' + JSON.stringify(nextState.userWall));
             return nextState;
         }
         case 'searchImages': {
@@ -64,7 +58,6 @@ let handleAjaxDone = (nextState, action) => {
 /* Called when a user wall is closed. */
 let handleCloseUser = (nextState, action) => {
     let username = action.username;
-    console.log('Closing wall for user ' + username);
 
     if (username === nextState.shownUserName) {
         nextState.userWall = null;
@@ -169,11 +162,7 @@ export function wallsReducer(state, action) {
     }
 
     // State copy done here
-    let act = action.type;
-    console.log(act + ' wallsReducer state: ' + JSON.stringify(state));
     let nextState = Object.assign({}, state);
-
-    console.log(act + ' wallsReducer nextState: ' + JSON.stringify(nextState));
 
     switch (action.type) {
         case 'AJAX_START': return handleAjaxStart(nextState, action);
